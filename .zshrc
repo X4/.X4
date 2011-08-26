@@ -37,11 +37,13 @@ alias -g c='gcc -Wall -ansi -pedantic -g -o '
 alias -g git-sub='git submodule init && git submodule update'
 alias -g rorv='which ruby;which rails;which bundle;ruby -v;rails -v; bundle -v'
 alias -g update-fonts='fc-cache -f -r -v'
+alias -g upp="sudo apt-get update > /dev/null &"
 alias -g ri='rvm exec ri '
 alias -g mongodb='mkdir /tmp/mongo -p && mongod --dbpath /tmp/mongo --rest > /dev/null &'
 alias -g hamilize="find . -name '*erb' | xargs ruby -e 'ARGV.each { |i| puts \"html2haml -r #{i} #{i.sub(/erb$/,\"haml\")};rm #{i}\"}' | bash"
 alias -g mount='mount | column -t'
-alias -g l="ls -lahH --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'"
+#alias -g l="ls -lahH --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'"
+alias -g l="ls -lahH --color --time-style long-iso | sed -e 's/--x/1/g' -e 's/$
 alias -g bb='bzip2 -dc ${1} | tar -xf - '
 alias -g dims='identify -format %wx%h ${1}'
 
