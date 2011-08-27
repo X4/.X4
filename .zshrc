@@ -5,7 +5,8 @@ export ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-export ZSH_THEME="robbyrussell"
+#export ZSH_THEME="robbyrussell"
+export ZSH_THEME="jtriley"
 
 # Set to this to use case-sensitive completion
 # export CASE_SENSITIVE="true"
@@ -27,8 +28,9 @@ plugins=(rvm rails3 ruby bundler git npm node git git-flow debian deb)
 source /home/ferhat/.oh-my-zsh/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
 
+alias -g cls='source ~/.zshrc && reset'
 alias -g hue='tar -cvf fdgr46.tar fdgr46 && gzip fdgr46.tar'
 alias -g empty='clear && history -p'
 alias -g dl='curl -O '
@@ -37,13 +39,13 @@ alias -g c='gcc -Wall -ansi -pedantic -g -o '
 alias -g git-sub='git submodule init && git submodule update'
 alias -g rorv='which ruby;which rails;which bundle;ruby -v;rails -v; bundle -v'
 alias -g update-fonts='fc-cache -f -r -v'
-alias -g upp="sudo apt-get update > /dev/null &"
+alias -g upp='sudo apt-get update > /dev/null &'
 alias -g ri='rvm exec ri '
 alias -g mongodb='mkdir /tmp/mongo -p && mongod --dbpath /tmp/mongo --rest > /dev/null &'
 alias -g hamilize="find . -name '*erb' | xargs ruby -e 'ARGV.each { |i| puts \"html2haml -r #{i} #{i.sub(/erb$/,\"haml\")};rm #{i}\"}' | bash"
 alias -g mount='mount | column -t'
 #alias -g l="ls -lahH --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'"
-alias -g l="ls -lahH --color --time-style long-iso | sed -e 's/--x/1/g' -e 's/$
+alias -g l="ls -lahH --color --time-style long-iso | sed -e 's/--x/1/g' -e 's/$"
 alias -g bb='bzip2 -dc ${1} | tar -xf - '
 alias -g dims='identify -format %wx%h ${1}'
 
