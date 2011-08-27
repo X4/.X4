@@ -24,8 +24,7 @@ export ZSH_THEME="jtriley"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(rvm rails3 ruby bundler git npm node git git-flow debian deb)
 
-#source $ZSH/oh-my-zsh.sh
-source /home/ferhat/.oh-my-zsh/oh-my-zsh.sh
+source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
