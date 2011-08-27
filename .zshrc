@@ -20,6 +20,15 @@ export ZSH_THEME="jtriley"
 # Uncomment following line if you want to disable autosetting terminal title.
 # export DISABLE_AUTO_TITLE="true"
 
+# Set a readable history time format
+export HISTTIMEFORMAT='%F %T '
+
+# How many lines of growth before rotating .zsh_history
+ROTATEHIST=10000
+
+# How many .zsh_history file rotations to keep
+MAXHISTFILES=20
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(rvm rails3 ruby bundler git npm node git git-flow debian deb)
@@ -47,6 +56,7 @@ alias -g l="ls -lahH --color --time-style long-iso | sed -e 's/--x/1/g' -e 's/-w
 alias -g bb='bzip2 -dc ${1} | tar -xf - '
 alias -g dims='identify -format %wx%h ${1}'
 alias -g dirsize="du -sk ./* | sort -n | AWKSIZE"
+alias -g favs="history | awk '{print $2}' | sort | uniq -c | sort -rn | head"
 
 # Handy Extract Program
 extract () {
