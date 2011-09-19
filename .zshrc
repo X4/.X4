@@ -38,27 +38,73 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
 
-alias -g cls='source ~/.zshrc && reset'
-alias -g hue='tar -cvf fdgr46.tar fdgr46 && gzip fdgr46.tar'
-alias -g empty='clear && history -p'
-alias -g dl='curl -O '
-alias -g h='ls -Alih --color'
-alias -g c='gcc -Wall -ansi -pedantic -g -o '
-alias -g git-sub='git submodule init && git submodule update'
-alias -g rorv='which ruby;which rails;which bundle;ruby -v;rails -v; bundle -v'
-alias -g update-fonts='fc-cache -f -r -v'
-alias -g upp='sudo apt-get update > /dev/null &'
-alias -g ri='rvm exec ri '
-alias -g mongodb='mkdir /tmp/mongo -p && mongod --dbpath /tmp/mongo --rest > /dev/null &'
-alias -g hamilize="find . -name '*erb' | xargs ruby -e 'ARGV.each { |i| puts \"html2haml -r #{i} #{i.sub(/erb$/,\"haml\")};rm #{i}\"}' | bash"
-alias -g mount='mount | column -t'
-alias -g l="ls -lahH --color --time-style long-iso | sed -e 's/--x/1/g' -e 's/-w-/2/g' -e 's/-wx/3/g' -e 's/r--/4/g' -e 's/r-x/5/g' -e 's/rw-/6/g' -e 's/rwx/7/g' -e 's/---/0/g'"
-alias -g bb='bzip2 -dc ${1} | tar -xf - '
-alias -g dims='identify -format %wx%h ${1}'
-alias -g dirsize="du -sk ./* | sort -n | AWKSIZE"
-alias -g favs="history | awk '{print $2}' | sort | uniq -c | sort -rn | head"
 
-# Handy Extract Program
+# Enhancements
+alias -g mount='mount | column -t' #prettyfy mounted filesystems
+alias dims='identify -format %wx%h ${1}' #get image dimensions
+alias dirsize="du -sk ./* | sort -n | AWKSIZE" #show directory sizes
+alias favs="history | awk '{print $2}' | sort | uniq -c | sort -rn | head" #show favorite commands
+
+# Show / Find
+alias -g h='ls -Alih --color' #more informative ls
+alias l="ls -lahgGX --color --time-style long-iso | sed -e 's/--x/1/g' -e 's/-w-/2/g' -e 's/-wx/3/g' -e 's/r--/4/g' -e 's/r-x/5/g' -e 's/rw-/6/g' -e 's/rwx/7/g' -e 's/---/0/g' | sort" # show oktal permissions
+alias le="ls -ld *(/^F)" #show empty dirs
+
+# GIT
+alias -g git-sub='git submodule init && git submodule update' #update all git submodules
+
+# Maintainance
+alias cls='source ~/.zshrc && reset' #reload config and reset terminal
+alias empty='clear && history -p' #kill history
+alias upp='sudo apt-get update > /dev/null &' #update apt silently
+alias update-fonts='fc-cache -f -r -v' #update font cache
+alias savedb='mysqldump --all-databases -p | bzip2 -c > $(date --rfc-3339=date)fulldatabasebackup.sql.bz2'
+alias 'os?'='lsb_release -a;echo;cat /etc/*release;echo; cat /etc/issue' #get os info
+alias 'empty?'='ls *(L0f.go-w.)' #List all zero-length-files which are not group- or world-writable
+
+
+# Lazyness / Comfort
+alias hue='tar -cvf fdgr46.tar fdgr46 && gzip fdgr46.tar' #finish homework
+alias dl='curl -O ' #download 
+alias updategwan='wget http://gwan.com/archives/gwan_linux.tar.bz2 ~/Downloads/G-WAN/'
+alias c='gcc -Wall -ansi -pedantic -g -o ' #compile C
+alias bbz='bzip2 -dc ${1} | tar -xf - ' #uncompress tar.bz2
+alias mmm='cp -u ~/.X4/Makefile .; make distclean > /dev/null && make; ./${PWD##*/}' #clean tmp files, compile and execute the ./current_directoryname. Works always thanks to my Generic Makefile
+alias psa='ps -eo pid,user,group,args,etime,lstart '
+
+# Ruby / Rails
+alias rorv='which ruby;which rails;which bundle;ruby -v;rails -v; bundle -v' #show ror version numbers
+alias mongodb='mkdir /tmp/mongo -p && mongod --dbpath /tmp/mongo --rest > /dev/null &' #start mongodb
+alias hamilize="find . -name '*erb' | xargs ruby -e 'ARGV.each { |i| puts \"html2haml -r #{i} #{i.sub(/erb$/,\"haml\")};rm #{i}\"}' | bash" #erb2haml
+
+
+
+# Shell Functions
+
+#ask wikipedia
+wiki(){
+    C=`tput cols`;dig +short txt ${1}.wp.dg.cx|sed -e 's/" "//g' -e 's/^"//g' -e 's/"$//g' -e 's/ http:/\n\nhttp:/'|fmt -w $C
+}
+
+#translate EN<->DE
+dict(){
+    NAME="dict.cc"; VERSION="1.0"; USERAGENT="${NAME}/${VERSION} (cli)";
+ 
+    if [[ "x${1}" = "x" ]]; then
+      echo "missing word."
+      echo "USAGE:" $(basename $0) "WORD"
+      return 1
+    fi
+
+    echo "" > /tmp/dict 
+    SITE="$(wget --user-agent="${USERAGENT}" -q -O - "http://www.dict.cc/?s=${1}")"
+    echo "ENGLISH"
+    echo "${SITE}" | grep "var c1Arr = new Array" | cut -d '(' -f2 | cut -d ')' -f1 | sed "s/,/\n/g" | sed "s/\"//g" | grep -v "^$" | uniq | sed "s/^/\t/"| column | fold -s --width=120
+    echo "DEUTSCH"
+    echo "${SITE}" | grep "var c2Arr = new Array" | cut -d '(' -f2 | cut -d ')' -f1 | sed "s/,/\n/g" | sed "s/\"//g" | grep -v "^$" | uniq | sed "s/^/\t/"| column | fold -s --width=120
+}
+
+#easier archive extraction
 extract () {
     if [ -f $1 ] ; then
         case $1 in
@@ -79,29 +125,198 @@ extract () {
         echo "'$1' is not a valid file"
     fi
 }
-
+ 
 AWKSIZE(){
-awk 'BEGIN{ pref[1]="K"; pref[2]="M"; pref[3]="G";} { total = total + $1; x = $1; y = 1; while( x > 1024 ) { x = (x + 1023)/1024; y++; } printf("%g%s\t%s\n",int(x*10)/10,pref[y],$2); } END { y = 1; while( total > 1024 ) { total = (total + 1023)/1024; y++; } printf("Total: %g%s\n",int(total*10)/10,pref[y]); }'
+    awk 'BEGIN{ pref[1]="K"; pref[2]="M"; pref[3]="G";} { total = total + $1; x = $1; y = 1; while( x > 1024 ) { x = (x + 1023)/1024; y++; } printf("%g%s\t%s\n",int(x*10)/10,pref[y],$2); } END { y = 1; while( total > 1024 ) { total = (total + 1023)/1024; y++; } printf("Total: %g%s\n",int(total*10)/10,pref[y]); }'
 }
 
-wiki(){C=`tput cols`;dig +short txt ${1}.wp.dg.cx|sed -e 's/" "//g' -e 's/^"//g' -e 's/"$//g' -e 's/ http:/\n\nhttp:/'|fmt -w $C}
-dict(){
-NAME="dict.cc"; VERSION="1.0"; USERAGENT="${NAME}/${VERSION} (cli)";
- 
-if [[ "x${1}" = "x" ]]; then
-  echo "missing word."
-  echo "USAGE:" $(basename $0) "WORD"
-  exit 1
+xplot() {
+    TMP="/tmp/gnuplot.tmp"
+    if [ $# != 0 ];
+    then
+        echo "set title \"Xplot Fast Plot with gnuplot\" ." > $TMP
+        echo "set xlabel \"x axes\"" >> $TMP
+        echo "set ylabel \"y axez\"" >> $TMP
+        echo -n "plot \"$1\" " >> $TMP
+        for i in $@
+        do
+        if [ $i != $1 ];then
+            echo -n "$i " >> $TMP
+        fi
+        done
+        echo "">>$TMP
+        gnuplot -persist $TMP
+        rm $TMP
+    else
+        echo "Please use xplot <file.dat> <options> to plot"
+	return 1
+    fi
+}
+
+
+vgaswitch() {
+# version 20101107
+
+pci_integrated=$(lspci | grep VGA | sed -n '1p' | cut -f 1 -d " ")
+pci_discrete=$(lspci | grep VGA | sed -n '2p' | cut -f 1 -d " ")
+
+integrated=$(cat /sys/kernel/debug/vgaswitcheroo/switch | grep $pci_integrated | grep -o -P ':.:...:')
+discrete=$(cat /sys/kernel/debug/vgaswitcheroo/switch | grep $pci_discrete | grep -o -P ':.:...:')
+
+name_integrated=$(lspci | grep VGA | sed -n '1p' | sed -e "s/.* VGA compatible controller[ :]*//g" | sed -e "s/ Corporation//g" | sed -e "s/ Technologies Inc//g" | sed -e 's/\[[0-9]*\]: //g' | sed -e 's/\[[0-9:a-z]*\]//g' | sed -e 's/(rev [a-z0-9]*)//g' | sed -e "s/ Integrated Graphics Controller//g")
+
+name_discrete=$(lspci | grep VGA | sed -n '2p' | sed -e "s/.* VGA compatible controller[ :]*//g" | sed -e "s/ Corporation//g" | sed -e "s/ Technologies Inc//g" | sed -e 's/\[[0-9]*\]: //g' | sed -e 's/\[[0-9:a-z]*\]//g' | sed -e 's/(rev [a-z0-9]*)//g' | sed -e "s/ Integrated Graphics Controller//g")
+
+if [ "$integrated" = ":+:Pwr:" ]
+then
+ integrated_condition="(*) - Power ON"
+elif [ "$integrated" = ": :Pwr:" ]
+then
+ integrated_condition="( ) - Power ON"
+elif [ "$integrated" = ": :Off:" ]
+then
+ integrated_condition="( ) - Power OFF"
 fi
 
-echo "" > /tmp/dict 
-SITE="$(wget --user-agent="${USERAGENT}" -q -O - "http://www.dict.cc/?s=${1}")"
-echo "ENGLISH"
-echo "${SITE}" | grep "var c1Arr = new Array" | cut -d '(' -f2 | cut -d ')' -f1 | sed "s/,/\n/g" | sed "s/\"//g" | grep -v "^$" | sort | uniq | sed "s/^/\t/"| column | fold -s --width=120
-echo "DEUTSCH"
-echo "${SITE}" | grep "var c2Arr = new Array" | cut -d '(' -f2 | cut -d ')' -f1 | sed "s/,/\n/g" | sed "s/\"//g" | grep -v "^$" | sort | uniq | sed "s/^/\t/"| column | fold -s --width=120
+if [ "$discrete" = ":+:Pwr:" ]
+then
+ discrete_condition="(*) - Power ON"
+elif [ "$discrete" = ": :Pwr:" ]
+then
+ discrete_condition="( ) - Power ON"
+elif [ "$discrete" = ": :Off:" ]
+then
+ discrete_condition="( ) - Power OFF"
+fi
+
+gxmessage -center \
+          -buttons "_Cancel":1,"switch to _Integrated":101,"switch to _Discrete":102 \
+          -wrap \
+          -title "Choose Hybrid Graphic Card" \
+"Choose Hybrid Graphic Card
+=================
+Integrated: $integrated_condition : $name_integrated
+Discrete: $discrete_condition : $name_discrete"
+
+
+whichCard=$?
+
+case "$whichCard" in
+
+1)
+ echo "Exit"
+;;
+101)
+ if [ "$integrated" == ":+:Pwr:" ] && [ "$discrete" == ": :Pwr:" ]
+ then
+  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_down.png" "switching to $name_integrated"
+  echo OFF > /sys/kernel/debug/vgaswitcheroo/switch
+ elif [ "$integrated" == ": :Pwr:" ] && [ "$discrete" == ":+:Pwr:" ]
+ then
+  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_down.png" "switching to $name_integrated"
+  echo DIGD > /sys/kernel/debug/vgaswitcheroo/switch
+  if [ "$DESKTOP_SESSION" = "openbox" ]
+  then
+   killall -u "$USER"
+  elif [ "$DESKTOP_SESSION" = "gnome" ]
+  then
+   gnome-session-save --logout
+  fi
+ elif [ "$integrated" == ": :Off:" ] && [ "$discrete" == ":+:Pwr:" ]
+ then
+  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_down.png" "switching to $name_integrated"
+  echo ON > /sys/kernel/debug/vgaswitcheroo/switch
+  echo DIGD > /sys/kernel/debug/vgaswitcheroo/switch
+  if [ "$DESKTOP_SESSION" = "openbox" ]
+  then
+   killall -u "$USER"
+  elif [ "$DESKTOP_SESSION" = "gnome" ]
+  then
+   gnome-session-save --logout
+  fi
+ elif [ "$integrated" == ":+:Pwr:" ] && [ "$discrete" == ": :Off:" ]
+ then
+  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_down.png" "already switched to $name_integrated"  
+ fi
+;;
+102)
+ if [ "$integrated" == ":+:Pwr:" ] && [ "$discrete" == ": :Pwr:" ]
+ then
+  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_up.png" "switching to $name_discrete"
+  echo DDIS > /sys/kernel/debug/vgaswitcheroo/switch
+  if [ "$DESKTOP_SESSION" = "openbox" ]
+  then
+   killall -u "$USER"
+  elif [ "$DESKTOP_SESSION" = "gnome" ]
+  then
+   gnome-session-save --logout
+  fi
+ elif [ "$integrated" == ": :Pwr:" ] && [ "$discrete" == ":+:Pwr:" ]
+ then
+  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_up.png" "switching to $name_discrete"
+  echo OFF > /sys/kernel/debug/vgaswitcheroo/switch
+ elif [ "$integrated" == ":+:Pwr:" ] && [ "$discrete" == ": :Off:" ]
+ then
+  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_up.png" "switching to $name_discrete"  
+  echo ON > /sys/kernel/debug/vgaswitcheroo/switch
+  echo DDIS > /sys/kernel/debug/vgaswitcheroo/switch
+  if [ "$DESKTOP_SESSION" = "openbox" ]
+  then
+   killall -u "$USER"
+  elif [ "$DESKTOP_SESSION" = "gnome" ]
+  then
+   gnome-session-save --logout
+  fi
+ elif [ "$integrated" == ": :Off:" ] && [ "$discrete" == ":+:Pwr:" ]
+ then
+  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_up.png" "already switched to $name_discrete"  
+ fi
+;;
+esac
 }
- 
+
+debdep() {
+if [[ -z "$1" ]]; then
+  echo "Syntax: $0 debfile"
+  return 1
+fi
+
+DEBFILE="$1"
+TMPDIR=`mktemp -d /tmp/deb.XXXXXXXXXX` || return 1
+OUTPUT=`basename "$DEBFILE" .deb`.modfied.deb
+
+if [[ -e "$OUTPUT" ]]; then
+  echo "$OUTPUT exists."
+  rm -r "$TMPDIR"
+  return 1
+fi
+
+dpkg-deb -x "$DEBFILE" "$TMPDIR"
+dpkg-deb --control "$DEBFILE" "$TMPDIR"/DEBIAN
+
+if [[ ! -e "$TMPDIR"/DEBIAN/control ]]; then
+  echo DEBIAN/control not found.
+
+  rm -r "$TMPDIR"
+  return 1
+fi
+
+CONTROL="$TMPDIR"/DEBIAN/control
+
+MOD=`stat -c "%y" "$CONTROL"`
+vi "$CONTROL"
+
+if [[ "$MOD" == `stat -c "%y" "$CONTROL"` ]]; then
+  echo Not modfied.
+else
+  echo Building new deb...
+  dpkg -b "$TMPDIR" "$OUTPUT"
+fi
+
+rm -r "$TMPDIR"
+}
+
+
 # [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm # Lokal install
-[[ -s '/usr/local/rvm/scripts/rvm' ]] && source '/usr/local/rvm/scripts/rvm' # Global install
+# [[ -s '/usr/local/rvm/scripts/rvm' ]] && source '/usr/local/rvm/scripts/rvm' # Global install
 
