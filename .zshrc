@@ -69,7 +69,7 @@ alias dl='curl -O ' #download
 alias updategwan='wget http://gwan.com/archives/gwan_linux.tar.bz2 ~/Downloads/G-WAN/'
 alias c='gcc -Wall -ansi -pedantic -g -o ' #compile C
 alias bbz='bzip2 -dc ${1} | tar -xf - ' #uncompress tar.bz2
-alias mmm='cp -u ~/.X4/Makefile .; make distclean > /dev/null && make; ./${PWD##*/}' #clean tmp files, compile and execute the ./current_directoryname. Works always thanks to my Generic Makefile
+alias mm='cp -u ~/.X4/Makefile .; make distclean > /dev/null && make; ./${PWD##*/}' #clean tmp files, compile and execute the ./current_directoryname. Works always thanks to my Generic Makefile
 alias psa='ps -eo pid,user,group,args,etime,lstart '
 
 # Ruby / Rails
