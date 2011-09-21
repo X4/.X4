@@ -5,7 +5,6 @@ export ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-#export ZSH_THEME="robbyrussell"
 export ZSH_THEME="jtriley"
 
 # Set to this to use case-sensitive completion
@@ -31,9 +30,10 @@ MAXHISTFILES=20
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(rvm rails3 ruby bundler git npm node git git-flow debian deb)
+plugins=(rvm rails3 ruby bundler git npm node git git-flow debian deb command-not-found history-substring-search extract compleat)
 
 source $ZSH/oh-my-zsh.sh
+source /home/$USER/.X4/.zsh_theme
 
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
@@ -56,17 +56,15 @@ alias -g git-sub='git submodule init && git submodule update' #update all git su
 # Maintainance
 alias cls='source ~/.zshrc && reset' #reload config and reset terminal
 alias empty='clear && history -p' #kill history
-alias upp='sudo apt-get update > /dev/null &' #update apt silently
-alias update-fonts='fc-cache -f -r -v' #update font cache
 alias savedb='mysqldump --all-databases -p | bzip2 -c > $(date --rfc-3339=date)fulldatabasebackup.sql.bz2'
 alias 'os?'='lsb_release -a;echo;cat /etc/*release;echo; cat /etc/issue' #get os info
 alias 'empty?'='ls *(L0f.go-w.)' #List all zero-length-files which are not group- or world-writable
-
+alias upp='sudo apt-get update > /dev/null &' #update apt silently
+alias update-fonts='fc-cache -f -r -v' #update font cache
 
 # Lazyness / Comfort
 alias hue='tar -cvf fdgr46.tar fdgr46 && gzip fdgr46.tar' #finish homework
 alias dl='curl -O ' #download 
-alias updategwan='wget http://gwan.com/archives/gwan_linux.tar.bz2 ~/Downloads/G-WAN/'
 alias c='gcc -Wall -ansi -pedantic -g -o ' #compile C
 alias bbz='bzip2 -dc ${1} | tar -xf - ' #uncompress tar.bz2
 alias mm='cp -u ~/.X4/Makefile .; make distclean > /dev/null && make; ./${PWD##*/}' #clean tmp files, compile and execute the ./current_directoryname. Works always thanks to my Generic Makefile
@@ -319,4 +317,3 @@ rm -r "$TMPDIR"
 
 # [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm # Lokal install
 # [[ -s '/usr/local/rvm/scripts/rvm' ]] && source '/usr/local/rvm/scripts/rvm' # Global install
-
