@@ -1,5 +1,9 @@
 # Path to your oh-my-zsh configuration.
-export ZSH=$HOME/.oh-my-zsh
+if [[ $EUID -ne 0 ]]; then
+   export ZSH=$HOME/.oh-my-zsh
+else
+   export ZSH=/root/.oh-my-zsh
+fi
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -33,7 +37,12 @@ MAXHISTFILES=20
 plugins=(rvm rails3 ruby bundler git npm node git git-flow debian deb command-not-found history-substring-search extract compleat)
 
 source $ZSH/oh-my-zsh.sh
-source /home/$USER/.X4/.zsh_theme
+
+if [[ $EUID -ne 0 ]]; then
+   source /$HOME/.X4/.zsh_theme
+else
+   source /root/.X4/.zsh_themesource /$HOME/.X4/.zsh_theme
+fi
 
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
@@ -47,7 +56,7 @@ alias favs="history | awk '{print $2}' | sort | uniq -c | sort -rn | head" #show
 
 # Show / Find
 alias -g h='ls -Alih --color' #more informative ls
-alias l="ls -alhgGd .* --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}' && ls -lhgGd --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'" # show oktal permissions
+alias l="ls -alhgGd .* --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}' && ls -lhgG --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'" # show oktal permissions
 alias le="ls -ld *(/^F)" #show empty dirs
 
 # GIT
