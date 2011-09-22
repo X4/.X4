@@ -35,7 +35,6 @@ plugins=(rvm rails3 ruby bundler git npm node git git-flow debian deb history-su
 source $ZSH/oh-my-zsh.sh
 source $HOME/.X4/.zsh_theme
 
-
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
 
