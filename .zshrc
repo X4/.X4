@@ -1,8 +1,8 @@
 # Path to your oh-my-zsh configuration.
-export ZSH=$HOME/.X4/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
-# Look in ~/.X4/.oh-my-zsh/themes/
+# Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 export ZSH_THEME="jtriley"
@@ -47,7 +47,7 @@ alias favs="history | awk '{print $2}' | sort | uniq -c | sort -rn | head" #show
 
 # Show / Find
 alias -g h='ls -Alih --color' #more informative ls
-alias l="ls -lahgGX --color --time-style long-iso | sed -e 's/--x/1/g' -e 's/-w-/2/g' -e 's/-wx/3/g' -e 's/r--/4/g' -e 's/r-x/5/g' -e 's/rw-/6/g' -e 's/rwx/7/g' -e 's/---/0/g' | sort" # show oktal permissions
+alias l="ls -alhgGd .* --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}' && ls -lhgGd --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'" # show oktal permissions
 alias le="ls -ld *(/^F)" #show empty dirs
 
 # GIT
@@ -64,7 +64,7 @@ alias update-fonts='fc-cache -f -r -v' #update font cache
 
 # Lazyness / Comfort
 alias hue='tar -cvf fdgr46.tar fdgr46 && gzip fdgr46.tar' #finish homework
-alias dl='curl -O ' #download 
+alias dl='curl -O ' #download
 alias c='gcc -Wall -ansi -pedantic -g -o ' #compile C
 alias bbz='bzip2 -dc ${1} | tar -xf - ' #uncompress tar.bz2
 alias mm='cp -u ~/.X4/Makefile .; make distclean > /dev/null && make; ./${PWD##*/}' #clean tmp files, compile and execute the ./current_directoryname. Works always thanks to my Generic Makefile
@@ -87,14 +87,14 @@ wiki(){
 #translate EN<->DE
 dict(){
     NAME="dict.cc"; VERSION="1.0"; USERAGENT="${NAME}/${VERSION} (cli)";
- 
+
     if [[ "x${1}" = "x" ]]; then
       echo "missing word."
       echo "USAGE:" $(basename $0) "WORD"
       return 1
     fi
 
-    echo "" > /tmp/dict 
+    echo "" > /tmp/dict
     SITE="$(wget --user-agent="${USERAGENT}" -q -O - "http://www.dict.cc/?s=${1}")"
     echo "ENGLISH"
     echo "${SITE}" | grep "var c1Arr = new Array" | cut -d '(' -f2 | cut -d ')' -f1 | sed "s/,/\n/g" | sed "s/\"//g" | grep -v "^$" | uniq | sed "s/^/\t/"| column | fold -s --width=120
@@ -123,7 +123,7 @@ extract () {
         echo "'$1' is not a valid file"
     fi
 }
- 
+
 AWKSIZE(){
     awk 'BEGIN{ pref[1]="K"; pref[2]="M"; pref[3]="G";} { total = total + $1; x = $1; y = 1; while( x > 1024 ) { x = (x + 1023)/1024; y++; } printf("%g%s\t%s\n",int(x*10)/10,pref[y],$2); } END { y = 1; while( total > 1024 ) { total = (total + 1023)/1024; y++; } printf("Total: %g%s\n",int(total*10)/10,pref[y]); }'
 }
@@ -147,7 +147,7 @@ xplot() {
         rm $TMP
     else
         echo "Please use xplot <file.dat> <options> to plot"
-	return 1
+    return 1
     fi
 }
 
@@ -234,7 +234,7 @@ case "$whichCard" in
   fi
  elif [ "$integrated" == ":+:Pwr:" ] && [ "$discrete" == ": :Off:" ]
  then
-  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_down.png" "already switched to $name_integrated"  
+  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_down.png" "already switched to $name_integrated"
  fi
 ;;
 102)
@@ -255,7 +255,7 @@ case "$whichCard" in
   echo OFF > /sys/kernel/debug/vgaswitcheroo/switch
  elif [ "$integrated" == ":+:Pwr:" ] && [ "$discrete" == ": :Off:" ]
  then
-  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_up.png" "switching to $name_discrete"  
+  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_up.png" "switching to $name_discrete"
   echo ON > /sys/kernel/debug/vgaswitcheroo/switch
   echo DDIS > /sys/kernel/debug/vgaswitcheroo/switch
   if [ "$DESKTOP_SESSION" = "openbox" ]
@@ -267,7 +267,7 @@ case "$whichCard" in
   fi
  elif [ "$integrated" == ": :Off:" ] && [ "$discrete" == ":+:Pwr:" ]
  then
-  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_up.png" "already switched to $name_discrete"  
+  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_up.png" "already switched to $name_discrete"
  fi
 ;;
 esac
