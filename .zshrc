@@ -47,7 +47,7 @@ alias favs="history | awk '{print $2}' | sort | uniq -c | sort -rn | head" #show
 
 # Show / Find
 alias -g h='ls -Alih --color' #more informative ls
-alias l="ls -alhgGd .* --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}' && ls -lhgG --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'" # show oktal permissions
+alias l="ls -alhgGd .* --color 2> /dev/null | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}' && ls -lhgG --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'" # show oktal permissions
 alias le="ls -ld *(/^F)" #show empty dirs
 
 # GIT
@@ -66,9 +66,10 @@ alias update-fonts='fc-cache -f -r -v' #update font cache
 alias hue='tar -cvf fdgr46.tar fdgr46 && gzip fdgr46.tar' #finish homework
 alias dl='curl -O ' #download
 alias c='gcc -Wall -ansi -pedantic -g -o ' #compile C
-alias bbz='bzip2 -dc ${1} | tar -xf - ' #uncompress tar.bz2
+alias bz='bzip2 -dc ${1} | tar -xf - ' #uncompress tar.bz2
 alias mm='cp -u ~/.X4/Makefile .; make distclean > /dev/null && make; ./${PWD##*/}' #clean tmp files, compile and execute the ./current_directoryname. Works always thanks to my Generic Makefile
 alias psa='ps -eo pid,user,group,args,etime,lstart '
+alias yurl='mplayer -fs $(curl -s "http://www.youtube.com/get_video_info?&video_id=$0" | echo -e $(sed "s/%/\\x/g;s/.*\(v[0-9]\.lscache.*\)/http:\/\/\1/g") | grep -oP "^[^|,]*")'
 
 # Ruby / Rails
 alias rorv='which ruby;which rails;which bundle;ruby -v;rails -v; bundle -v' #show ror version numbers
