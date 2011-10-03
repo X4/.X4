@@ -59,8 +59,8 @@ alias empty='clear && history -p' #kill history
 alias savedb='mysqldump --all-databases -p | bzip2 -c > $(date --rfc-3339=date)fulldatabasebackup.sql.bz2'
 alias 'os?'='lsb_release -a;echo;cat /etc/*release;echo; cat /etc/issue' #get os info
 alias 'empty?'='ls *(L0f.go-w.)' #List all zero-length-files which are not group- or world-writable
-alias upp='sudo apt-get update > /dev/null &' #update apt silently
 alias update-fonts='fc-cache -f -r -v' #update font cache
+alias userlist='awk -F":" '{ print "username: " $1 "\t\tuid:" $3 }' /etc/passwd'
 
 # Lazyness / Comfort
 alias hue='tar -cvf fdgr46.tar fdgr46 && gzip fdgr46.tar' #finish homework
