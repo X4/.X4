@@ -5,7 +5,7 @@ export ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-export ZSH_THEME="jtriley"
+export ZSH_THEME="robbyrussell"
 
 # Set to this to use case-sensitive completion
 # export CASE_SENSITIVE="true"
@@ -33,25 +33,46 @@ MAXHISTFILES=20
 plugins=(rvm rails3 ruby bundler git npm node git git-flow debian deb history-substring-search extract compleat)
 
 source $ZSH/oh-my-zsh.sh
-source $HOME/.X4/.zsh_theme
+#source $HOME/.X4/.zsh_theme
 
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
 
+# Synaptics Fix
+synclient HorizTwoFingerScroll=1
+synclient PalmDetect=1
+synclient FastTaps=1
+synclient LockedDrags=1
+
+#########################################
+# Aliases and Functions only
+#########################################
 
 # Enhancements
-alias -g mount='mount | column -t' #prettyfy mounted filesystems
+alias mount='mount | column -t' #prettyfy mounted filesystems
 alias dims='identify -format %wx%h ${1}' #get image dimensions
 alias dirsize="du -sk ./* | sort -n | AWKSIZE" #show directory sizes
 alias favs="history | awk '{print $2}' | sort | uniq -c | sort -rn | head" #show favorite commands
 
 # Show / Find
-alias -g h='ls -Alih --color' #more informative ls
+alias h='ls -Alih --color' #more informative ls
 alias l="ls -alhgGd .* --color 2> /dev/null | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}' && ls -lhgG --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'" # show oktal permissions
 alias le="ls -ld *(/^F)" #show empty dirs
 
 # GIT
-alias -g git-sub='git submodule init && git submodule update' #update all git submodules
+alias git-sub='git submodule init && git submodule update' #update all git submodules
+alias g='git'
+alias gl='git pull --rebase'
+alias gp='git push'
+alias gpa='git push -u origin master'
+alias ga='git add'
+alias gc='git commit'
+alias gca='git commit -a'
+alias gs='git status -sb'
+alias gd='git diff'
+alias grm="git status | grep deleted | awk '{print \$3}' | xargs git rm"
+alias changelog='git --no-pager log --format="%ai %aN %n%n%x09* %s%d%n" > ChangeLog'
+alias 'ga!'='find . -type d -empty -exec touch {}/.gitignore \;'
 
 # Maintainance
 alias cls='source ~/.zshrc && reset' #reload config and reset terminal
