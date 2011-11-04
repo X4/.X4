@@ -82,6 +82,9 @@ alias 'os?'='lsb_release -a;echo;cat /etc/*release;echo; cat /etc/issue' #get os
 alias 'empty?'='ls *(L0f.go-w.)' #List all zero-length-files which are not group- or world-writable
 alias update-fonts='fc-cache -f -r -v' #update font cache
 alias userlist='awk -F":" '"'"'{ print "username: " $1 "\t\tuid:" $3 }'"'"' /etc/passwd'
+alias chmodFix=' for i in `find . -type d`; do  chmod 755 $i; done; for i in `find . -type f`; do  chmod 644 $i; done'
+alias chmodWWW=' for i in `find . -type d`; do  chmod 775 $i; done; for i in `find . -type f`; do  chmod 664 $i; done'
+
 
 # Lazyness / Comfort
 alias hue='tar -cvf fdgr46.tar fdgr46 && gzip fdgr46.tar' #finish homework
