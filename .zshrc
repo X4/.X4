@@ -38,11 +38,7 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
 
-# Synaptics Fix
-synclient HorizTwoFingerScroll=1
-synclient PalmDetect=1
-synclient FastTaps=1
-synclient LockedDrags=1
+ulimit -Hn 4999999
 
 #########################################
 # Aliases and Functions only
