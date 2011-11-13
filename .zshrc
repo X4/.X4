@@ -100,22 +100,33 @@ alias hamilize="find . -name '*erb' | xargs ruby -e 'ARGV.each { |i| puts \"html
 
 #update G-WAN
 update-gwan(){
-cd "$HOME/.gwan"
+#update G-WAN
 if [[ ! -f gwan_linux.tar.bz2 ]]; then
-        wget -N "gwan.ch/archives/gwan_linux.tar.bz2" 2>/dev/null
+        wget -NP "$HOME/.gwan" "gwan.ch/archives/gwan_linux.tar.bz2" 2> /dev/null
 else
-        newfilesum=$(wget -NP $HOME/.gwan 'gwan.ch/archives/gwan_linux.tar.bz2' 2>/dev/null | sha256sum gwan_linux.tar.bz2 2>/dev/null)
-        oldfilesum=$(sha256sum gwan_linux.tar.bz2 2>/dev/null)
-
+        newfilesum=$(wget -NP "$HOME/.gwan" "gwan.ch/archives/gwan_linux.tar.bz2" 2> /dev/null | sha256sum "$HOME/.gwan/gwan_linux.tar.bz2" 2> /dev/null)
+        oldfilesum=$(sha256sum "$HOME/.gwan/gwan_linux.tar.bz2" 2> /dev/null)
         if [[ $newfilesum != $oldfilesum ]]; then
+                # create backup directory
+                mkdir -p "$HOME/.gwan/backups/"
+
                 # Backup local G-WAN installation
-                tar cfj "$HOME/.gwan/gwan.$(date --iso).tar.bz2" "/usr/local/gwan"
+                tar cfj "$HOME/.gwan/backups/gwan.$(date --iso).tar.bz2" "/usr/local/gwan"
 
                 # Decompress new G-WAN archive
-                tar xjf gwan_linux.tar.bz2
+                tar xjf "$HOME/.gwan/gwan_linux.tar.bz2"
 
-                # Update local G-WAN installation with new files
-                sudo mv -f "$HOME/.gwan/gwan/" "/usr/local/gwan"
+                # Update local G-WAN installation with new files using rsync
+                sudo rsync -avP "$HOME/.gwan/gwan/" "/usr/local/gwan"
+
+                # Take ownership of all gwan files, so that we can edit without beeing root
+                sudo chown $(whoami):$(whoami) -R "/usr/local/gwan" 2> /dev/null
+
+                # Remove temporary directory
+                rm -R "$HOME/.gwan/gwan"
+
+                # Create a symbolic link so that we can run ie. gwan -v anywhere
+                sudo ln -s "/usr/local/gwan/gwan" "/usr/local/bin/gwan"
         else
                 /usr/local/gwan/gwan -v | tr '\n' ' ' | echo -n "You're running "
         fi
