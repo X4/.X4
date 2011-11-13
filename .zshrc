@@ -67,6 +67,7 @@ alias gd='git diff'
 alias grm="git status | grep deleted | awk '{print \$3}' | xargs git rm"
 alias changelog='git --no-pager log --format="%ai %aN %n%n%x09* %s%d%n" > ChangeLog'
 alias 'ga!'='find . -type d -empty -exec touch {}/.gitignore \;'
+alias gtop="cat /home/git/.gitolite/logs/gitolite-`date +%Y-%m -d -30days`.log | cut -f2 | sort | uniq -c | sort -n -r"
 
 # Maintainance
 alias cls='source ~/.zshrc && reset' #reload config and reset terminal
