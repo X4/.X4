@@ -38,8 +38,6 @@ source $ZSH/oh-my-zsh.sh
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
 
-ulimit -Hn 4999999
-
 #########################################
 # Aliases and Functions only
 #########################################
@@ -99,6 +97,30 @@ alias hamilize="find . -name '*erb' | xargs ruby -e 'ARGV.each { |i| puts \"html
 
 
 # Shell Functions
+
+#update G-WAN
+update-gwan(){
+cd "$HOME/.gwan"
+if [[ ! -f gwan_linux.tar.bz2 ]]; then
+        wget -N "gwan.ch/archives/gwan_linux.tar.bz2" 2>/dev/null
+else
+        newfilesum=$(wget -NP $HOME/.gwan 'gwan.ch/archives/gwan_linux.tar.bz2' 2>/dev/null | sha256sum gwan_linux.tar.bz2 2>/dev/null)
+        oldfilesum=$(sha256sum gwan_linux.tar.bz2 2>/dev/null)
+
+        if [[ $newfilesum != $oldfilesum ]]; then
+                # Backup local G-WAN installation
+                tar cfj "$HOME/.gwan/gwan.$(date --iso).tar.bz2" "/usr/local/gwan"
+
+                # Decompress new G-WAN archive
+                tar xjf gwan_linux.tar.bz2
+
+                # Update local G-WAN installation with new files
+                sudo mv -f "$HOME/.gwan/gwan/" "/usr/local/gwan"
+        else
+                /usr/local/gwan/gwan -v | tr '\n' ' ' | echo -n "You're running "
+        fi
+fi
+}
 
 #ask wikipedia
 wiki(){
