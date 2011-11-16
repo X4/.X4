@@ -76,7 +76,7 @@ alias savedb='mysqldump --all-databases -p | bzip2 -c > $(date --rfc-3339=date)f
 alias 'os?'='lsb_release -a;echo;cat /etc/*release;echo; cat /etc/issue' #get os info
 alias 'empty?'='ls *(L0f.go-w.)' #List all zero-length-files which are not group- or world-writable
 alias update-fonts='fc-cache -f -r -v' #update font cache
-alias userlist='awk -F":" '"'"'{ print "username: " $1 "\t\tuid:" $3 }'"'"' /etc/passwd'
+alias userlist='awk -F":" '"'"'{ print "username: " $1 "\t\tuid:" $3 }'"'"' /etc/passwd | column -t'
 alias chmodFix=' for i in `find . -type d`; do  chmod 755 $i; done; for i in `find . -type f`; do  chmod 644 $i; done'
 alias chmodWWW=' for i in `find . -type d`; do  chmod 775 $i; done; for i in `find . -type f`; do  chmod 664 $i; done'
 
@@ -120,7 +120,7 @@ else
                 sudo rsync -avP "$HOME/.gwan/gwan/" "/usr/local/gwan"
 
                 # Take ownership of all gwan files, so that we can edit without beeing root
-                sudo chown $(whoami):$(whoami) -R "/usr/local/gwan" 2> /dev/null
+                sudo chown $(whoami):root -R "/usr/local/gwan" 2> /dev/null
 
                 # Remove temporary directory
                 rm -R "$HOME/.gwan/gwan"
