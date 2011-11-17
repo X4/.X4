@@ -1,6 +1,10 @@
 # Path to your oh-my-zsh configuration.
 export ZSH=$HOME/.oh-my-zsh
 
+setopt HIST_IGNORE_SPACE
+setopt HIST_IGNORE_DUPS
+
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -35,6 +39,24 @@ plugins=(rvm rails3 ruby bundler git npm node git git-flow debian deb history-su
 source $ZSH/oh-my-zsh.sh
 #source $HOME/.X4/.zsh_theme
 
+export CLICOLOR=true
+
+autoload -U zrecompile 
+
+### Use cache - Some functions, like _apt and _dpkg, are very slow. You can use a cache in
+## order to proxy the list of results (like the list of available debian packages)
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
+
+## Prevent CVS files/directories from being completed
+zstyle ':completion:*:(all-|)files' ignored-patterns '(|*/)CVS'
+zstyle ':completion:*:cd:*' ignored-patterns '(*/)#CVS'
+
+## With commands like `rm' it's annoying if one gets offered the same filename
+## again even if it is already on the command line. To avoid that:
+zstyle ':completion:*:rm:*' ignore-line yes
+
+
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
 
@@ -51,7 +73,8 @@ alias favs="history | awk '{print $2}' | sort | uniq -c | sort -rn | head" #show
 # Show / Find
 alias h='ls -Alih --color' #more informative ls
 alias l="ls -alhgGd .* --color 2> /dev/null | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}' && ls -lhgG --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'" # show oktal permissions
-alias le="ls -ld *(/^F)" #show empty dirs
+alias le='ls -ld *(/^F)' #show empty dirs
+alias lm='ls -t $* 2> /dev/null | head -n 1' #show last modified
 
 # GIT
 alias git-sub='git submodule init && git submodule update' #update all git submodules
@@ -62,11 +85,15 @@ alias gpa='git push -u origin master'
 alias ga='git add'
 alias gc='git commit'
 alias gca='git commit -a'
+alias gb='git branch'
 alias gs='git status -sb'
 alias gd='git diff'
 alias grm="git status | grep deleted | awk '{print \$3}' | xargs git rm"
 alias changelog='git --no-pager log --format="%ai %aN %n%n%x09* %s%d%n" > ChangeLog'
 alias 'ga!'='find . -type d -empty -exec touch {}/.gitignore \;'
+alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
+alias gamend='git commit --amend -C HEAD'
+alias gundo='git reset --soft HEAD^' # Undo your last commit, but don't throw away your changes
 alias gtop="cat /home/git/.gitolite/logs/gitolite-`date +%Y-%m -d -30days`.log | cut -f2 | sort | uniq -c | sort -n -r"
 
 # Maintainance
@@ -79,7 +106,11 @@ alias update-fonts='fc-cache -f -r -v' #update font cache
 alias userlist='awk -F":" '"'"'{ print "username: " $1 "\t\tuid:" $3 }'"'"' /etc/passwd | column -t'
 alias chmodFix=' for i in `find . -type d`; do  chmod 755 $i; done; for i in `find . -type f`; do  chmod 644 $i; done'
 alias chmodWWW=' for i in `find . -type d`; do  chmod 775 $i; done; for i in `find . -type f`; do  chmod 664 $i; done'
-
+alias sstart='sudo service $0 start'
+alias sstop='sudo service $0 stop'
+alias sreload='sudo service $0 reload'
+alias '1proxy'="PORT=$[${RANDOM}%2012+4012]; echo -n 'Enter Hostname: '; read HOSTNAME; ssh -C2Ntf -c blowfish -D $PORT $HOSTNAME sleep 2; echo 'Your proxy runs on: localhost:${PORT} forwarded through ${HOSTNAME}'" # start with proxyme to unblock stuff through your proxy
+alias '0proxy'="read USER; kill $(ps ax o 'pid euser egroup command' | grep "sshd: $USER" | awk '{ print $1 }' | sed ':a;N;$!ba;s/\n/ /g') > /dev/null" #kills all users using ssh with given username
 
 # Lazyness / Comfort
 alias hue='tar -cvf fdgr46.tar fdgr46 && gzip fdgr46.tar' #finish homework
@@ -88,7 +119,10 @@ alias c='gcc -Wall -ansi -pedantic -g -o ' #compile C
 alias bz='bzip2 -dc ${1} | tar -xf - ' #uncompress tar.bz2
 alias mm='cp -u ~/.X4/Makefile .; make distclean > /dev/null && make; ./${PWD##*/}' #clean tmp files, compile and execute the ./current_directoryname. Works always thanks to my Generic Makefile
 alias psa='ps -eo pid,user,group,args,etime,lstart '
-alias yurl='mplayer -fs $(curl -s "http://www.youtube.com/get_video_info?&video_id=$0" | echo -e $(sed "s/%/\\x/g;s/.*\(v[0-9]\.lscache.*\)/http:\/\/\1/g") | grep -oP "^[^|,]*")'
+alias targx="tar -zxvf"
+alias targc="tar -cxvf"
+alias tarbx="tar --bzip2 -xvf"
+alias tarbc="tar --bzip2 -cvf"
 
 # Ruby / Rails
 alias rorv='which ruby;which rails;which bundle;ruby -v;rails -v; bundle -v' #show ror version numbers
@@ -369,5 +403,20 @@ rm -r "$TMPDIR"
 }
 
 
-# [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm # Lokal install
-# [[ -s '/usr/local/rvm/scripts/rvm' ]] && source '/usr/local/rvm/scripts/rvm' # Global install
+zrecompile -p -R ~/.zshrc -- -M ~/.zcompdump --  > /dev/null
+
+for ((i=1; i <= $#fpath; ++i)); do
+  dir=$fpath[i]
+  zwc=${dir:t}.zwc
+  if [[ $dir == (.|..) || $dir == (.|..)/* ]]; then
+    continue
+  fi
+  files=($dir/*(N-.))
+  if [[ -w $dir:h && -n $files ]]; then
+    files=(${${(M)files%/*/*}#/})
+    if ( cd $dir:h &&
+         zrecompile -p -U -z $zwc $files ); then
+      fpath[i]=$fpath[i].zwc
+    fi
+  fi
+done
