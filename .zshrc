@@ -9,7 +9,10 @@ setopt HIST_IGNORE_DUPS
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-# export ZSH_THEME="muse"
+if [[ -e $HOME/.zsh_custom ]]; then
+	# export ZSH_THEME="muse"
+        source $HOME/.zsh_custom
+fi
 
 # Set to this to use case-sensitive completion
 # export CASE_SENSITIVE="true"
@@ -37,9 +40,6 @@ MAXHISTFILES=20
 plugins=(rvm rails3 ruby bundler git npm node git git-flow debian deb history-substring-search extract compleat)
 
 source $ZSH/oh-my-zsh.sh
-if [[ -e $HOME/.zsh_custom ]]; then
-	source $HOME/.zsh_custom
-fi
 
 export CLICOLOR=true
 
