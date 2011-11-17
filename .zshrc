@@ -9,7 +9,7 @@ setopt HIST_IGNORE_DUPS
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-export ZSH_THEME="robbyrussell"
+# export ZSH_THEME="muse"
 
 # Set to this to use case-sensitive completion
 # export CASE_SENSITIVE="true"
@@ -37,7 +37,9 @@ MAXHISTFILES=20
 plugins=(rvm rails3 ruby bundler git npm node git git-flow debian deb history-substring-search extract compleat)
 
 source $ZSH/oh-my-zsh.sh
-#source $HOME/.X4/.zsh_theme
+if [[ -e $HOME/.zsh_custom ]]; then
+	source $HOME/.zsh_custom
+fi
 
 export CLICOLOR=true
 
@@ -109,7 +111,7 @@ alias chmodWWW=' for i in `find . -type d`; do  chmod 775 $i; done; for i in `fi
 alias sstart='sudo service $0 start'
 alias sstop='sudo service $0 stop'
 alias sreload='sudo service $0 reload'
-alias '1proxy'="PORT=$[${RANDOM}%2012+4012]; echo -n 'Enter Hostname: '; read HOSTNAME; ssh -C2Ntf -c blowfish -D $PORT $HOSTNAME sleep 2; echo 'Your proxy runs on: localhost:${PORT} forwarded through ${HOSTNAME}'" # start with proxyme to unblock stuff through your proxy
+alias '1proxy'="PORT=$[${RANDOM}%2012+4012]; echo -n 'Enter Hostname: '; read HOSTNAME; ssh -C2 -c blowfish -D $PORT $HOSTNAME sleep 5; echo 'Your proxy runs on: localhost:${PORT} forwarded through ${HOSTNAME}'" # start with proxyme to unblock stuff through your proxy
 alias '0proxy'="read USER; kill $(ps ax o 'pid euser egroup command' | grep "sshd: $USER" | awk '{ print $1 }' | sed ':a;N;$!ba;s/\n/ /g') > /dev/null" #kills all users using ssh with given username
 
 # Lazyness / Comfort
