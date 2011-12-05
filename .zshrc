@@ -10,7 +10,6 @@ setopt HIST_IGNORE_DUPS
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 if [[ -e $HOME/.zsh_custom ]]; then
-	# export ZSH_THEME="muse"
         source $HOME/.zsh_custom
 fi
 
@@ -37,33 +36,17 @@ MAXHISTFILES=20
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(rvm rails3 ruby bundler git npm node git git-flow debian deb history-substring-search extract compleat)
+plugins=(command-coloring git npm node git git-flow debian deb history-substring-search extract compleat taskwarrior)
 
 source $ZSH/oh-my-zsh.sh
 
 export CLICOLOR=true
 
-autoload -U zrecompile 
-
-### Use cache - Some functions, like _apt and _dpkg, are very slow. You can use a cache in
-## order to proxy the list of results (like the list of available debian packages)
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.zsh/cache
-
-## Prevent CVS files/directories from being completed
-zstyle ':completion:*:(all-|)files' ignored-patterns '(|*/)CVS'
-zstyle ':completion:*:cd:*' ignored-patterns '(*/)#CVS'
-
-## With commands like `rm' it's annoying if one gets offered the same filename
-## again even if it is already on the command line. To avoid that:
-zstyle ':completion:*:rm:*' ignore-line yes
-
-
 # Customize to your needs...
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
 
 #########################################
-# Aliases and Functions only
+# Aliases and Helpers
 #########################################
 
 # Enhancements
@@ -71,12 +54,15 @@ alias mount='mount | column -t' #prettyfy mounted filesystems
 alias dims='identify -format %wx%h ${1}' #get image dimensions
 alias dirsize="du -sk ./* | sort -n | AWKSIZE" #show directory sizes
 alias favs="history | awk '{print $2}' | sort | uniq -c | sort -rn | head" #show favorite commands
+alias stay='tail -f'
+alias bc='bc -q -l ~/.X4/.bcrc'
 
 # Show / Find
 alias h='ls -Alih --color' #more informative ls
-alias l="ls -alhgGd .* --color 2> /dev/null | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}' && ls -lhgG --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'" # show oktal permissions
+alias l="ls -alhd .* --color 2> /dev/null | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}' && ls -lh --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'" # show oktal permissions
 alias le='ls -ld *(/^F)' #show empty dirs
 alias lm='ls -t $* 2> /dev/null | head -n 1' #show last modified
+alias lsym='find . -lname "*"' #show symbolic links
 
 # GIT
 alias git-sub='git submodule init && git submodule update' #update all git submodules
@@ -91,11 +77,12 @@ alias gb='git branch'
 alias gs='git status -sb'
 alias gd='git diff'
 alias grm="git status | grep deleted | awk '{print \$3}' | xargs git rm"
-alias changelog='git --no-pager log --format="%ai %aN %n%n%x09* %s%d%n" > ChangeLog'
+alias changelog='git --no-pager log --format="%ai %aN %n%n%x09* %s%d%n" | sed "s/\*\ \*/*/g" > ChangeLog'
 alias 'ga!'='find . -type d -empty -exec touch {}/.gitignore \;'
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 alias gamend='git commit --amend -C HEAD'
 alias gundo='git reset --soft HEAD^' # Undo your last commit, but don't throw away your changes
+alias gredo='git reset --soft HEAD'
 alias gtop="cat /home/git/.gitolite/logs/gitolite-`date +%Y-%m -d -30days`.log | cut -f2 | sort | uniq -c | sort -n -r"
 
 # Maintainance
@@ -113,11 +100,13 @@ alias sstop='sudo service $0 stop'
 alias sreload='sudo service $0 reload'
 alias '1proxy'="PORT=$[${RANDOM}%2012+4012]; echo -n 'Enter Hostname: '; read HOSTNAME; ssh -C2 -c blowfish -D $PORT $HOSTNAME sleep 5; echo 'Your proxy runs on: localhost:${PORT} forwarded through ${HOSTNAME}'" # start with proxyme to unblock stuff through your proxy
 alias '0proxy'="read USER; kill $(ps ax o 'pid euser egroup command' | grep "sshd: $USER" | awk '{ print $1 }' | sed ':a;N;$!ba;s/\n/ /g') > /dev/null" #kills all users using ssh with given username
+alias lsock='lsof -Pnl +M -i4'
 
 # Lazyness / Comfort
-alias hue='tar -cvf fdgr46.tar fdgr46 && gzip fdgr46.tar' #finish homework
+alias hue='git --no-pager log --format="%ai %aN %n%n%x09* %s%d%n" | sed "s/\*\ \*/*/g" > fdgr46/ChangeLog; tar -cvf fdgr46.tar fdgr46 && gzip fdgr46.tar' #finish homework
 alias dl='curl -O ' #download
 alias c='gcc -Wall -ansi -pedantic -g -o ' #compile C
+alias cb='cp $0{,.orig}' #backup file to file.orig
 alias bz='bzip2 -dc ${1} | tar -xf - ' #uncompress tar.bz2
 alias mm='cp -u ~/.X4/Makefile .; make distclean > /dev/null && make; ./${PWD##*/}' #clean tmp files, compile and execute the ./current_directoryname. Works always thanks to my Generic Makefile
 alias psa='ps -eo pid,user,group,args,etime,lstart '
@@ -132,293 +121,12 @@ alias mongodb='mkdir /tmp/mongo -p && mongod --dbpath /tmp/mongo --rest > /dev/n
 alias hamilize="find . -name '*erb' | xargs ruby -e 'ARGV.each { |i| puts \"html2haml -r #{i} #{i.sub(/erb$/,\"haml\")};rm #{i}\"}' | bash" #erb2haml
 
 
-
+#########################################
 # Shell Functions
+#########################################
+source $HOME/.X4/functions/helpers
+source $HOME/.X4/functions/vga_switch
 
-#update G-WAN
-update-gwan(){
-if [[ ! -f gwan_linux.tar.bz2 ]]; then
-        wget -NP "$HOME/.gwan" "gwan.ch/archives/gwan_linux.tar.bz2" 2> /dev/null
-else
-        newfilesum=$(wget -NP "$HOME/.gwan" "gwan.ch/archives/gwan_linux.tar.bz2" 2> /dev/null | sha256sum "$HOME/.gwan/gwan_linux.tar.bz2" 2> /dev/null)
-        oldfilesum=$(sha256sum "$HOME/.gwan/gwan_linux.tar.bz2" 2> /dev/null)
-        if [[ $newfilesum != $oldfilesum ]]; then
-                # Create backup directory
-                mkdir -p "$HOME/.gwan/backups/"
+# ZSH Tuning
+source $HOME/.X4/functions/zsh_compile
 
-                # Backup local G-WAN installation
-                tar cfj "$HOME/.gwan/backups/gwan.$(date --iso).tar.bz2" "/usr/local/gwan"
-
-                # Decompress new G-WAN archive
-                tar xjf "$HOME/.gwan/gwan_linux.tar.bz2"
-
-                # Update local G-WAN installation with new files using rsync
-                sudo rsync -avP "$HOME/.gwan/gwan/" "/usr/local/gwan"
-
-                # Take ownership of all gwan files, so that we can edit without beeing root
-                sudo chown $(whoami):root -R "/usr/local/gwan" 2> /dev/null
-
-                # Remove temporary directory
-                rm -R "$HOME/.gwan/gwan"
-
-                # Create a symbolic link so that we can run ie. gwan -v anywhere
-                sudo ln -s "/usr/local/gwan/gwan" "/usr/local/bin/gwan"
-        else
-                /usr/local/gwan/gwan -v | tr '\n' ' ' | echo -n "You're running "
-        fi
-fi
-}
-
-#ask wikipedia
-wiki(){
-    C=`tput cols`;dig +short txt ${1}.wp.dg.cx|sed -e 's/" "//g' -e 's/^"//g' -e 's/"$//g' -e 's/ http:/\n\nhttp:/'|fmt -w $C
-}
-
-#translate EN<->DE
-dict(){
-    NAME="dict.cc"; VERSION="1.0"; USERAGENT="${NAME}/${VERSION} (cli)";
-
-    if [[ "x${1}" = "x" ]]; then
-      echo "missing word."
-      echo "USAGE:" $(basename $0) "WORD"
-      return 1
-    fi
-
-    echo "" > /tmp/dict
-    SITE="$(wget --user-agent="${USERAGENT}" -q -O - "http://www.dict.cc/?s=${1}")"
-    echo "ENGLISH"
-    echo "${SITE}" | grep "var c1Arr = new Array" | cut -d '(' -f2 | cut -d ')' -f1 | sed "s/,/\n/g" | sed "s/\"//g" | grep -v "^$" | uniq | sed "s/^/\t/"| column | fold -s --width=120
-    echo "DEUTSCH"
-    echo "${SITE}" | grep "var c2Arr = new Array" | cut -d '(' -f2 | cut -d ')' -f1 | sed "s/,/\n/g" | sed "s/\"//g" | grep -v "^$" | uniq | sed "s/^/\t/"| column | fold -s --width=120
-}
-
-#easier archive extraction
-extract () {
-    if [ -f $1 ] ; then
-        case $1 in
-            *.tar.bz2)   tar xvjf $1        ;;
-            *.tar.gz)    tar xvzf $1     ;;
-            *.bz2)       bunzip2 $1       ;;
-            *.rar)       unrar x $1     ;;
-            *.gz)        gunzip $1     ;;
-            *.tar)       tar xvf $1        ;;
-            *.tbz2)      tar xvjf $1      ;;
-            *.tgz)       tar xvzf $1       ;;
-            *.zip)       unzip $1     ;;
-            *.Z)         uncompress $1  ;;
-            *.7z)        7z x $1    ;;
-            *)           echo "'$1' cannot be extracted via >extract<" ;;
-        esac
-    else
-        echo "'$1' is not a valid file"
-    fi
-}
-
-AWKSIZE(){
-    awk 'BEGIN{ pref[1]="K"; pref[2]="M"; pref[3]="G";} { total = total + $1; x = $1; y = 1; while( x > 1024 ) { x = (x + 1023)/1024; y++; } printf("%g%s\t%s\n",int(x*10)/10,pref[y],$2); } END { y = 1; while( total > 1024 ) { total = (total + 1023)/1024; y++; } printf("Total: %g%s\n",int(total*10)/10,pref[y]); }'
-}
-
-xplot() {
-    TMP="/tmp/gnuplot.tmp"
-    if [ $# != 0 ];
-    then
-        echo "set title \"Xplot Fast Plot with gnuplot\" ." > $TMP
-        echo "set xlabel \"x axes\"" >> $TMP
-        echo "set ylabel \"y axez\"" >> $TMP
-        echo -n "plot \"$1\" " >> $TMP
-        for i in $@
-        do
-        if [ $i != $1 ];then
-            echo -n "$i " >> $TMP
-        fi
-        done
-        echo "">>$TMP
-        gnuplot -persist $TMP
-        rm $TMP
-    else
-        echo "Please use xplot <file.dat> <options> to plot"
-    return 1
-    fi
-}
-
-
-vgaswitch() {
-# version 20101107
-
-pci_integrated=$(lspci | grep VGA | sed -n '1p' | cut -f 1 -d " ")
-pci_discrete=$(lspci | grep VGA | sed -n '2p' | cut -f 1 -d " ")
-
-integrated=$(cat /sys/kernel/debug/vgaswitcheroo/switch | grep $pci_integrated | grep -o -P ':.:...:')
-discrete=$(cat /sys/kernel/debug/vgaswitcheroo/switch | grep $pci_discrete | grep -o -P ':.:...:')
-
-name_integrated=$(lspci | grep VGA | sed -n '1p' | sed -e "s/.* VGA compatible controller[ :]*//g" | sed -e "s/ Corporation//g" | sed -e "s/ Technologies Inc//g" | sed -e 's/\[[0-9]*\]: //g' | sed -e 's/\[[0-9:a-z]*\]//g' | sed -e 's/(rev [a-z0-9]*)//g' | sed -e "s/ Integrated Graphics Controller//g")
-
-name_discrete=$(lspci | grep VGA | sed -n '2p' | sed -e "s/.* VGA compatible controller[ :]*//g" | sed -e "s/ Corporation//g" | sed -e "s/ Technologies Inc//g" | sed -e 's/\[[0-9]*\]: //g' | sed -e 's/\[[0-9:a-z]*\]//g' | sed -e 's/(rev [a-z0-9]*)//g' | sed -e "s/ Integrated Graphics Controller//g")
-
-if [ "$integrated" = ":+:Pwr:" ]
-then
- integrated_condition="(*) - Power ON"
-elif [ "$integrated" = ": :Pwr:" ]
-then
- integrated_condition="( ) - Power ON"
-elif [ "$integrated" = ": :Off:" ]
-then
- integrated_condition="( ) - Power OFF"
-fi
-
-if [ "$discrete" = ":+:Pwr:" ]
-then
- discrete_condition="(*) - Power ON"
-elif [ "$discrete" = ": :Pwr:" ]
-then
- discrete_condition="( ) - Power ON"
-elif [ "$discrete" = ": :Off:" ]
-then
- discrete_condition="( ) - Power OFF"
-fi
-
-gxmessage -center \
-          -buttons "_Cancel":1,"switch to _Integrated":101,"switch to _Discrete":102 \
-          -wrap \
-          -title "Choose Hybrid Graphic Card" \
-"Choose Hybrid Graphic Card
-=================
-Integrated: $integrated_condition : $name_integrated
-Discrete: $discrete_condition : $name_discrete"
-
-
-whichCard=$?
-
-case "$whichCard" in
-
-1)
- echo "Exit"
-;;
-101)
- if [ "$integrated" == ":+:Pwr:" ] && [ "$discrete" == ": :Pwr:" ]
- then
-  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_down.png" "switching to $name_integrated"
-  echo OFF > /sys/kernel/debug/vgaswitcheroo/switch
- elif [ "$integrated" == ": :Pwr:" ] && [ "$discrete" == ":+:Pwr:" ]
- then
-  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_down.png" "switching to $name_integrated"
-  echo DIGD > /sys/kernel/debug/vgaswitcheroo/switch
-  if [ "$DESKTOP_SESSION" = "openbox" ]
-  then
-   killall -u "$USER"
-  elif [ "$DESKTOP_SESSION" = "gnome" ]
-  then
-   gnome-session-save --logout
-  fi
- elif [ "$integrated" == ": :Off:" ] && [ "$discrete" == ":+:Pwr:" ]
- then
-  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_down.png" "switching to $name_integrated"
-  echo ON > /sys/kernel/debug/vgaswitcheroo/switch
-  echo DIGD > /sys/kernel/debug/vgaswitcheroo/switch
-  if [ "$DESKTOP_SESSION" = "openbox" ]
-  then
-   killall -u "$USER"
-  elif [ "$DESKTOP_SESSION" = "gnome" ]
-  then
-   gnome-session-save --logout
-  fi
- elif [ "$integrated" == ":+:Pwr:" ] && [ "$discrete" == ": :Off:" ]
- then
-  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_down.png" "already switched to $name_integrated"
- fi
-;;
-102)
- if [ "$integrated" == ":+:Pwr:" ] && [ "$discrete" == ": :Pwr:" ]
- then
-  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_up.png" "switching to $name_discrete"
-  echo DDIS > /sys/kernel/debug/vgaswitcheroo/switch
-  if [ "$DESKTOP_SESSION" = "openbox" ]
-  then
-   killall -u "$USER"
-  elif [ "$DESKTOP_SESSION" = "gnome" ]
-  then
-   gnome-session-save --logout
-  fi
- elif [ "$integrated" == ": :Pwr:" ] && [ "$discrete" == ":+:Pwr:" ]
- then
-  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_up.png" "switching to $name_discrete"
-  echo OFF > /sys/kernel/debug/vgaswitcheroo/switch
- elif [ "$integrated" == ":+:Pwr:" ] && [ "$discrete" == ": :Off:" ]
- then
-  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_up.png" "switching to $name_discrete"
-  echo ON > /sys/kernel/debug/vgaswitcheroo/switch
-  echo DDIS > /sys/kernel/debug/vgaswitcheroo/switch
-  if [ "$DESKTOP_SESSION" = "openbox" ]
-  then
-   killall -u "$USER"
-  elif [ "$DESKTOP_SESSION" = "gnome" ]
-  then
-   gnome-session-save --logout
-  fi
- elif [ "$integrated" == ": :Off:" ] && [ "$discrete" == ":+:Pwr:" ]
- then
-  notify-send -t 5000 --icon="/home/$USER/.local/share/icons/hardware_up.png" "already switched to $name_discrete"
- fi
-;;
-esac
-}
-
-debdep() {
-if [[ -z "$1" ]]; then
-  echo "Syntax: $0 debfile"
-  return 1
-fi
-
-DEBFILE="$1"
-TMPDIR=`mktemp -d /tmp/deb.XXXXXXXXXX` || return 1
-OUTPUT=`basename "$DEBFILE" .deb`.modfied.deb
-
-if [[ -e "$OUTPUT" ]]; then
-  echo "$OUTPUT exists."
-  rm -r "$TMPDIR"
-  return 1
-fi
-
-dpkg-deb -x "$DEBFILE" "$TMPDIR"
-dpkg-deb --control "$DEBFILE" "$TMPDIR"/DEBIAN
-
-if [[ ! -e "$TMPDIR"/DEBIAN/control ]]; then
-  echo DEBIAN/control not found.
-
-  rm -r "$TMPDIR"
-  return 1
-fi
-
-CONTROL="$TMPDIR"/DEBIAN/control
-
-MOD=`stat -c "%y" "$CONTROL"`
-vi "$CONTROL"
-
-if [[ "$MOD" == `stat -c "%y" "$CONTROL"` ]]; then
-  echo Not modfied.
-else
-  echo Building new deb...
-  dpkg -b "$TMPDIR" "$OUTPUT"
-fi
-
-rm -r "$TMPDIR"
-}
-
-
-zrecompile -p -R ~/.zshrc -- -M ~/.zcompdump --  > /dev/null
-
-for ((i=1; i <= $#fpath; ++i)); do
-  dir=$fpath[i]
-  zwc=${dir:t}.zwc
-  if [[ $dir == (.|..) || $dir == (.|..)/* ]]; then
-    continue
-  fi
-  files=($dir/*(N-.))
-  if [[ -w $dir:h && -n $files ]]; then
-    files=(${${(M)files%/*/*}#/})
-    if ( cd $dir:h &&
-         zrecompile -p -U -z $zwc $files ); then
-      fpath[i]=$fpath[i].zwc
-    fi
-  fi
-done
