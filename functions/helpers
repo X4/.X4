@@ -2,9 +2,14 @@
 autovpn(){
     while [ 1 ]; do
        echo -n $(date) "##  "
-       sudo $HOME/.X4/autovpn
+       sudo $HOME/.X4/functions/autovpn
        sleep 3
     done
+}
+
+#chkservice control services
+chkservice(){
+	sudo $HOME/.X4/functions/chkservice
 }
 
 #update G-WAN
@@ -91,7 +96,10 @@ extract () {
     fi
 }
 
+# convert to Upper-Case
 toUpper() { echo $@ | tr "[:lower:]" "[:upper:]"; }
+
+# currency conversion
 currency() {
 	if [ $# -eq 2 ]
 	then
