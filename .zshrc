@@ -41,13 +41,10 @@ plugins=(command-coloring git npm node git git-flow debian deb history-substring
 source $ZSH/oh-my-zsh.sh
 
 export CLICOLOR=true
+export LESS="-erX"
 
 # Customize to your needs...
-export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
-
-#########################################
-# Aliases and Helpers
-#########################################
+export PATH=/usr/local/bin/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
 
 # Enhancements
 alias mount='mount | column -t' #prettyfy mounted filesystems
@@ -59,7 +56,7 @@ alias bc='bc -q -l ~/.X4/.bcrc'
 
 # Show / Find
 alias h='ls -Alih --color' #more informative ls
-alias l="ls -alhd .* --color 2> /dev/null | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}' && ls -lh --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'" # show oktal permissions
+alias l="noglob ls -alhd .* --color 2> /dev/null | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}' && ls -lh --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'" # show oktal permissions
 alias le='ls -ld *(/^F)' #show empty dirs
 alias lm='ls -t $* 2> /dev/null | head -n 1' #show last modified
 alias lsym='find . -lname "*"' #show symbolic links
@@ -89,7 +86,7 @@ alias gtop="cat /home/git/.gitolite/logs/gitolite-`date +%Y-%m -d -30days`.log |
 alias cls='source ~/.zshrc && reset' #reload config and reset terminal
 alias empty='clear && history -p' #kill history
 alias savedb='mysqldump --all-databases -p | bzip2 -c > $(date --rfc-3339=date)fulldatabasebackup.sql.bz2'
-alias 'os?'='lsb_release -a;echo;cat /etc/*release;echo; cat /etc/issue' #get os info
+alias 'os?'='lsb_release -a;echo;cat /etc/*release;echo; cat /etc/issue*' #get os info
 alias 'empty?'='ls *(L0f.go-w.)' #List all zero-length-files which are not group- or world-writable
 alias update-fonts='fc-cache -f -r -v' #update font cache
 alias userlist='awk -F":" '"'"'{ print "username: " $1 "\t\tuid:" $3 }'"'"' /etc/passwd | column -t'
@@ -129,4 +126,3 @@ source $HOME/.X4/functions/vga_switch
 
 # ZSH Tuning
 source $HOME/.X4/functions/zsh_compile
-
