@@ -1,3 +1,10 @@
+start()   { for arg in $*; do sudo /etc/rc.d/rc.$arg start;   done }
+stop()    { for arg in $*; do sudo /etc/rc.d/rc.$arg stop;    done }
+restart() { for arg in $*; do sudo /etc/rc.d/rc.$arg restart; done }
+run()     { for arg in $*; do sudo /etc/rc.d/rc.$arg run;     done }
+test()    { for arg in $*; do sudo /etc/rc.d/rc.$arg test;    done }
+status()  { for arg in $*; do sudo /etc/rc.d/rc.$arg status;  done }
+
 #reconnect vpns
 autovpn(){
     while [ 1 ]; do

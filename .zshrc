@@ -1,8 +1,11 @@
 # Path to your oh-my-zsh configuration.
 export ZSH=$HOME/.oh-my-zsh
 
+setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_SPACE
-setopt HIST_IGNORE_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt HIST_VERIFY
 
 
 # Set name of the theme to load.
@@ -34,6 +37,10 @@ ROTATEHIST=10000
 # How many .zsh_history file rotations to keep
 MAXHISTFILES=20
 
+# Remove duplicate history entries
+export HISTCONTROL=erasedups
+export HISTIGNORE="&:ls:ll:la:pwd:exit:clear" #Never log these
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
 plugins=(command-coloring git npm node git git-flow debian deb history-substring-search extract compleat taskwarrior)
@@ -44,7 +51,7 @@ export CLICOLOR=true
 export LESS="-erX"
 
 # Customize to your needs...
-export PATH=/usr/local/bin/ccache:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/local/sbin:/usr/sbin:/sbin:/usr/lib64/java/bin:~/bin:/usr/share
 
 # Enhancements
 alias mount='mount | column -t' #prettyfy mounted filesystems
@@ -103,7 +110,7 @@ alias lsock='lsof -Pnl +M -i4'
 alias hue='git --no-pager log --format="%ai %aN %n%n%x09* %s%d%n" | sed "s/\*\ \*/*/g" > fdgr46/ChangeLog; tar -cvf fdgr46.tar fdgr46 && gzip fdgr46.tar' #finish homework
 alias dl='curl -O ' #download
 alias c='gcc -Wall -ansi -pedantic -g -o ' #compile C
-alias cb='cp $0{,.orig}' #backup file to file.orig
+alias cb='cp $1{,.orig}' #backup file to file.orig
 alias bz='bzip2 -dc ${1} | tar -xf - ' #uncompress tar.bz2
 alias mm='cp -u ~/.X4/Makefile .; make distclean > /dev/null && make; ./${PWD##*/}' #clean tmp files, compile and execute the ./current_directoryname. Works always thanks to my Generic Makefile
 alias psa='ps -eo pid,user,group,args,etime,lstart '
@@ -111,6 +118,7 @@ alias targx="tar -zxvf"
 alias targc="tar -cxvf"
 alias tarbx="tar --bzip2 -xvf"
 alias tarbc="tar --bzip2 -cvf"
+alias duff="du -hd 1 | sort -h"
 
 # Ruby / Rails
 alias rorv='which ruby;which rails;which bundle;ruby -v;rails -v; bundle -v' #show ror version numbers
