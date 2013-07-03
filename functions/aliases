@@ -1,0 +1,80 @@
+# Enhancements
+alias gdb="gdb -q"
+alias cal="cal -m -3"
+alias mount="mount | column -t" #prettyfy mounted filesystems
+alias dirsize="du -sk ./* | sort -n | AWKSIZE" #show directory sizes
+alias favs="history | awk '{print $2}' | sort | uniq -c | sort -rn | head" #show favorite commands
+alias stay="tail -f"
+alias bc="bc -q -l ~/.bcrc"
+
+# Show / Find
+alias h="ls -Alih --color" #more informative ls
+alias l="noglob ls -alhd .* --color 2> /dev/null | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}' && ls -lh --color | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\" %0o \",k);print}'" # show oktal permissions
+alias le="ls -ld *(/^F)" #show empty dirs
+alias lm="ls -t $* 2> /dev/null | head -n 1" #show last modified
+alias lsym="find . -lname \"*\"" #show symbolic links
+
+# GIT
+alias g.sub="git submodule init && git submodule update" #update all git submodules
+alias g.up="find . -type d -name .git -exec sh -c \"cd \"{}\"/../ && pwd && git pull && git submodule init && git submodule update\" \;"    # find all .git directories and exec "git pull" on the parent.
+alias g.c="git clone "
+alias g.pm="git push -u origin master"
+alias g.co="git commit "
+alias g.s="git status -sb "
+alias g.rm="git status | grep deleted | awk '{print \$3}' | xargs git rm"
+alias g.changelog="git --no-pager log --format=\"%ai %aN %n%n%x09* %s%d%n\" | sed \"s/\*\ \*/*/g\" > ChangeLog"
+alias g.ignore="find . -type d -empty -exec touch {}/.gitignore \;"
+alias g.log="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
+alias g.amend="git commit --amend -C HEAD "
+alias g.undo="git reset --soft HEAD^ " # Undo your last commit, but don't throw away your changes
+alias g.redo="git reset --soft HEAD "
+alias g.top="cat /home/git/.gitolite/logs/gitolite-`date +%Y-%m -d -30days`.log | cut -f2 | sort | uniq -c | sort -n -r"
+alias g.export="git archive --format=tar --remote=$1 master | tar -xf -" #only works with ssh://
+
+# Maintainance
+alias cls="source ~/.zshrc && reset" #reload config and reset terminal
+alias empty="clear && history -p" #kill history
+alias savedb="mysqldump --all-databases -p | bzip2 -c > $(date --rfc-3339=date)fulldatabasebackup.sql.bz2"
+alias 'os?'="lsb_release -a;echo;cat /etc/*release;echo; cat /etc/issue*" #get os info
+alias 'empty?'="ls *(L0f.go-w.)" #List all zero-length-files which are not group- or world-writable
+alias 'update-fonts'="fc-cache -f -r -v" #update font cache
+alias 'update-system-fonts'="PERSONAL_FONTS=$HOME/.fonts && echo \"Scanning $PERSONAL_FONTS\"; sudo fc-cache -f -r -v $PERSONAL_FONTS; sudo texhash; sudo mktexlsr; sudo updmap-sys --force"
+alias userlist='awk -F":" '"'"'{ print "username: " $1 "\t\tuid:" $3 }'"'"' /etc/passwd | column -t'
+alias chmodFix=' for i in `find . -type d`; do  chmod 755 $i; done; for i in `find . -type f`; do  chmod 644 $i; done'
+alias chmodWWW=' for i in `find . -type d`; do  chmod 775 $i; done; for i in `find . -type f`; do  chmod 664 $i; done'
+alias cmx="chmod +x "
+alias '1proxy'="PORT=$[${RANDOM}%2012+4012]; echo -n 'Enter Hostname: '; read HOSTNAME; ssh -C2 -c blowfish -D $PORT $HOSTNAME sleep 5; echo 'Your proxy runs on: localhost:${PORT} forwarded through ${HOSTNAME}'" # start with proxyme to unblock stuff through your proxy
+alias '0proxy'="read USER; kill $(ps ax o 'pid euser egroup command' | grep "sshd: $USER" | awk '{ print $1 }' | sed ':a;N;$!ba;s/\n/ /g') > /dev/null" #kills all users using ssh with given username
+alias lsock="lsof -Pnl +M -i4"
+alias autotools="aclocal && autoheader && libtoolize --copy --automake && automake --copy --add-missing  && autoconf"
+alias 'please-plasma'="kbuildsycoca4 2>/dev/null && kquitapp plasma-desktop 2>/dev/null ; kstart plasma-desktop > /dev/null 2>&1"
+alias utf8="ex $1 \"+set ff=unix fileencoding=utf-8\" \"+x\""
+
+
+# Ruby / Rails
+alias gemup="gem update --system && gem update"
+alias rorv="which ruby;which rails;which bundle;ruby -v;rails -v; bundle -v" #show ror version numbers
+alias mongodb="mkdir /tmp/mongo -p && mongod --dbpath /tmp/mongo --rest > /dev/null &" #start mongodb
+alias hamilize="find . -name '*erb' | xargs ruby -e 'ARGV.each { |i| puts \"html2haml -r #{i} #{i.sub(/erb$/,\"haml\")};rm #{i}\"}' | bash" #erb2haml
+
+# Lazyness / Comfort
+alias hue="git --no-pager log --format=\"%ai %aN %n%n%x09* %s%d%n\" | sed \"s/\*\ \*/*/g\" > fdgr46/ChangeLog; tar -cvf fdgr46.tar fdgr46 && gzip fdgr46.tar" #finish homework
+alias dl="curl -O " #download
+alias c="gcc -Wall -ansi -pedantic -g -o " #compile C
+alias cb="cp $1{,.orig}" #backup file to file.orig
+alias bz="bzip2 -dc ${1} | tar -xf - " #uncompress tar.bz2
+alias mm="cp -u ~/.X4/Makefile .; make distclean > /dev/null && make; ./${PWD##*/}" #clean tmp files, compile and execute the ./current_directoryname. Works always thanks to my Generic Makefile
+alias psa="ps -eo pid,user,group,args,etime,lstart "
+alias psl="watch -n 1 ps -eo %cpu,pid,egid,user,group,args,etime,lstart,comm --sort=-%cpu,uid,-ppid,+pid "
+alias targx="tar -zxvf"
+alias targc="tar -cxvf"
+alias tarbx="tar --bzip2 -xvf"
+alias tarbc="tar --bzip2 -cvf"
+alias duff="du -hd 1 | sort -h"
+alias eqq="equo match --multimatch --multirepo --installed "
+alias eqs="equo s "
+alias eqi="equo i "
+alias eqr="equo rm "
+alias equ="equo up && equp u"
+alias 'update-repos'="equo up && layman -S && emerge --sync "
+

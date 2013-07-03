@@ -1,0 +1,8 @@
+[Unit]
+Description=Disable ATI
+
+[Service]
+ExecStart=/home/ferhat/.X4/binaries/disable-ati
+
+[Install]
+WantedBy=multi-user.target

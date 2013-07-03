@@ -1,9 +1,38 @@
-start()   { for arg in $*; do sudo /etc/rc.d/rc.$arg start;   done }
-stop()    { for arg in $*; do sudo /etc/rc.d/rc.$arg stop;    done }
-restart() { for arg in $*; do sudo /etc/rc.d/rc.$arg restart; done }
-run()     { for arg in $*; do sudo /etc/rc.d/rc.$arg run;     done }
-test()    { for arg in $*; do sudo /etc/rc.d/rc.$arg test;    done }
-status()  { for arg in $*; do sudo /etc/rc.d/rc.$arg status;  done }
+#start()   { for arg in $*; do sudo /etc/rc.d/rc.$arg start;   done }
+#stop()    { for arg in $*; do sudo /etc/rc.d/rc.$arg stop;    done }
+#restart() { for arg in $*; do sudo /etc/rc.d/rc.$arg restart; done }
+#run()     { for arg in $*; do sudo /etc/rc.d/rc.$arg run;     done }
+#test()    { for arg in $*; do sudo /etc/rc.d/rc.$arg test;    done }
+#status()  { for arg in $*; do sudo /etc/rc.d/rc.$arg status;  done }
+
+# get image dimensions
+imgres () {
+for image in "$@"; do
+  if [ ${image: -4} == ".txt" ]; then
+
+    # use identify to get the size in format "width height"
+    size="$(identify -format "%w %h" "$image")"
+
+    # extract width from the string by 'cutting off' everything
+    # from the first space on (or up to the first space(see string manipulations)
+    width="${size%% *}"
+
+    # extract height
+    height="${size##* }" 
+
+    # use bash math to compare the numbers
+    if ((width*height>maxsize)); then
+        echo "$fname";
+    fi
+  fi
+#	identify -format '%f is a %zbit %C compressed %m with %G@%nfps AND %wx%h\n' "$@" | sort -u | tr -s '\n';
+done
+}
+
+# show weather
+function show_weather() {
+   curl --silent "http://xml.weather.yahoo.com/forecastrss?p=GMXX0260&u=c" | grep -E '(Current Conditions:| C<BR)' | sed -e 's/Current Conditions://' -e 's/<br \/>//' -e 's/<b>//' -e 's/<\/b>//' -e 's/<BR \/>//g' -e 's/<description>//' -e 's/<\/description>//' -e 's/Drifting Snow/Schneeverwehungen/g' -e 's/Fair/Heiter/g' -e 's/Haze/Nebel/g' -e 's/Partly/Zum Teil/g' -e 's/Sunny/Sonnig/g' -e 's/Mostly/Meist/g' -e 's/Heavy/Starker/g' -e 's/Light/Leichter/g' -e 's/Rain Shower/Regenschauer/g' -e 's/Rain/Regen/g' -e 's/Showers/Schauer/g' -e 's/T-showers/Gewitter/g' -e 's/Thundershower/Gewitterschauer/g' -e 's/Mostly/Meist/g' -e 's/Scattered/Vereinzelt/g' -e 's/Showers Late/Abends Schauer/g' -e 's/Shower/Schauer/g' -e 's/Showers in the Vicinity/Schauer in der Umgebung/g' -e 's/AM/vormittags/g' -e 's/PM/nachmittags/g' -e 's/Clear/Klar/g' -e 's/Cloudy/bewÃ¶lkt/g' -e 's/Windy/windig/g' -e 's/Few/Wenige/g' -e 's/Thunderstorm/Gewittersturm/g' -e 's/Thunder/Gewitter/g' -e 's/Snow/Schnee/g' -e 's/Fog/Nebel/g' -e 's/Early/Morgens/g' -e 's/Late/Abends/g' -e 's/Drizzle/Nieselregen/g' -e 's/Isolated/Vereinzelt/g' -e 's/Mix/Wechselhaft/g' -e 's/Wintry/Winterlich/g' -e 's/to/oder/g' -e 's/in the Vicinity/in der Umgebung/g' -e 's/Mist/Leichter Nebel/g' -e 's/\ C$/\Â°C/' -e 's/,/ bei/g' -e 's/with/mit/g' | tail -1
+}
 
 #reconnect vpns
 autovpn(){
