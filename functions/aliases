@@ -16,20 +16,21 @@ alias lsym="find . -lname \"*\"" #show symbolic links
 
 # GIT
 alias g.sub="git submodule init && git submodule update" #update all git submodules
-alias g.up="find . -type d -name .git -exec sh -c \"cd \"{}\"/../ && pwd && git pull && git submodule init && git submodule update\" \;"    # find all .git directories and exec "git pull" on the parent.
+alias g.up="find . -type d -name .git -exec sh -c \"cd \"{}\"/../ && pwd && git pull && git submodule init && git submodule update\" \; "    # find all .git directories and exec "git pull" on the parent.
 alias g.c="git clone "
-alias g.pm="git push -u origin master"
+alias g.pm="git push -u origin master "
 alias g.co="git commit "
 alias g.s="git status -sb "
-alias g.rm="git status | grep deleted | awk '{print \$3}' | xargs git rm"
-alias g.changelog="git --no-pager log --format=\"%ai %aN %n%n%x09* %s%d%n\" | sed \"s/\*\ \*/*/g\" > ChangeLog"
-alias g.ignore="find . -type d -empty -exec touch {}/.gitignore \;"
-alias g.log="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
+alias g.rm="git status | grep deleted | awk '{print \$3}' | xargs git rm "
+alias g.changelog="git --no-pager log --format=\"%ai %aN %n%n%x09* %s%d%n\" | sed \"s/\*\ \*/*/g\" > ChangeLog" 
+alias g.ignore="find . -type d -empty -exec touch {}/.gitignore \; "
+alias g.log="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative" 
 alias g.amend="git commit --amend -C HEAD "
 alias g.undo="git reset --soft HEAD^ " # Undo your last commit, but don't throw away your changes
 alias g.redo="git reset --soft HEAD "
-alias g.top="cat /home/git/.gitolite/logs/gitolite-`date +%Y-%m -d -30days`.log | cut -f2 | sort | uniq -c | sort -n -r"
-alias g.export="git archive --format=tar --remote=$1 master | tar -xf -" #only works with ssh://
+alias g.top="cat /home/git/.gitolite/logs/gitolite-`date +%Y-%m -d -30days`.log | cut -f2 | sort | uniq -c | sort -n -r "
+alias g.export="git archive --format=tar --remote=$1 master | tar -xf - " #only works with ssh://
+alias g.whereami="git rev-parse --abbrev-ref HEAD " # prints only the current branch
 
 # Maintainance
 alias cls="source ~/.zshrc && reset" #reload config and reset terminal
@@ -49,6 +50,12 @@ alias lsock="lsof -Pnl +M -i4"
 alias autotools="aclocal && autoheader && libtoolize --copy --automake && automake --copy --add-missing  && autoconf"
 alias 'please-plasma'="kbuildsycoca4 2>/dev/null && kquitapp plasma-desktop 2>/dev/null ; kstart plasma-desktop > /dev/null 2>&1"
 alias utf8="ex $1 \"+set ff=unix fileencoding=utf-8\" \"+x\""
+
+# WiFi
+alias w.scan="iwlist wlan0 scan >/dev/null "
+alias w.up="ifconfig wlan0 up"
+alias w.down="ifconfig wlan0 down"
+alias w.reload="rmmod iwldvm && rmmod iwlwifi && sleep 1;modprobe iwlwifi auto_agg=0 wd_disable=1 bt_coex_active=0 && sleep 1 modprobe iwldvm"
 
 
 # Ruby / Rails
