@@ -56,13 +56,13 @@ setup_shell() {
     msg "Which shell do you want to setup?\n[\e[31m1\033[0m] Bash\n[\e[31m2\033[0m] ZSH\n[\e[31m3\033[0m] Fish\nChoose: "
     read -p "" $X4
     if [[ $REPLY =~ ^[1]$ ]]; then
-        ln -sfv $HOME/.X4/{.bash*} $HOME/
+        ln -sfv $HOME/.X4/.bash* $HOME/
     fi
     if [[ $REPLY =~ ^[2]$ ]]; then
-        ln -sfv $HOME/.X4/{.zsh*} $HOME/
+        ln -sfv $HOME/.X4/.zsh* $HOME/
     fi
     if [[ $REPLY =~ ^[3]$ ]]; then
-        ln -sfv $HOME/.X4/{.fish*} $HOME/
+        ln -sfv $HOME/.X4/.fish* $HOME/
     fi
     if [[ ! $REPLY -eq "" ]]; then
         ln -sfv $HOME/.X4/{.bcrc, .cvsignore, .gemrc, .inputrc, .irbrc, .tmux*} $HOME/
