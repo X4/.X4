@@ -1,3 +1,4 @@
+
 #########################################
 # Delegate Configuration
 #########################################
@@ -17,7 +18,7 @@ fi
 # Load Plugin Bundles
 #########################################
 
-for bundle in ~/.X4/bundle/*; do
+for bundle in $HOME/.X4/bundle/*; do
   test -d $bundle && bundle=$bundle/${bundle##*/}.zsh
   test -f $bundle && source $bundle
 done
@@ -25,13 +26,13 @@ done
 #########################################
 # Define Shell Functions
 #########################################
-for file in ~/.X4/func.d/*.zsh; do
+for file in $HOME/.X4/func.d/*.zsh; do
   source $file
-done/
+done
 
 #########################################
 # Set Shell Aliases
 #########################################
-for file in ~/.X4/alias.d/*.zsh; do
+for file in $HOME/.X4/alias.d/*.zsh; do
   source $file
 done

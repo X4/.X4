@@ -4,9 +4,12 @@
 PROMPT='%(?..%B%F{red}exit %?%f%b'$'\n'')'\
 '$(vcs_info && echo $vcs_info_msg_0_)'\
 '%(!.%F{red}.%F{green})%~%f'\
-'%(!.#.>) '
+'%(!.#.❯ %f) '
 
 RPROMPT='%F{cyan}%@%f'
+
+# Threshold (sec) for showing cmd exec time
+CMD_MAX_EXEC_TIME=5
 
 # VCS integration for command prompt using vcs_info
 # http://zsh.git.sourceforge.net/git/gitweb.cgi?p=zsh/zsh;a=blob_plain;f=Misc/vcs_info-examples
@@ -18,6 +21,20 @@ zstyle ':vcs_info:*' unstagedstr   '%B%F{yellow}%%%f%b'
 zstyle ':vcs_info:*' formats       '%c%u%b%m '
 zstyle ':vcs_info:*' actionformats '%c%u%b%m %B%s-%a%%b '
 zstyle ':vcs_info:git*+set-message:*' hooks git-untracked git-aheadbehind git-remotebranch
+
+
+# For my own and others sanity
+# git:
+# %b => current branch
+# %a => current action (rebase/merge)
+# prompt:
+# %F => color dict
+# %f => reset color
+# %~ => current path
+# %* => time
+# %n => username
+# %m => shortname host
+# %(?..) => prompt conditional - %(condition.true.false)
 
 ### git: Show marker (T) if there are untracked files in repository
 # Make sure you have added staged to your 'formats':  %c
@@ -69,3 +86,19 @@ function +vi-git-remotebranch() {
     fi
 }
 
+# Displays the exec time of the last command if set threshold was exceeded
+function cmd_exec_time() {
+	local stop=`date +%s`
+	local start=${cmd_timestamp:-$stop}
+	let local elapsed=$stop-$start
+	[ $elapsed -gt $CMD_MAX_EXEC_TIME ] && echo ${elapsed}s
+}
+
+function preexec() {
+	cmd_timestamp=`date +%s`
+}
+
+# Reset value since `preexec` isn't always triggered
+function precmd() {
+	unset cmd_timestamp
+}

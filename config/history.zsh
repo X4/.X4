@@ -1,4 +1,4 @@
-HISTFILE=~/.zsh_history
+HISTFILE=$HOME/.zsh_history
 HISTSIZE=9999
 SAVEHIST=9999
 setopt appendhistory
