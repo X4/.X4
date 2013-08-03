@@ -1,8 +1,11 @@
 #!/bin/bash
+############################  SETUP PARAMETERS
+debug_mode=0
+
 ############################  BUNDLES LIST
-history_substring_search='bundle/zsh-history-substring-search --squash https://github.com/zsh-users/zsh-history-substring-search.git master'
-zsh_syntax_highlighting='bundle/zsh-syntax-highlighting --squash https://github.com/zsh-users/zsh-syntax-highlighting.git master'
-zsh_base16='bundle/zsh-base16 --squash git@github.com:X4/zsh-base16.git master'
+history_substring_search="bundle/zsh-history-substring-search --squash https://github.com/zsh-users/zsh-history-substring-search.git master"
+zsh_syntax_highlighting="bundle/zsh-syntax-highlighting --squash https://github.com/zsh-users/zsh-syntax-highlighting.git master"
+zsh_base16="bundle/zsh-base16 --squash git@github.com:X4/zsh-base16.git master"
 
 
 ############################  BASIC SETUP TOOLS
@@ -43,9 +46,10 @@ program_exists() {
 
 git_subtrees() {
     cd ~/.X4
-    git subtree add --prefix $1
+    git subtree add  --prefix $1
     git subtree pull --prefix $1
-    ret="$?"; success "$2"
+    ret="$?"
+    success "$2"
 }
 
 setup_shell() {
