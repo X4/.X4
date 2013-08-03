@@ -9,8 +9,8 @@ done
 #########################################
 # Set Shell Theme
 #########################################
-if [[ -e $HOME/.zsh_custom ]]; then
-        source $HOME/.zsh_theme
+if [[ -e $HOME/.zsh_theme ]]; then
+  source $HOME/.zsh_theme
 fi
 
 #########################################

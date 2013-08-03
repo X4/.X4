@@ -1,5 +1,5 @@
-# my "sunaku" prompt for ZSH using vcs_info stdlib
-# http://snk.tuxfamily.org/log/sunaku-zsh-prompt.png
+# Prompt for ZSH using vcs_info stdlib
+# Ripped from: http://snk.tuxfamily.org/log/sunaku-zsh-prompt.png
 
 PROMPT='%(?..%B%F{red}exit %?%f%b'$'\n'')'\
 '$(vcs_info && echo $vcs_info_msg_0_)'\
@@ -68,3 +68,4 @@ function +vi-git-remotebranch() {
         hook_com[branch]="${hook_com[branch]}(%F{cyan}${remote}%f)"
     fi
 }
+
