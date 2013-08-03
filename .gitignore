@@ -1,6 +1,8 @@
 *~
 .*.s[a-w][a-z]
+..*.kate-swp
 *.un~
 Session.vim
 .netrwhist
+*.directory
 

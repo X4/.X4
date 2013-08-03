@@ -1,2 +1,59 @@
 #!/bin/bash
-ln -s -f $HOME/.X4/.* $HOME/
+
+############################  BASIC SETUP TOOLS
+msg() {
+    printf '%b\n' "$1" >&2
+}
+
+success() {
+    if [ "$ret" -eq '0' ]; then
+    msg "\e[32m[✔]\033[0m ${1}${2}"
+    fi
+}
+
+error() {
+    msg "\e[31m[✘]\033[0m ${1}${2}"
+    exit 1
+}
+
+debug() {
+    if [ "$debug_mode" -eq '1' ] && [ "$ret" -gt '1' ]; then
+      msg "An error occured in function \"${FUNCNAME[$i+1]}\" on line ${BASH_LINENO[$i+1]}, we're sorry for that."
+    fi
+}
+
+program_exists() {
+    local ret='0'
+    type $1 >/dev/null 2>&1 || { local ret='1'; }
+
+    # throw error on non-zero return value
+    if [ ! "$ret" -eq '0' ]; then
+    error "$2"
+    fi
+}
+
+############################  SETUP ROUTINE
+
+
+setup_shell() {
+    msg "Which shell do you want to setup?\nBash [1]\n Zsh [2]\Fish [3]\nChoose:"
+    read $X4
+    if [[ $REPLY =~ ^[1]$ ]]; then
+        ln -sfv $HOME/.X4/{.bash*} $HOME/
+    fi
+    if [[ $REPLY =~ ^[2]$ ]]; then
+        ln -sfv $HOME/.X4/{.zsh*} $HOME/
+    fi
+    if [[ $REPLY =~ ^[3]$ ]]; then
+        ln -sfv $HOME/.X4/{.fish*} $HOME/
+    fi
+    if [[ ! $REPLY -eq "" ]]; then
+        ln -sfv $HOME/.X4/{.bcrc, .cvsignore, .gemrc, .inputrc, .irbrc, .tmux*} $HOME/
+    fi
+    ret="$?"
+    success "$1"
+}
+
+setup_shell "Successfully installed your symlinks."
+
+

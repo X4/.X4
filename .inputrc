@@ -3,3 +3,6 @@
 "\e[B": history-search-forward
 set show-all-if-ambiguous on
 set completion-ignore-case on
+# previous/next word - Ctrl-Left/Ctrl-Right (alt-b and alt-forward)
+"\e[1;5C": forward-word
+"\e[1;5D": backward-word
