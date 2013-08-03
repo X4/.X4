@@ -71,6 +71,7 @@ setup_shell() {
         ln -sfv $HOME/.X4/.inputrc $HOME/
         ln -sfv $HOME/.X4/.irbrc $HOME/
         ln -sfv $HOME/.X4/.tmux* $HOME/
+        ln -sfv $HOME/.X4/script.d/ssh-add.sh $HOME/.kde4/Autostart/
     fi
     ret="$?"
     success "$1"
