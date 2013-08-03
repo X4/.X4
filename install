@@ -53,7 +53,7 @@ git_subtrees() {
 }
 
 setup_shell() {
-    msg "Which shell do you want to setup?\n[\e[31m1\033[0m] Bash\n[\e[31m2\033[0m] ZSH\n[\e[31m3\033[0m] Fish\nChoose:"
+    msg "Which shell do you want to setup?\n[\e[31m1\033[0m] Bash\n[\e[31m2\033[0m] ZSH\n[\e[31m3\033[0m] Fish\nChoose: "
     read -p "" $X4
     if [[ $REPLY =~ ^[1]$ ]]; then
         ln -sfv $HOME/.X4/{.bash*} $HOME/
