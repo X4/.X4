@@ -65,7 +65,7 @@ setup_shell() {
         ln -sfv $HOME/.X4/.fish* $HOME/
     fi
     if [[ ! $REPLY -eq "" ]]; then
-        ln -sfv $HOME/.X4/.bcrc
+        ln -sfv $HOME/.X4/.bcrc $HOME/
         ln -sfv $HOME/.X4/.cvsignore $HOME/
         ln -sfv $HOME/.X4/.gemrc $HOME/
         ln -sfv $HOME/.X4/.inputrc $HOME/
