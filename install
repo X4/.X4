@@ -10,7 +10,7 @@ zsh_base16="bundle/zsh-base16 --squash git@github.com:X4/zsh-base16.git master"
 
 ############################  BASIC SETUP TOOLS
 msg() {
-    printf '%b\n' "$1" >&2
+    printf '%b' "$1" >&2
 }
 
 error() {
