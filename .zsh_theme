@@ -1,19 +1,8 @@
 # Prompt for ZSH using vcs_info stdlib
 # Ripped from: http://snk.tuxfamily.org/log/sunaku-zsh-prompt.png
-CMD_MAX_EXEC_TIME=1
-
-# Left Prompt
-PROMPT='$(vcs_info && echo $vcs_info_msg_0_)'\
-'%(!.%F{red}.%F{green})%~%f'\
-'%(!.#.❯ %f)'
-
-# Right Prompt
-RPROMPT='%(?.%F{yellow}$(cmd_exec_time).[%B%F{red}exit %?%f%b]) %F{cyan}%@%f'
-
-# Prompt turns red if the previous command didn't exit with 0
-#PROMPT='%(?.%F{magenta}.%F{red})❯%f '
 
 # Threshold (sec) for showing cmd exec time
+CMD_MAX_EXEC_TIME=1
 
 # VCS integration for command prompt using vcs_info
 # http://zsh.git.sourceforge.net/git/gitweb.cgi?p=zsh/zsh;a=blob_plain;f=Misc/vcs_info-examples
@@ -99,9 +88,20 @@ function cmd_exec_time() {
 
 function preexec() {
 	cmd_timestamp=`date +%s`
+	flag=0
 }
 
-# Reset value since `preexec` isn't always triggered
 function precmd() {
-	unset cmd_timestamp
+	psvar[1]=$(cmd_exec_time);
+	ret="[%B%F{red}exit $?%f%b]"
+	(( flag )) && ret=""
+	flag=1
 }
+
+# Left Prompt
+PROMPT='$(vcs_info && echo $vcs_info_msg_0_)'\
+'%(!.%F{red}.%F{green})%~%f'\
+'%(!.#.%(?.❯.%F{yellow}❯%f) )'
+
+# Right Prompt
+RPROMPT='%(?.%F{yellow}%1v.$ret) %F{cyan}%@%f'

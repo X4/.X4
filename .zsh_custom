@@ -1,2 +1,2 @@
 export SSH_ASKPASS=/usr/bin/ksshaskpass
-export LC_ALL="de_DE.UTF-8
+export LC_ALL="de_DE.UTF-8"

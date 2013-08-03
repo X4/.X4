@@ -22,8 +22,7 @@ setopt interactive
 setopt kshglob
 setopt longlistjobs
 setopt monitor
-setopt promptsubst
-setopt prompt_subst		# Parameter Expansion for the prompt
+setopt promptsubst		# Parameter Expansion for the prompt
 setopt pushdignoredups
 
 # remove HEAD^ escaping madness
