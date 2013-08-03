@@ -78,7 +78,7 @@ setup_shell() {
 }
 
 ############################  MAIN()
-git_subtrees $history_substring_search	"installing bundle/zsh-history-substring-search ..."
-git_subtrees $zsh_syntax_highlighting	"installing bundle/zsh-syntax-highlighting ..."
-git_subtrees $zsh_base16		"installing bundle/zsh-base16 ..."
-setup_shell 				"installing dotfile symlinks ..."
+git_subtrees $history_substring_search	"installing bundle/zsh-history-substring-search ...\n"
+git_subtrees $zsh_syntax_highlighting	"installing bundle/zsh-syntax-highlighting ...\n"
+git_subtrees $zsh_base16		"installing bundle/zsh-base16 ...\n"
+setup_shell 				"installing dotfile symlinks ...\n"
