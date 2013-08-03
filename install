@@ -1,19 +1,26 @@
 #!/bin/bash
+############################  BUNDLES LIST
+history_substring_search='bundle/zsh-history-substring-search --squash https://github.com/zsh-users/zsh-history-substring-search.git master'
+zsh_syntax_highlighting='bundle/zsh-syntax-highlighting --squash https://github.com/zsh-users/zsh-syntax-highlighting.git master'
+zsh_base16='bundle/zsh-base16 --squash git@github.com:X4/zsh-base16.git master'
+
 
 ############################  BASIC SETUP TOOLS
 msg() {
     printf '%b\n' "$1" >&2
 }
 
-success() {
-    if [ "$ret" -eq '0' ]; then
-    msg "\e[32m[✔]\033[0m ${1}${2}"
-    fi
-}
-
 error() {
     msg "\e[31m[✘]\033[0m ${1}${2}"
     exit 1
+}
+
+success() {
+    if [ "$ret" -eq '0' ]; then
+      msg "\e[32m[✔]\033[0m ${1}${2}"
+    else
+      error "${1}${2}"
+    fi
 }
 
 debug() {
@@ -34,6 +41,12 @@ program_exists() {
 
 ############################  SETUP ROUTINE
 
+git_subtrees() {
+    cd ~/.X4
+    git subtree add --prefix $1
+    git subtree pull --prefix $1
+    ret="$?"; success "$2"
+}
 
 setup_shell() {
     msg "Which shell do you want to setup?\nBash [1]\n Zsh [2]\Fish [3]\nChoose:"
@@ -54,6 +67,8 @@ setup_shell() {
     success "$1"
 }
 
-setup_shell "Successfully installed your symlinks."
-
-
+############################  MAIN()
+git_subtrees $history_substring_search	"installing bundle/zsh-history-substring-search ..."
+git_subtrees $zsh_syntax_highlighting	"installing bundle/zsh-syntax-highlighting ..."
+git_subtrees $zsh_base16		"installing bundle/zsh-base16 ..."
+setup_shell 				"installing dotfile symlinks ..."
