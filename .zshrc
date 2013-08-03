@@ -15,6 +15,13 @@ if [[ -e $HOME/.zsh_theme ]]; then
 fi
 
 #########################################
+# Set Shell Theme
+#########################################
+if [[ -e $HOME/.zsh_custom ]]; then
+  source $HOME/.zsh_custom
+fi
+
+#########################################
 # Load Plugin Bundles
 #########################################
 

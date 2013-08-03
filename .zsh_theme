@@ -8,7 +8,7 @@ PROMPT='$(vcs_info && echo $vcs_info_msg_0_)'\
 '%(!.#.❯ %f)'
 
 # Right Prompt
-RPROMPT='%(?.%F{yellow}$(echo "test").[%B%F{red}exit %?%f%b]) %F{cyan}%@%f'
+RPROMPT='%(?.%F{yellow}$(cmd_exec_time).[%B%F{red}exit %?%f%b]) %F{cyan}%@%f'
 
 # Prompt turns red if the previous command didn't exit with 0
 #PROMPT='%(?.%F{magenta}.%F{red})❯%f '
