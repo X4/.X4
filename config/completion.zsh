@@ -5,6 +5,9 @@ autoload -U colors ; colors
 # Use eight bit characters for completions
 PRINT_EIGHT_BIT=1
 
+
+
+
 # determine in which order the names (files) should be listed and completed when using menu completion.
 # `size' to sort them by the size of the file
 # `links' to sort them by the number of links to the file
@@ -25,6 +28,8 @@ zstyle ':completion:*' menu select=long
 # If there are more than 5 options, allow selecting from a menu with
 # arrows (case insensitive completion!).
 zstyle ':completion:*-case' menu select=5
+
+
 
 
 # Enable cache - Some functions, like _apt and _dpkg, are very slow. You can use a cache in
@@ -57,7 +62,7 @@ zstyle ':completion:*:history-words'	menu yes
 # Enable completion of 'cd -<tab>' and 'cd -<ctrl-d>' with menu
 zstyle ':completion:*:*:cd:*:directory-stack' menu yes select
 
-# Enable expand completer for all expansions 
+# Enable expand completer for all expansions
 zstyle ':completion:*:expand:*'		tag-order all-expansions
 zstyle ':completion:*:history-words'	list false
 
@@ -71,7 +76,7 @@ zstyle ':completion:*:processes'	command 'ps -au$USER'
 zstyle ':completion:*:processes-names'	command 'ps c -u ${USER} -o command | uniq'
 zstyle ':completion:*:(killall|pkill|kill):*'	menu yes select
 zstyle ':completion:*:(killall|pkill|kill):*'	force-list always
-  
+
 # Enable offering indexes before parameters in subscripts
 zstyle ':completion:*:*:-subscript-:*'	tag-order indexes parameters
 
@@ -87,8 +92,17 @@ zstyle -e ':completion:*'		special-dirs '[[ $PREFIX = (../)#(|.|..) ]] && reply=
 # Enable process lists completion, like the local web server details and host completion
 zstyle ':completion:*:urls' 		local 'www' '/var/www/' 'public_html'
 
-# Enable hostname completion
-_ssh_hosts=(); _etc_hosts=(); hosts=( $(hostname); "$_ssh_hosts[@]"; "$_etc_hosts[@]"; localhost )
+# Enable hostname completion (use /etc/hosts and known_hosts for hostname completion)
+[ -r /etc/ssh/ssh_known_hosts ] && _global_ssh_hosts=(${${${${(f)"$(</etc/ssh/ssh_known_hosts)"}:#[\|]*}%%\ *}%%,*}) || _global_ssh_hosts=()
+[ -r ~/.ssh/known_hosts ] && _ssh_hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[\|]*}%%\ *}%%,*}) || _ssh_hosts=()
+[ -r /etc/hosts ] && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(</etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} || _etc_hosts=()
+hosts=(
+  "$_global_ssh_hosts[@]"
+  "$_ssh_hosts[@]"
+  "$_etc_hosts[@]"
+  "$HOST"
+  localhost
+)
 zstyle ':completion:*:hosts' 		hosts $hosts
 
 # Enable $ scp file username@<TAB><TAB>:/<TAB>
@@ -98,6 +112,7 @@ zstyle ':completion:*:(ssh|scp|ftp):*' users $users
 # Enable completions for some progs. not in default completion system
 zstyle ':completion:*:*:mpg123:*' file-patterns '*.(mp3|MP3):mp3\ files *(-/):directories'
 zstyle ':completion:*:*:ogg123:*' file-patterns '*.(ogg|OGG):ogg\ files *(-/):directories'
+
 
 
 
@@ -139,12 +154,15 @@ zstyle ':completion:*:*:(^rm):*:*files' ignored-patterns  '*?.(o|c~|old|pro|zwc)
 
 
 
-# Adjust TAB-completion of partial file names or paths
-# http://www.rayninfo.co.uk/tips/zshtips.html
-zstyle ':completion:*'			matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
+# Adjust case-insensitive completions for: (all),partial-word and then substring matches
+if [ "x$CASE_SENSITIVE" = "xtrue" ]; then
+zstyle ':completion:*' 			matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+  unset CASE_SENSITIVE
+else
 # Adjust uppercase to match from lowercase
-zstyle ':completion:*'			matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*' 			matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+fi
 
 # Adjust mismatch handling - allow one error for every three characters typed in approximate completer
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $((($#PREFIX+$#SUFFIX)/3 )) numeric )'
@@ -188,6 +206,7 @@ zstyle ':completion:*:warnings'		format $'%{\e[0;31m%}No matches for:%{\e[0m%} %
 
 
 
+
 # Complete manpages - display seperate sections
 # complete manual by their section
 zstyle ':completion:*:manuals'		separate-sections true
@@ -203,6 +222,9 @@ zstyle ':completion:*:sudo:*'		command-path /usr/local/sbin \
 					 /sbin           \
 					 /bin            \
 					 /usr/X11R6/bin
+
+
+
 
 # manpage comletion
 man_glob () {
