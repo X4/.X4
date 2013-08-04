@@ -1,3 +1,2 @@
-alias equo='nocorrect equo'
-alias emerge='nocorrect emerge'
+alias "emerge -av"='nocorrect emerge -av'
 

@@ -14,3 +14,7 @@
   alias run.mongodb="mkdir /tmp/mongo -p && mongod --dbpath /tmp/mongo --rest > /dev/null &" #start mongodb
 # Converts erb files to haml
   alias run.hamilize="find . -name '*erb' | xargs ruby -e 'ARGV.each { |i| puts \"html2haml -r #{i} #{i.sub(/erb$/,\"haml\")};rm #{i}\"}' | bash"
+# Execute \kbd{./configure}
+  alias CO="./configure"
+# Execute \kbd{./configure --help}
+  alias CH="./configure --help"

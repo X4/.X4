@@ -53,18 +53,25 @@ git_subtrees() {
 }
 
 setup_shell() {
-    msg "\n\nWhich shell do you want to setup?\n[\e[31m1\033[0m] Bash\t [\e[31m2\033[0m] ZSH\t [\e[31m3\033[0m] Fish\nChoose: "
-    read -p "" $X4 ; echo ""
-    if [[ $REPLY =~ ^[1]$ ]]; then
-        ln -sfv $HOME/.X4/.bash* $HOME/
-    fi
-    if [[ $REPLY =~ ^[2]$ ]]; then
+    msg "\n\n\e[36mWhich shell do you want to setup?\033[0m]\n[\e[31m1\033[0m] ZSH\t [\e[31m2\033[0m] Bash\t [\e[31m3\033[0m] Fish\nChoose: "
+    read -p "" X4 ; echo ""
+
+    if [[ $X4 =~ ^[1]$ ]]; then
+	chosen_one=$(which zsh)
         ln -sfv $HOME/.X4/.zsh* $HOME/
     fi
-    if [[ $REPLY =~ ^[3]$ ]]; then
+
+    if [[ $X4 =~ ^[2]$ ]]; then
+	chosen_one=$(which bash)
+        ln -sfv $HOME/.X4/.bash* $HOME/
+    fi
+
+    if [[ $X4 =~ ^[3]$ ]]; then
+	chosen_one=$(which fish)
         ln -sfv $HOME/.X4/.fish* $HOME/
     fi
-    if [[ ! $REPLY -eq "" ]]; then
+
+    if [[ ! $X4 -eq "" ]]; then
 	# Enable custom bc functions
         ln -sfv $HOME/.X4/.bcrc $HOME/
 
@@ -86,14 +93,44 @@ setup_shell() {
 
         # Install Konsole themes
 	mkdir -p `kde4-config --localprefix`/share/apps/konsole/
-	ln -sfv $HOME/.X4/konsole/* `kde4-config --localprefix`/share/apps/konsole/
+	cp -fv $HOME/.X4/konsole/* `kde4-config --localprefix`/share/apps/konsole/
     fi
     ret="$?"
     success "$1"
+
+    if [[ $X4 =~ ^[1]$ ]]; then
+	msg "\n\e[36mDo you want to make $chosen_one your default shell now?\033[0m\n[\e[31m1\033[0m] yes\t\t[\e[31m0\033[0m] no \nChoose: "
+	read
+
+        chsh -s $chosen_one
+    fi
+
+    ret="$?"
+    success "$2\n"
+
+}
+
+function setup_subtrees {
+    msg "\n\e[36mDo you want to add the bundle git subtrees now?\033[0m\n[\e[31m1\033[0m] yes\t\t[\e[31m0\033[0m] no \nChoose: "
+
+    read;
+    if [[ $REPLY =~ ^[1]$ ]]; then
+	git_subtrees $history_substring_search	"installing bundle/zsh-history-substring-search ...\n"
+	git_subtrees $zsh_syntax_highlighting	"installing bundle/zsh-syntax-highlighting ...\n"
+	git_subtrees $zsh_base16		"installing bundle/zsh-base16 ...\n"
+    fi
+
+    ret="$?"
+    success "$2\n"
 }
 
 ############################  MAIN()
-git_subtrees $history_substring_search	"installing bundle/zsh-history-substring-search ...\n"
-git_subtrees $zsh_syntax_highlighting	"installing bundle/zsh-syntax-highlighting ...\n"
-git_subtrees $zsh_base16		"installing bundle/zsh-base16 ...\n"
-setup_shell 				"installing dotfile symlinks ...\n"
+msg			"Welcome!\n" && sleep 1
+msg			"Do you want to play a game?\n" && sleep 1
+
+setup_shell 		"Successfully installed chosen dotfile symlinks ...\n"\
+	 		"Successfully set default shell to $chosen_one ...\n"
+
+setup_subtrees		"Successfully installed all bundle subtrees ...\n"
+
+success			"Thank you master commander!"

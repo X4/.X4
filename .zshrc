@@ -1,13 +1,5 @@
 #########################################
-# Global ZSH Settings
-#########################################
-if [[ -e $HOME/.zsh_custom ]]; then
-  source $HOME/.zsh_custom
-fi
-
-
-#########################################
-# Delegate Configuration
+# Delegate Global Configuration
 #########################################
 
 for file in $HOME/.X4/config/**/*.zsh; do
@@ -43,3 +35,12 @@ done
 for file in $HOME/.X4/alias.d/*.zsh; do
   source $file
 done
+
+#########################################
+# Custom ZSH Settings
+#########################################
+if [[ -e $HOME/.zsh_custom ]]; then
+  source $HOME/.zsh_custom
+fi
+
+
