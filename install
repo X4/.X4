@@ -65,13 +65,28 @@ setup_shell() {
         ln -sfv $HOME/.X4/.fish* $HOME/
     fi
     if [[ ! $REPLY -eq "" ]]; then
+	# Enable custom bc functions
         ln -sfv $HOME/.X4/.bcrc $HOME/
+
+	# Install VCS defaults
         ln -sfv $HOME/.X4/.cvsignore $HOME/
+
+	# Enable custom RoR toolset defaults
         ln -sfv $HOME/.X4/.gemrc $HOME/
-        ln -sfv $HOME/.X4/.inputrc $HOME/
         ln -sfv $HOME/.X4/.irbrc $HOME/
+
+	# Enable custom keybindings
+        ln -sfv $HOME/.X4/.inputrc $HOME/
+
+	# Enable custom tmux defaults
         ln -sfv $HOME/.X4/.tmux* $HOME/
+
+	# Install ksshaskpass script
         ln -sfv $HOME/.X4/script.d/ssh-add.sh $HOME/.kde4/Autostart/
+
+        # Install Konsole themes
+	mkdir -p `kde4-config --localprefix`/share/apps/konsole/
+	ln -sfv $HOME/.X4/konsole/* `kde4-config --localprefix`/share/apps/konsole/
     fi
     ret="$?"
     success "$1"

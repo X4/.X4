@@ -2,7 +2,7 @@
 # Ripped from: http://snk.tuxfamily.org/log/sunaku-zsh-prompt.png
 
 # Threshold (sec) for showing cmd exec time
-CMD_MAX_EXEC_TIME=1
+CMD_MAX_EXEC_TIME=5
 
 # VCS integration for command prompt using vcs_info
 # http://zsh.git.sourceforge.net/git/gitweb.cgi?p=zsh/zsh;a=blob_plain;f=Misc/vcs_info-examples
@@ -77,8 +77,8 @@ function +vi-git-remotebranch() {
     fi
 }
 
-
-# Displays the exec time of the last command if set threshold was exceeded
+### Records the exec time of the last command
+# Depends on the threshold that defined
 function cmd_exec_time() {
 	local stop=`date +%s`
 	local start=${cmd_timestamp:-$stop}
@@ -86,22 +86,32 @@ function cmd_exec_time() {
 	[ $elapsed -gt $CMD_MAX_EXEC_TIME ] && echo ${elapsed}s
 }
 
+
+# function periodic() {}
+
 function preexec() {
 	cmd_timestamp=`date +%s`
 	flag=0
 }
 
 function precmd() {
-	psvar[1]=$(cmd_exec_time);
-	ret="[%B%F{red}exit $?%f%b]"
-	(( flag )) && ret=""
+	white_user="%F{white}❯%f"
+	red_user="%F{red}❯%f"
+
+	white_root="%F{white}#%f"
+	red_root="%F{red}#%f"
+
+	psvar[1]=$(cmd_exec_time)
+        ret1="[%B%F{red}exit $?%f%b]"
+	(( flag )) && ret1="" && red_user=$white_user && red_root=$white_root
 	flag=1
 }
 
+
 # Left Prompt
 PROMPT='$(vcs_info && echo $vcs_info_msg_0_)'\
-'%(!.%F{red}.%F{green})%~%f'\
-'%(!.#.%(?.❯.%F{yellow}❯%f) )'
+'%(!.%F{red}.%F{green})${PWD/#$HOME/~} %f'\
+'%(!.%(?.$white_root.$red_root).%(?.$white_user.$red_user) )'
 
 # Right Prompt
-RPROMPT='%(?.%F{yellow}%1v.$ret) %F{cyan}%@%f'
+RPROMPT='%(?.%F{yellow}%1v.$ret1) %F{cyan}%T%f'
