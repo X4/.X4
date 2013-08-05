@@ -2,7 +2,7 @@
 ############################  SETUP PARAMETERS
 # TODO: Makefile
 debug_mode=0
-############################  BUNDLES LIST
+############################  ZSH BUNDLES
 bundles=(
     "bundle/zsh-history-substring-search"
     "--squash https://github.com/zsh-users/zsh-history-substring-search.git master"
