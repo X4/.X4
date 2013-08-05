@@ -53,9 +53,9 @@ program_exists() {
 
 git_subtrees() {
     cd ~/.X4
-    git subtree add  --prefix "$1" && git subtree pull --prefix "$1"
-    ret="$?"
-    success "$2"
+    git subtree add  --prefix "$1"
+    git subtree pull --prefix "$1"
+    msg "\e[32m[✔]\033[0m ${2}\n"
 }
 
 setup_shell() {
@@ -121,7 +121,7 @@ function setup_subtrees {
     read; echo ""
     if [[ $REPLY =~ ^[yY]$ ]]; then
 	for ((i=0; i<=${#bundles[@]}; i+=2)) ; do
-	    git_subtrees "${bundles[$i]}" "${bundles[$i+1]}"
+	    git_subtrees "${bundles[$i]} ${bundles[$i+1]}" "${bundles[$i]}"
 	done
     fi
 
@@ -156,7 +156,6 @@ function uninstall () {
 	    rm -i "$HOME/.tmux.linux.conf"
 	    rm -i "$HOME/.kde4/Autostart/ssh-add.sh"
         fi
-
 	ret="$?"
 	error "$1\n"
     fi
@@ -165,12 +164,12 @@ function uninstall () {
 }
 
 ############################  MAIN()
-#msg			"Welcome!\n"
+msg			"Welcome!\n"
 
-#uninstall		"Successfully uninstalled X4 ...\n" "Skipping uninstaller ..."
-#setup_shell 		"Successfully installed chosen dotfile symlinks ...\n"\
-#	 		"Successfully set default shell to $chosen_one ...\n"
+uninstall		"Successfully uninstalled X4 ...\n" "Skipping uninstaller ..."
+setup_shell 		"Successfully installed chosen dotfile symlinks ...\n"\
+	 		"Successfully set default shell to $chosen_one ...\n"
 
 setup_subtrees		"Successfully installed all bundle subtrees ..."
 
-#success			"Thank you master commander!\n"
+success			"Thank you master commander!\n"
