@@ -2,11 +2,17 @@
 ############################  SETUP PARAMETERS
 # TODO: replace this by Makefile
 debug_mode=0
-set -e
 ############################  BUNDLES LIST
-history_substring_search="bundle/zsh-history-substring-search --squash https://github.com/zsh-users/zsh-history-substring-search.git master"
-zsh_syntax_highlighting="bundle/zsh-syntax-highlighting --squash https://github.com/zsh-users/zsh-syntax-highlighting.git master"
-zsh_base16="bundle/zsh-base16 --squash git@github.com:X4/zsh-base16.git master"
+bundles=(
+    'bundle/zsh-history-substring-search'
+    '--squash https://github.com/zsh-users/zsh-history-substring-search.git	master'
+    'bundle/zsh-syntax-highlighting'
+    '--squash https://github.com/zsh-users/zsh-syntax-highlighting.git 		master'
+    'bundle/zsh-base16'
+    '--squash git@github.com:X4/zsh-base16.git 					master'
+    'bundle/zsh-auto-fu'
+    '--squash https://github.com/hchbaw/auto-fu.zsh.git 			master'
+);
 
 
 ############################  BASIC SETUP TOOLS
@@ -20,7 +26,7 @@ error() {
 }
 
 success() {
-    if [ "$ret" -eq '0' ]; then
+    if [[ "$ret" -eq '0' ]]; then
       msg "\e[32m[✔]\033[0m ${1}${2}"
     else
       error "${1}${2}"
@@ -47,8 +53,8 @@ program_exists() {
 
 git_subtrees() {
     cd ~/.X4
-    git subtree add  --prefix $1
-    git subtree pull --prefix $1
+    git subtree add  --prefix "$1"
+    git subtree pull --prefix "$1"
     ret="$?"
     success "$2"
 }
@@ -115,9 +121,9 @@ function setup_subtrees {
 
     read; echo ""
     if [[ $REPLY =~ ^[yY]$ ]]; then
-	git_subtrees $history_substring_search	"installing bundle/zsh-history-substring-search ...\n"
-	git_subtrees $zsh_syntax_highlighting	"installing bundle/zsh-syntax-highlighting ...\n"
-	git_subtrees $zsh_base16		"installing bundle/zsh-base16 ...\n"
+	for ((i=0; i<=${#bundles[@]}; i+=2)) ; do
+	    git_subtrees "${bundles[$i]}" "${bundles[$i+1]}"
+	done
     fi
 
     ret="$?"
@@ -129,32 +135,43 @@ function uninstall () {
 
     read; echo ""
     if [[ $REPLY =~ ^[yY]$ ]]; then
+
 	if [[ -L "$HOME/.zshrc" ]]; then
-	    rm -i $HOME/.zshrc $HOME/.zsh_custom $HOME/.zsh_theme $HOME/.*.zwc $HOME/.zcompdump $HOME/.zdirs
+	    rm -i "$HOME/.zshrc" "$HOME/.zsh_custom" "$HOME/.zsh_theme" "$HOME/.*.zwc" "$HOME/.zcompdump" "$HOME/.zdirs"
 	fi
+
 	if [[ -L "$HOME/.bashrc" ]]; then
 	    rm -i $HOME/.bashrc
 	fi
-   	if [[ -L "$HOME.fishrc" ]]; then
+
+	if [[ -L "$HOME.fishrc" ]]; then
 	    rm -i $HOME/.fishrc
 	fi
-    	if [[ -L "$HOME/.bcrc" || -L "$HOME/.irbrc" || -L "$HOME/.gemrc" || -L "$HOME/.tmux.linux.conf" ]]; then
-	    rm -i "$HOME/{.bcrc .cvsignore .gemrc .irbrc .inputrc .tmux.linux.conf}"
+
+	if [[ -L "$HOME/.bcrc" || -L "$HOME/.irbrc" || -L "$HOME/.gemrc" || -L "$HOME/.tmux.linux.conf" ]]; then
+	    rm -i "$HOME/.bcrc"
+	    rm -i "$HOME/.cvsignore"
+	    rm -i "$HOME/.gemrc"
+	    rm -i "$HOME/.irbrc"
+	    rm -i "$HOME/.inputrc"
+	    rm -i "$HOME/.tmux.linux.conf"
 	    rm -i "$HOME/.kde4/Autostart/ssh-add.sh"
         fi
-    ret="$?"
-    error "$1\n"
+
+	ret="$?"
+	error "$1\n"
     fi
+
     success  "$2\n"
 }
 
 ############################  MAIN()
-msg			"Welcome!\n" && sleep 1
+#msg			"Welcome!\n"
 
-uninstall		"Successfully uninstalled X4 ...\n" "Skipping uninstaller ..."
-setup_shell 		"Successfully installed chosen dotfile symlinks ...\n"\
-	 		"Successfully set default shell to $chosen_one ...\n"
+#uninstall		"Successfully uninstalled X4 ...\n" "Skipping uninstaller ..."
+#setup_shell 		"Successfully installed chosen dotfile symlinks ...\n"\
+#	 		"Successfully set default shell to $chosen_one ...\n"
 
 setup_subtrees		"Successfully installed all bundle subtrees ..."
 
-success			"Thank you master commander!\n"
+#success			"Thank you master commander!\n"

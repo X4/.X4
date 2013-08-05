@@ -123,7 +123,7 @@ zstyle ':completion:*:cd:*'		ignored-patterns '(*/)#CVS'
 zstyle ':completion:*:rm:*'		ignore-line yes
 
 # Prevent menu completion for ambiguous initial strings
-zstyle ':completion:*:correct:*'	insert-unambiguous true
+zstyle ':completion:*'			insert-unambiguous true
 zstyle ':completion:*:corrections'	format $'%{\e[0;31m%}%d (errors: %e)%{\e[0m%}'
 zstyle ':completion:*:correct:*'	original true
 
