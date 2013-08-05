@@ -114,4 +114,8 @@ PROMPT='$(vcs_info && echo $vcs_info_msg_0_)'\
 '%(!.%(?.$white_root.$red_root).%(?.$white_user.$red_user) )'
 
 # Right Prompt
-RPROMPT='%(?.%F{yellow}%1v.$ret1) %F{cyan}%T%f'
+RPROMPT='%(?.%F{yellow}%1v.$ret1) %F{cyan}%D{%H:%M:%S}%f'
+
+# Redraw Prompt every second
+_prompt_and_resched() { sched +1 _prompt_and_resched; zle && zle reset-prompt }
+_prompt_and_resched

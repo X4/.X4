@@ -6,8 +6,6 @@ autoload -U colors ; colors
 PRINT_EIGHT_BIT=1
 
 
-
-
 # determine in which order the names (files) should be listed and completed when using menu completion.
 # `size' to sort them by the size of the file
 # `links' to sort them by the number of links to the file
@@ -113,7 +111,8 @@ zstyle ':completion:*:(ssh|scp|ftp):*' users $users
 zstyle ':completion:*:*:mpg123:*' file-patterns '*.(mp3|MP3):mp3\ files *(-/):directories'
 zstyle ':completion:*:*:ogg123:*' file-patterns '*.(ogg|OGG):ogg\ files *(-/):directories'
 
-
+# Enable Autocomplete
+zstyle ':completion:*' use-compctl false
 
 
 # Prevent CVS files/directories from being completed
@@ -156,13 +155,7 @@ zstyle ':completion:*:*:(^rm):*:*files' ignored-patterns  '*?.(o|c~|old|pro|zwc)
 
 
 # Adjust case-insensitive completions for: (all),partial-word and then substring matches
-if [ "x$CASE_SENSITIVE" = "xtrue" ]; then
-zstyle ':completion:*' 			matcher-list 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-  unset CASE_SENSITIVE
-else
-# Adjust uppercase to match from lowercase
-zstyle ':completion:*' 			matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-fi
+zstyle ':completion:*' 			matcher-list 'm:ss=ß m:ue=ü m:ue=Ü m:oe=ö m:oe=Ö m:ae=ä m:ae=Ä m:{a-zA-Zöäüa-zÖÄÜ}={A-Za-zÖÄÜA-Zöäü}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
 # Adjust mismatch handling - allow one error for every three characters typed in approximate completer
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $((($#PREFIX+$#SUFFIX)/3 )) numeric )'
