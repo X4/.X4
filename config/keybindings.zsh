@@ -1,3 +1,9 @@
+# Don't create newlines if no command is given
+accept-line () { [[ -z $BUFFER ]] && return;
+	zle .accept-line;
+};
+zle -N accept-line
+
 ## use the vi navigation keys (hjkl) besides cursor keys in menu completion
 bindkey -M menuselect 'h' vi-backward-char        # left
 bindkey -M menuselect 'k' vi-up-line-or-history   # up
