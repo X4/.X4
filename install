@@ -12,6 +12,7 @@ bundles=(
     '--squash git@github.com:X4/zsh-base16.git 					master'
     'bundle/zsh-auto-fu'
     '--squash https://github.com/hchbaw/auto-fu.zsh.git 			master'
+
 );
 
 
