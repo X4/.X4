@@ -54,7 +54,7 @@ program_exists() {
 git_subtrees() {
     cd ~/.X4
     git subtree add  --prefix "$1"
-    git subtree pull --prefix "$1"
+    git subtree pull --prefix "$2"
     msg "\e[32m[✔]\033[0m ${2}\n"
     cd -
 }
