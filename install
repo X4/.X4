@@ -54,8 +54,7 @@ program_exists() {
 
 git_subtrees() {
     cd ~/.X4
-    git subtree add  --prefix "$1"
-    git subtree pull --prefix "$1"
+    git subtree add  --prefix "$1" && git subtree pull --prefix "$1"
     ret="$?"
     success "$2"
 }
