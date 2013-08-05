@@ -56,6 +56,7 @@ git_subtrees() {
     git subtree add  --prefix "$1"
     git subtree pull --prefix "$1"
     msg "\e[32m[✔]\033[0m ${2}\n"
+    cd -
 }
 
 setup_shell() {
