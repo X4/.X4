@@ -156,7 +156,7 @@ function setup_subtrees {
     if [[ $REPLY =~ ^[yY]$ ]]; then
 	cd ~/.X4
 	for ((i=0; i<${#bundles[@]}; i+=2)) ; do
-	    git_subtrees "$bundles[$i] $bundles[$i+1]" "$bundles[$i]"
+	    git_subtrees "${bundles[$i]} ${bundles[$i+1]}" "${bundles[$i]}"
 	done
 	cd -
     fi
