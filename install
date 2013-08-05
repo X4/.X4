@@ -138,10 +138,12 @@ setup_shell() {
     success "$1"
 
     if [[ $REPLY =~ ^[123]$ ]]; then
-	msg "\n\e[36mDo you want to make $chosen_one your default shell now?\033[0m\n[\e[31m1\033[0m] yes\t\t[\e[31m0\033[0m] no\t[\e[31mENTER\033[0m] skip \nChoose: "
-	read; echo ""
+	msg "\n\e[36mDo you want to make $chosen_one your default shell now?\033[0m\n[\e[31my\033[0m] yes\t\t[\e[31mn\033[0m] no\t[\e[31mENTER\033[0m] skip \nChoose: "
 
-        chsh -s $chosen_one
+	read; echo ""
+	if [[ $REPLY =~ ^[yY]$ ]]; then
+	    chsh -s $chosen_one
+	fi
     fi
 
     ret="$?"
