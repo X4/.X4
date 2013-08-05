@@ -51,16 +51,48 @@ program_exists() {
 
 ############################  SETUP ROUTINE
 
+function uninstall () {
+    msg "\n\e[36mDo you want to uninstall X4?\033[0m\n[\e[31mn\033[0m] no\t\t[\e[31my\033[0m] yes\t\t[\e[31mENTER\033[0m] skip \nChoose: "
+
+    read; echo ""
+    if [[ $REPLY =~ ^[yY]$ ]]; then
+
+	if [[ -L "$HOME/.zshrc" ]]; then
+	    rm -i "$HOME/.zshrc" "$HOME/.zsh_custom" "$HOME/.zsh_theme" "$HOME/.*.zwc" "$HOME/.zcompdump" "$HOME/.zdirs"
+	fi
+
+	if [[ -L "$HOME/.bashrc" ]]; then
+	    rm -i $HOME/.bashrc
+	fi
+
+	if [[ -L "$HOME.fishrc" ]]; then
+	    rm -i $HOME/.fishrc
+	fi
+
+	if [[ -L "$HOME/.bcrc" || -L "$HOME/.irbrc" || -L "$HOME/.gemrc" || -L "$HOME/.tmux.linux.conf" ]]; then
+	    rm -i "$HOME/.bcrc"
+	    rm -i "$HOME/.cvsignore"
+	    rm -i "$HOME/.gemrc"
+	    rm -i "$HOME/.irbrc"
+	    rm -i "$HOME/.inputrc"
+	    rm -i "$HOME/.tmux.linux.conf"
+	    rm -i "$HOME/.kde4/Autostart/ssh-add.sh"
+        fi
+	ret="$?"
+	error "$1\n"
+    fi
+
+    success  "$2\n"
+}
+
 git_subtrees() {
-    cd ~/.X4
     git subtree add  --prefix "$1"
     git subtree pull --prefix "$2"
     msg "\e[32m[✔]\033[0m ${2}\n"
-    cd -
 }
 
 setup_shell() {
-    msg "\n\n\e[36mWhich shell do you want to setup?\033[0m]\n[\e[31m1\033[0m] ZSH\t\t [\e[31m2\033[0m] Bash\t [\e[31m3\033[0m] Fish\nChoose: "
+    msg "\n\n\e[36mWhich shell do you want to setup?\033[0m]\n[\e[31m1\033[0m] ZSH\t\t [\e[31m2\033[0m] Bash\t [\e[31m3\033[0m] Fish\t [\e[31mENTER\033[0m] skip\nChoose: "
     read; echo ""
 
     if [[ $REPLY =~ ^[1]$ ]]; then
@@ -106,7 +138,7 @@ setup_shell() {
     success "$1"
 
     if [[ $REPLY =~ ^[123]$ ]]; then
-	msg "\n\e[36mDo you want to make $chosen_one your default shell now?\033[0m\n[\e[31m1\033[0m] yes\t\t[\e[31m0\033[0m] no \nChoose: "
+	msg "\n\e[36mDo you want to make $chosen_one your default shell now?\033[0m\n[\e[31m1\033[0m] yes\t\t[\e[31m0\033[0m] no\t[\e[31mENTER\033[0m] skip \nChoose: "
 	read; echo ""
 
         chsh -s $chosen_one
@@ -117,51 +149,19 @@ setup_shell() {
 }
 
 function setup_subtrees {
-    msg "\n\e[36mDo you want to add the bundle git subtrees now?\033[0m\n[\e[31my\033[0m] yes\t\t[\e[31mn\033[0m] no \nChoose: "
+    msg "\n\e[36mDo you want to add the bundle git subtrees now?\033[0m\n[\e[31my\033[0m] yes\t\t[\e[31mn\033[0m] no\t\t[\e[31mENTER\033[0m] skip \nChoose: "
 
     read; echo ""
     if [[ $REPLY =~ ^[yY]$ ]]; then
+	cd ~/.X4
 	for ((i=0; i<${#bundles[@]}; i+=2)) ; do
 	    git_subtrees "${bundles[$i]} ${bundles[$i+1]}" "${bundles[$i]}"
 	done
+	cd -
     fi
 
     ret="$?"
     success "$1\n"
-}
-
-function uninstall () {
-    msg "\n\e[36mDo you want to uninstall X4?\033[0m\n[\e[31mn\033[0m] no\t\t[\e[31my\033[0m] yes \nChoose: "
-
-    read; echo ""
-    if [[ $REPLY =~ ^[yY]$ ]]; then
-
-	if [[ -L "$HOME/.zshrc" ]]; then
-	    rm -i "$HOME/.zshrc" "$HOME/.zsh_custom" "$HOME/.zsh_theme" "$HOME/.*.zwc" "$HOME/.zcompdump" "$HOME/.zdirs"
-	fi
-
-	if [[ -L "$HOME/.bashrc" ]]; then
-	    rm -i $HOME/.bashrc
-	fi
-
-	if [[ -L "$HOME.fishrc" ]]; then
-	    rm -i $HOME/.fishrc
-	fi
-
-	if [[ -L "$HOME/.bcrc" || -L "$HOME/.irbrc" || -L "$HOME/.gemrc" || -L "$HOME/.tmux.linux.conf" ]]; then
-	    rm -i "$HOME/.bcrc"
-	    rm -i "$HOME/.cvsignore"
-	    rm -i "$HOME/.gemrc"
-	    rm -i "$HOME/.irbrc"
-	    rm -i "$HOME/.inputrc"
-	    rm -i "$HOME/.tmux.linux.conf"
-	    rm -i "$HOME/.kde4/Autostart/ssh-add.sh"
-        fi
-	ret="$?"
-	error "$1\n"
-    fi
-
-    success  "$2\n"
 }
 
 ############################  MAIN()
