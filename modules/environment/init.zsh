@@ -74,7 +74,7 @@ if zstyle -t ':prezto:environment:termcap' color; then
   export LESS_TERMCAP_us=$'\E[01;32m'      # Begins underline.
 fi
 
-y
+
 # Check if we can read given files and source those we can.
 function xsource() {
     if (( ${#argv} < 1 )) ; then
