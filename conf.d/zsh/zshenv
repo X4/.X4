@@ -21,10 +21,20 @@ export PAGER='less'
 #
 # Language
 #
-
-if [[ -z "$LANG" ]]; then
-  export LANG='de_DE.UTF-8'
+xsource "/etc/default/locale"
+if [[ LC_ALL -eq '' ]]; then
+    export LC_ALL="$LANG"
 fi
+
+#
+# Keyboard
+#
+xsource "/etc/sysconfig/keyboard"
+
+#
+# Timezone
+#
+TZ=$(xcat /etc/timezone)
 
 #
 # Paths
@@ -82,3 +92,7 @@ stty -ixon
 #};
 #zle -N accept-line
 
+[ -f /etc/DIR_COLORS ] && eval $(dircolors -b /etc/DIR_COLORS)
+export ZLSCOLORS="${LS_COLORS}"
+export SHELL='/bin/zsh'
+export SSH_ASKPASS=/usr/bin/ksshaskpass

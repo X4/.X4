@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 ############################  SETUP PARAMETERS
 # TODO: Makefile
 debug_mode=0
@@ -54,37 +54,38 @@ program_exists() {
 ############################  SETUP ROUTINE
 
 function uninstall () {
-    msg "\n\e[36mDo you want to uninstall X4?\033[0m\n[\e[31mn\033[0m] no\t\t[\e[31my\033[0m] yes\t\t[\e[31mENTER\033[0m] skip \nChoose: "
 
-    read; echo ""
-    if [[ $REPLY =~ ^[yY]$ ]]; then
+    if [[ -d "$HOME/.X4" ]]; then
+      rm -Rf "$HOME/.X4"
+      ret=0
+      msg "\n\e[36mDo you want to uninstall X4?\033[0m\n[\e[31mn\033[0m] no\t\t[\e[31my\033[0m] yes\t\t[\e[31mENTER\033[0m] skip \nChoose: "
+      read; echo ""
+      if [[ $REPLY =~ ^[yY]$ ]]; then
 
-	if [[ -L "$HOME/.zshrc" ]]; then
-	    rm -i "$HOME/.zshrc" "$HOME/.zsh_custom" "$HOME/.zsh_theme" "$HOME/.*.zwc" "$HOME/.zcompdump" "$HOME/.zdirs"
-	fi
+          if [[ -L "$HOME/.zshrc" ]]; then
+              rm -i "$HOME/.zshrc" "$HOME/.zsh_custom" "$HOME/.zsh_theme" "$HOME/.*.zwc" "$HOME/.zcompdump" "$HOME/.zdirs"
+          fi
 
-	if [[ -L "$HOME/.bashrc" ]]; then
-	    rm -i $HOME/.bashrc
-	fi
+          if [[ -L "$HOME/.bashrc" ]]; then
+              rm -i $HOME/.bashrc
+          fi
 
-	if [[ -L "$HOME.fishrc" ]]; then
-	    rm -i $HOME/.fishrc
-	fi
+          if [[ -L "$HOME.fishrc" ]]; then
+              rm -i $HOME/.fishrc
+          fi
 
-	if [[ -L "$HOME/.bcrc" || -L "$HOME/.irbrc" || -L "$HOME/.gemrc" || -L "$HOME/.tmux.linux.conf" ]]; then
-	    rm -i "$HOME/.bcrc"
-	    rm -i "$HOME/.cvsignore"
-	    rm -i "$HOME/.gemrc"
-	    rm -i "$HOME/.irbrc"
-	    rm -i "$HOME/.inputrc"
-	    rm -i "$HOME/.tmux.linux.conf"
-	    rm -i "$HOME/.kde4/Autostart/ssh-add.sh"
-        fi
-	ret="$?"
-	error "$1\n"
+          if [[ -L "$HOME/.bcrc" || -L "$HOME/.irbrc" || -L "$HOME/.gemrc" || -L "$HOME/.tmux.linux.conf" ]]; then
+              rm -i "$HOME/.bcrc"
+              rm -i "$HOME/.cvsignore"
+              rm -i "$HOME/.gemrc"
+              rm -i "$HOME/.irbrc"
+              rm -i "$HOME/.inputrc"
+              rm -i "$HOME/.tmux.linux.conf"
+              rm -i "$HOME/.kde4/Autostart/ssh-add.sh"
+          fi
+          success "$1\n"
+      fi
     fi
-
-    success  "$2\n"
 }
 
 git_subtrees() {
@@ -96,15 +97,14 @@ git_subtrees() {
 clone_repo() {
     msg "\n\e[36mDo you want to clone the X4 repo now?\033[0m\n[\e[31mn\033[0m] no\t\t[\e[31my\033[0m] yes\t\t[\e[31mENTER\033[0m] skip \nChoose: "
 
-
     read; echo ""
     if [[ $REPLY =~ ^[yY]$ ]]; then
         git clone --recursive https://github.com/X4/.X4.git "${ZDOTDIR:-$HOME}/.X4"
         ret="$?"
-        error "$1\n"
+        success "$1\n"
+    else
+        error  "$2\n"
     fi
-
-    success  "$2\n"
 }
 
 setup_shell() {
