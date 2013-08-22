@@ -51,6 +51,9 @@ bindkey ' ' magic-space
 bindkey "^R" history-incremental-pattern-search-backward
 bindkey "^S" history-incremental-pattern-search-forward
 
+# Redefine  clear-screen
+bindkey '^l'  clear-screen
+
 # M-m will copy the last word of the current line, then the second last word, etc. But with M-. you can go back in lines too! 
 autoload -Uz copy-earlier-word
 zle -N copy-earlier-word
