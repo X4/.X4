@@ -20,6 +20,7 @@ autoload -U zsh/datetime
 #
 # General
 #
+setopt MAGIC_EQUAL_SUBST
 setopt NO_FLOW_CONTROL
 setopt INTERACTIVE
 setopt KSH_GLOB

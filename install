@@ -143,7 +143,7 @@ setup_shell() {
 
         # Install Konsole themes
 	mkdir -p `kde4-config --localprefix`/share/apps/konsole/
-	cp -fv "${ZDOTDIR:-$HOME}/.X4/conf.d/konsole/*" `kde4-config --localprefix`/share/apps/konsole/
+	cp -fv "${ZDOTDIR:-$HOME}"/.X4/conf.d/konsole/* `kde4-config --localprefix`/share/apps/konsole/
     fi
     ret="$?"
     success "$1"

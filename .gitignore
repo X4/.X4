@@ -4,6 +4,7 @@ modules/*/cache.zsh
 *~
 .*.s[a-w][a-z]
 ..*.kate-swp
+*.kate-swp
 *.un~
 Session.vim
 .netrwhist
