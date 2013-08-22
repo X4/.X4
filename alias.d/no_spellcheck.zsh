@@ -1,2 +1,2 @@
-alias "emerge -av"='nocorrect emerge -av'
-
+alias emerge="nocorrect emerge -j1"
+alias emerges="nocorrect emerge"

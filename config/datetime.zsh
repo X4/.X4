@@ -1,1 +1,0 @@
-autoload -U zsh/datetime

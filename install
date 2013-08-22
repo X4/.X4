@@ -8,10 +8,12 @@ bundles=(
     "--squash https://github.com/zsh-users/zsh-history-substring-search.git master"
     "bundle/zsh-syntax-highlighting"
     "--squash https://github.com/zsh-users/zsh-syntax-highlighting.git master"
-    "bundle/zsh-auto-fu"
-    "--squash https://github.com/hchbaw/auto-fu.zsh.git master"
-    "bundle/zsh-base16"
-    "--squash git@github.com:X4/zsh-base16.git master"
+    "bundle/zsh-completions"
+    "--squash https://github.com/zsh-users/zsh-completions.git master"
+#    "bundle/zsh-auto-fu"
+#    "--squash https://github.com/hchbaw/auto-fu.zsh.git pu"
+#    "bundle/zsh-base16"
+#    "--squash git@github.com:X4/zsh-base16.git master"
 );
 
 
@@ -91,48 +93,57 @@ git_subtrees() {
     msg "\e[32m[✔]\033[0m ${2}\n"
 }
 
+clone_repo() {
+    msg "\n\e[36mDo you want to clone the X4 repo now?\033[0m\n[\e[31mn\033[0m] no\t\t[\e[31my\033[0m] yes\t\t[\e[31mENTER\033[0m] skip \nChoose: "
+
+
+    read; echo ""
+    if [[ $REPLY =~ ^[yY]$ ]]; then
+        git clone --recursive https://github.com/X4/.X4.git "${ZDOTDIR:-$HOME}/.X4"
+        ret="$?"
+        error "$1\n"
+    fi
+
+    success  "$2\n"
+}
+
 setup_shell() {
     msg "\n\n\e[36mWhich shell do you want to setup?\033[0m]\n[\e[31m1\033[0m] ZSH\t\t [\e[31m2\033[0m] Bash\t [\e[31m3\033[0m] Fish\t [\e[31mENTER\033[0m] skip\nChoose: "
     read; echo ""
-
+    setopt EXTENDED_GLOB
+   
     if [[ $REPLY =~ ^[1]$ ]]; then
 	chosen_one=$(which zsh)
-        ln -sfv $HOME/.X4/.zsh* $HOME/
+        for rcfile in "${ZDOTDIR:-$HOME}"/.X4/conf.d/zsh/^README.md(.N); do
+          ln -sfv "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+        done
     fi
 
     if [[ $REPLY =~ ^[2]$ ]]; then
 	chosen_one=$(which bash)
-        ln -sfv $HOME/.X4/.bash* $HOME/
+        for rcfile in "${ZDOTDIR:-$HOME}"/.X4/conf.d/bash/^README.md(.N); do
+          ln -sfv "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+        done
     fi
 
     if [[ $REPLY =~ ^[3]$ ]]; then
 	chosen_one=$(which fish)
-        ln -sfv $HOME/.X4/.fish* $HOME/
+        for rcfile in "${ZDOTDIR:-$HOME}"/.X4/conf.d/fish/^README.md(.N); do
+          ln -sfv "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+        done
     fi
 
     if [[ ! $REPLY -eq "" ]]; then
-	# Enable custom bc functions
-        ln -sfv $HOME/.X4/.bcrc $HOME/
-
-	# Install VCS defaults
-        ln -sfv $HOME/.X4/.cvsignore $HOME/
-
-	# Enable custom RoR toolset defaults
-        ln -sfv $HOME/.X4/.gemrc $HOME/
-        ln -sfv $HOME/.X4/.irbrc $HOME/
-
-	# Enable custom keybindings
-        ln -sfv $HOME/.X4/.inputrc $HOME/
-
-	# Enable custom tmux defaults
-        ln -sfv $HOME/.X4/.tmux* $HOME/
+        for rcfile in "${ZDOTDIR:-$HOME}"/.X4/conf.d/other/^README.md(.N); do
+          ln -sfv "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+        done    
 
 	# Install ksshaskpass script
-        ln -sfv $HOME/.X4/script.d/ssh-add.sh $HOME/.kde4/Autostart/
+        ln -sfv "${ZDOTDIR:-$HOME}/.X4/conf.d/ssh/ssh-add.sh" "${ZDOTDIR:-$HOME}$HOME/.kde4/Autostart/"
 
         # Install Konsole themes
 	mkdir -p `kde4-config --localprefix`/share/apps/konsole/
-	cp -fv $HOME/.X4/konsole/* `kde4-config --localprefix`/share/apps/konsole/
+	cp -fv "${ZDOTDIR:-$HOME}/.X4/conf.d/konsole/*" `kde4-config --localprefix`/share/apps/konsole/
     fi
     ret="$?"
     success "$1"
@@ -170,9 +181,10 @@ function setup_subtrees {
 msg			"Welcome!\n"
 
 uninstall		"Successfully uninstalled X4 ...\n" "Skipping uninstaller ..."
+clone_repo              "Successfully cloned .X4 repository ...\n" "Skipping download ..."
 setup_shell 		"Successfully installed chosen dotfile symlinks ...\n"\
 	 		"Successfully set default shell to $chosen_one ...\n"
 
-setup_subtrees		"Successfully installed all bundle subtrees ..."
+#setup_subtrees		"Successfully installed all bundle subtrees ..."
 
 success			"Thank you master commander!\n"

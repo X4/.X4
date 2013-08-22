@@ -1,3 +1,6 @@
+*.zwc
+*.zwc.old
+modules/*/cache.zsh
 *~
 .*.s[a-w][a-z]
 ..*.kate-swp
@@ -5,4 +8,4 @@
 Session.vim
 .netrwhist
 *.directory
-
+tmp
