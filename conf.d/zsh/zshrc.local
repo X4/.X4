@@ -22,7 +22,6 @@ zstyle ':prezto:load' zfunction 'zargs' 'zmv'
 # The order matters.
 zstyle ':prezto:load' pmodule   \
   'environment'                 \
-  'keybindings'                 \
   'terminal'                    \
   'editor'                      \
   'history'                     \
@@ -36,6 +35,7 @@ zstyle ':prezto:load' pmodule   \
   'neocomplete'                 \
   'prediction'                  \
   'prompt'                      \
+  'keybindings'                 \
   'zcompile'
 
 #

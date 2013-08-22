@@ -26,6 +26,14 @@ bindkey -M menuselect 'k' vi-up-line-or-history   # up
 bindkey -M menuselect 'l' vi-forward-char         # right
 bindkey -M menuselect 'j' vi-down-line-or-history # bottom
 
+# let zsh infer next-hist-item completion
+bindkey '^f' _complete_menu
+bindkey -M menuselect '^f' accept-and-infer-next-history
+bindkey -M menuselect '/'  accept-and-infer-next-history
+bindkey -M menuselect '^?' undo
+bindkey -M menuselect ' ' accept-and-hold
+bindkey -M menuselect '*' history-incremental-search-forward
+
 # backward delete
 bindkey '^?' backward-delete-char
 bindkey "^[[3~" delete-char
@@ -39,11 +47,11 @@ bindkey "^[[1;5D" backward-word
 # Do history expansion on space
 bindkey ' ' magic-space
 
-# let zsh infer next-hist-item completion
-bindkey -M menuselect '^o' accept-and-infer-next-history
-
 # Incremental Pattern Supported search
 bindkey "^R" history-incremental-pattern-search-backward
 bindkey "^S" history-incremental-pattern-search-forward
 
- 
+# M-m will copy the last word of the current line, then the second last word, etc. But with M-. you can go back in lines too! 
+autoload -Uz copy-earlier-word
+zle -N copy-earlier-word
+bindkey "^[m" copy-earlier-word

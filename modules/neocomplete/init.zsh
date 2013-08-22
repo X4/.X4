@@ -17,6 +17,14 @@ zmodload zsh/complist
 autoload -Uz compinit && compinit #-i
 autoload -U colors ; colors
 
+zle -C complete-menu menu-select _generic
+_complete_menu() {
+  setopt localoptions alwayslastprompt
+  zle complete-menu
+}
+zle -N _complete_menu
+
+
 #
 # Options
 #
