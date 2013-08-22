@@ -1,0 +1,140 @@
+#!/usr/bin/python
+
+import sys
+import os
+import dbus
+import gobject
+import signal
+import subprocess
+from	dbus.mainloop.glib import DBusGMainLoop
+
+# The uuid of the VPN connection to activate
+VPN_CONNECTION_UUID = "0dec678a-4b7c-49ee-90f8-974a9639e622"
+
+# The uuid of the connection that needs to be active to start the VPN connection
+ACTIVE_CONNECTION_UUID = "92d369bc-8fae-4a42-9b93-fe8ef6495889"
+
+# some service, path and interface constants
+NM_DBUS_SERVICE									 = "org.freedesktop.NetworkManager"
+NM_DBUS_PATH											= "/org/freedesktop/NetworkManager"
+NM_DBUS_INTERFACE								 = "org.freedesktop.NetworkManager"
+NM_DBUS_IFACE_CONNECTION_ACTIVE	 = "org.freedesktop.NetworkManager.Connection.Active"
+NM_DBUS_SERVICE_SYSTEM_SETTINGS	 = "org.freedesktop.NetworkManagerSystemSettings"
+NM_DBUS_SERVICE_USER_SETTINGS		 = "org.freedesktop.NetworkManagerUserSettings"
+NM_DBUS_IFACE_SETTINGS						= "org.freedesktop.NetworkManagerSettings"
+NM_DBUS_PATH_SETTINGS						 = "/org/freedesktop/NetworkManagerSettings"
+NM_DBUS_IFACE_SETTINGS_CONNECTION = "org.freedesktop.NetworkManagerSettings.Connection"
+
+DBusGMainLoop(set_as_default=True)
+
+nm_dbus_settings_services = (NM_DBUS_SERVICE_SYSTEM_SETTINGS, NM_DBUS_SERVICE_USER_SETTINGS)
+
+def get_connections(bus, service):
+	proxy = bus.get_object(service, NM_DBUS_PATH_SETTINGS)
+	iface = dbus.Interface(proxy, dbus_interface=NM_DBUS_IFACE_SETTINGS)
+	return iface.ListConnections()
+
+def get_connection_by_uuid(bus, uuid):
+	for service in nm_dbus_settings_services:
+		for c in get_connections(bus, service):
+			proxy = bus.get_object(service, c)
+			iface = dbus.Interface(proxy, dbus_interface = NM_DBUS_IFACE_SETTINGS_CONNECTION)
+			settings = iface.GetSettings()
+			if settings['connection']['uuid'] == uuid:
+				return (c, service)
+	return None
+
+def list_uuids(bus):
+	for service in nm_dbus_settings_services:
+		for c in get_connections(bus, service):
+			proxy = bus.get_object(service, c)
+			iface = dbus.Interface(proxy, dbus_interface=NM_DBUS_IFACE_SETTINGS_CONNECTION)
+			settings = iface.GetSettings()
+			conn = settings['connection']
+			print " %s: %s - %s (%s)" % (service, conn['uuid'], conn['id'], conn['type'])
+
+def get_active_connection_path(bus, uuid):
+	proxy = bus.get_object(NM_DBUS_SERVICE, NM_DBUS_PATH)
+	iface = dbus.Interface(proxy, dbus_interface='org.freedesktop.DBus.Properties')
+	active_connections = iface.Get(NM_DBUS_INTERFACE, 'ActiveConnections')
+	connection_and_service = get_connection_by_uuid(bus, uuid)
+	if connection_and_service == None:
+		return None
+	for a in active_connections:
+		proxy = bus.get_object(NM_DBUS_SERVICE, a)
+		iface = dbus.Interface(proxy, dbus_interface='org.freedesktop.DBus.Properties')
+		path = iface.Get(NM_DBUS_IFACE_CONNECTION_ACTIVE, 'Connection')
+		service = iface.Get(NM_DBUS_IFACE_CONNECTION_ACTIVE, 'ServiceName')
+		if service != connection_and_service[1]:
+			continue
+		proxy = bus.get_object(connection_and_service[1], path)
+		iface = dbus.Interface(proxy, dbus_interface=NM_DBUS_IFACE_SETTINGS_CONNECTION)
+		settings = iface.GetSettings()
+		if settings['connection']['uuid'] == uuid:
+			return a
+	return None
+
+def activate_connection(bus, vpn_connection, active_connection):
+	# Change this to your process name
+	processname = 'transmission-gtk'
+	for line in os.popen("ps xa"):
+		fields = line.split()
+		pid = fields[0]
+		process = fields[4]
+
+		if processname in process:
+			# Kill the Process. Change signal.SIGHUP to signal.SIGKILL if you like
+			os.kill(int(pid), signal.SIGKILL)
+			# Do something else here
+			print "Restarting Transsmission Client"
+			# Restart the process
+			subprocess.call(['transmission-gtk&'], shell=True)
+	def reply_handler(opath):
+		print "<<SUCCESS>>"
+		sys.exit(0)
+	def error_handler(*args):
+		print "<<FAILURE>>"
+		sys.exit(1)
+	proxy = bus.get_object(NM_DBUS_SERVICE, NM_DBUS_PATH)
+	iface = dbus.Interface(proxy, dbus_interface=NM_DBUS_INTERFACE)
+	iface.ActivateConnection(NM_DBUS_SERVICE_USER_SETTINGS,
+													 vpn_connection[0],
+													 dbus.ObjectPath("/"),
+													 active_connection,
+													 reply_handler=reply_handler,
+													 error_handler=error_handler)
+
+bus = dbus.SystemBus()
+
+#print "connections:"
+#list_uuids(bus)
+
+if len(VPN_CONNECTION_UUID) < 1 or len(ACTIVE_CONNECTION_UUID) < 1:
+		print "you need to set the uuids"
+		sys.exit(0)
+
+vpn_connection = get_connection_by_uuid(bus, VPN_CONNECTION_UUID)
+if not vpn_connection:
+		print "Configured VPN connection is not known to NM, check VPN_CONNECTION_UUID."
+		sys.exit(1)
+
+active_connection = get_connection_by_uuid(bus, ACTIVE_CONNECTION_UUID)
+if not active_connection:
+	print "Configured active connection is not known to NM, check ACTIVE_CONNECTION_UUID."
+	sys.exit(1)
+
+if get_active_connection_path(bus, VPN_CONNECTION_UUID) != None:
+	print "VPN connection already activated"
+	sys.exit(0)
+
+active_connection_path = get_active_connection_path(bus, ACTIVE_CONNECTION_UUID)
+if not active_connection_path:
+	print "The required connection isn't active at the moment"
+	sys.exit(0)
+
+print "connecting...." # to:\n	'%s'\nwith active connection:\n	'%s'" % (vpn_connection, active_connection)
+
+activate_connection(bus, vpn_connection, active_connection_path)
+
+loop = gobject.MainLoop()
+loop.run()
