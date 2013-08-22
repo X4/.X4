@@ -1,4 +1,6 @@
 # Execute code that does not affect the current session in the background.
+{
+autoload -U zrecompile
 
 zrecompile -p -R ~/.zshrc -- -M ~/.zcompdump --  > /dev/null
 
@@ -17,6 +19,7 @@ for ((i=1; i <= $#fpath; ++i)); do
     fi
   fi
 done
+} &!
 
 #{
   # Compile the completion dump to increase startup speed.
