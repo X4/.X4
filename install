@@ -102,8 +102,10 @@ clone_repo() {
         git clone --recursive https://github.com/X4/.X4.git "${ZDOTDIR:-$HOME}/.X4"
         ret="$?"
         success "$1\n"
-    else
-        error  "$2\n"
+    fi
+    # throw error on non-zero return value
+    if [ ! "$ret" -eq '0' ]; then
+      error "$2\n"
     fi
 }
 
@@ -139,7 +141,7 @@ setup_shell() {
         done    
 
 	# Install ksshaskpass script
-        ln -sfv "${ZDOTDIR:-$HOME}/.X4/conf.d/ssh/ssh-add.sh" "${ZDOTDIR:-$HOME}$HOME/.kde4/Autostart/"
+        ln -sfv "${ZDOTDIR:-$HOME}/.X4/conf.d/ssh/ssh-add.sh" "${ZDOTDIR:-$HOME}/.kde4/Autostart/"
 
         # Install Konsole themes
 	mkdir -p `kde4-config --localprefix`/share/apps/konsole/
