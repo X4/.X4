@@ -1,11 +1,18 @@
 #
+# Authors:
+#   Robby Russell <robby@planetargon.com>
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#   Ferhat Dogru  <worldwide@online.de>
+
+
+#
 # Version Check
 #
 
 # Check for the minimum supported version.
 min_zsh_version='4.3.10'
 if ! autoload -Uz is-at-least || ! is-at-least "$min_zsh_version"; then
-  print "prezto: old shell detected, minimum required: $min_zsh_version" >&2
+  print "prezto: old z-shell version detected, minimum requirement: $min_zsh_version" >&2
   return 1
 fi
 unset min_zsh_version
@@ -75,39 +82,13 @@ function pmodload {
   done
 }
 
-# Check if we can read given files and source those we can.
-function xsource() {
-    if (( ${#argv} < 1 )) ; then
-        printf 'usage: xsource FILE(s)...\n' >&2
-        return 1
-    fi
-
-    while (( ${#argv} > 0 )) ; do
-        [[ -r "$1" ]] && source "$1"
-        shift
-    done
-    return 0
-}
-
-# Check if we can read a given file and 'cat(1)' it.
-function xcat() {
-    emulate -L zsh
-    if (( ${#argv} != 1 )) ; then
-        printf 'usage: xcat FILE\n' >&2
-        return 1
-    fi
-
-    [[ -r $1 ]] && cat $1
-    return 0
-}
-
 #
 # Initialization
 #
 
 # Source the configuration file.
-if [[ -s "${ZDOTDIR:-$HOME}/.zshrc.local" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zshrc.local"
+if [[ -s "${ZDOTDIR:-$HOME}/.zpreztorc" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zpreztorc"
 fi
 
 # Disable color and theme in dumb terminals.
@@ -135,3 +116,8 @@ unset pmodules
 for file in ${ZDOTDIR:-$HOME}/.X4/alias.d/*.zsh; do
   test -f && source $file
 done
+
+# Source the local configuration file.
+if [[ -s "${ZDOTDIR:-$HOME}/.zshrc.local" ]]; then
+  test -f source "${ZDOTDIR:-$HOME}/.zshrc.local"
+fi

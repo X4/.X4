@@ -31,12 +31,6 @@ setopt HIST_BEEP                 # Beep when accessing non-existent history.
 setopt HIST_ALLOW_CLOBBER        # Add '|' to output redirections in the history.
 setopt PUSHD_IGNORE_DUPS         # Don't push the same dir twice.
 
-#
-# Aliases
-#
-
-# Lists the ten most used commands.
-alias history-stat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 
 # Buffer history to continue history expansion even when it fails
 function _recover_line_or_else() {

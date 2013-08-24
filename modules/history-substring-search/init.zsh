@@ -38,38 +38,5 @@ if ! zstyle -t ':prezto:module:history-substring-search' color; then
   unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_{FOUND,NOT_FOUND}
 fi
 
-#
-# Key Bindings
-#
-
-if [[ -n "$key_info" ]]; then
-  # Emacs
-  bindkey -M emacs "$key_info[Control]P" history-substring-search-up
-  bindkey -M emacs "$key_info[Control]N" history-substring-search-down
-
-  # Vi
-  bindkey -M vicmd "k" history-substring-search-up
-  bindkey -M vicmd "j" history-substring-search-down
-
-  # Emacs and Vi
-  for keymap in 'emacs' 'viins'; do
-    bindkey -M "$keymap" "$key_info[Up]" history-substring-search-up
-    bindkey -M "$keymap" "$key_info[Down]" history-substring-search-down
-  done
-fi
-
-# bind UP and DOWN arrow keys
-zmodload zsh/terminfo
-bindkey "$terminfo[kcuu1]" history-substring-search-up
-bindkey "$terminfo[kcud1]" history-substring-search-down
-
-# ... support zsh in tmux in URxvt too
-if test "${TERM#screen}" != "$TERM"; then
-  bindkey '\e[1;5A' history-substring-search-up
-  bindkey '\e[1;5B' history-substring-search-down
-fi
-
-# ctrl+arrow-up
-bindkey '\e[1;5A' history-substring-search-up
-# ctrl+arrow-down
-bindkey '\e[1;5B' history-substring-search-down
+# Source keybindings.
+source "${0:h}/keybindings.zsh"

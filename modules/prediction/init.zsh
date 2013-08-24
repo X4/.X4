@@ -1,6 +1,4 @@
 # command prediction from history
-#autoload predict-on
-#predict-on
 
 autoload -U predict-on
 zle-line-init() { predict-on }
@@ -8,10 +6,6 @@ zle -N zle-line-init
 zle -N predict-on
 zle -N predict-off
 zstyle ':predict' verbose false
-bindkey '^j^k' predict-off
-bindkey '^l' expand-or-complete
-bindkey '^f' forward-word
-bindkey '^b' backward-word
 
 #autoload -U predict-on
 #zle -N predict-on

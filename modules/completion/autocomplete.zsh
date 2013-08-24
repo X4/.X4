@@ -2,19 +2,9 @@
 # Sets completion options.
 #
 
-
-# Return if requirements are not found.
-if [[ "$TERM" == 'dumb' ]]; then
-  return 1
-fi
-
-# Add zsh-completions to $fpath.
-fpath=("${0:h}/external/src" $fpath)
-
-
 # Load and initialize the completion system ignoring insecure directories.
 zmodload zsh/complist
-autoload -Uz compinit && compinit #-i
+autoload -Uz compinit && compinit -i
 autoload -U colors ; colors
 
 zle -C complete-menu menu-select _generic
@@ -308,3 +298,4 @@ else
 	    fi
 	fi'
 fi
+

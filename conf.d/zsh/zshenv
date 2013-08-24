@@ -60,6 +60,7 @@ fi
 # Keyboard
 #
 xsource "/etc/sysconfig/keyboard"
+DEBIAN_PREVENT_KEYBOARD_CHANGES=yes
 
 #
 # Timezone
@@ -125,4 +126,3 @@ stty -ixon
 [ -f /etc/DIR_COLORS ] && eval $(dircolors -b /etc/DIR_COLORS)
 export ZLSCOLORS="${LS_COLORS}"
 export SHELL='/bin/zsh'
-export SSH_ASKPASS=/usr/bin/ksshaskpass
