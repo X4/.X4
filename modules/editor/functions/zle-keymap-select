@@ -1,0 +1,2 @@
+# Updates editor information when the keymap changes.
+zle editor-info

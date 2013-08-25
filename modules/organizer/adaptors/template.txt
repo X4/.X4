@@ -1,0 +1,10 @@
+#
+# __AppName__ - __Description__
+#
+
+## NOTE: Don't give your file a .zsh extension until you're ready for it to load!
+##       Otherwise it gets... messy.
+
+# export PROGRC="$(dotfile prog config file progrc)"
+
+# dotfile prog data file proginfo >/dev/null

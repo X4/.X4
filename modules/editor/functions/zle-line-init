@@ -1,0 +1,5 @@
+# Enable terminal application mode.
+if (( $+terminfo[smkx] && $+terminfo[rmkx] )); then
+  echoti smkx
+fi
+zle editor-info

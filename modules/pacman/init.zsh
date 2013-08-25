@@ -19,7 +19,7 @@ fi
 #
 
 # Get the Pacman frontend.
-zstyle -s ':prezto:module:pacman' frontend '_pacman_frontend'
+zstyle -s ':zcontrol:module:pacman' frontend '_pacman_frontend'
 
 if (( $+commands[$_pacman_frontend] )); then
   alias pacman="$_pacman_frontend"

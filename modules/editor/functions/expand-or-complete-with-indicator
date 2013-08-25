@@ -1,0 +1,6 @@
+# Displays an indicator when completing.
+local indicator
+zstyle -s ':zcontrol:module:editor:info:completing' format 'indicator'
+print -Pn "$indicator"
+zle expand-or-complete
+zle redisplay

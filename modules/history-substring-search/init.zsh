@@ -1,5 +1,5 @@
 #
-# Integrates history-substring-search into Prezto.
+# Integrates history-substring-search into Zcontrol.
 #
 # Authors:
 #   Suraj N. Kurapati <sunaku@gmail.com>
@@ -13,30 +13,32 @@ pmodload 'editor'
 source "${0:h}/external/zsh-history-substring-search.zsh"
 
 #
-# Search
+# Styles
 #
 
-zstyle -s ':prezto:module:history-substring-search:color' found \
-  'HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND' \
-    || HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=magenta,fg=white,bold'
-       #HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=yellow,standout'
-
-zstyle -s ':prezto:module:history-substring-search:color' not-found \
-  'HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND' \
-    || HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='bg=red,fg=white,bold'
-       #HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=red,standout'
-
-zstyle -s ':prezto:module:history-substring-search' globbing-flags \
-  'HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS' \
-    || HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS='i'
-
-if zstyle -t ':prezto:module:history-substring-search' case-sensitive; then
-  HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS="${HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS//i}"
+if zstyle -t ':zcontrol:module:history-substring-search' case-sensitive; then
+  unset HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS
 fi
 
-if ! zstyle -t ':prezto:module:history-substring-search' color; then
+if ! zstyle -t ':zcontrol:module:history-substring-search' color; then
   unset HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_{FOUND,NOT_FOUND}
 fi
 
-# Source keybindings.
-source "${0:h}/keybindings.zsh"
+#
+# Key Bindings
+#
+
+# Emacs
+bindkey -M emacs "$key_info[Control]P" history-substring-search-up
+bindkey -M emacs "$key_info[Control]N" history-substring-search-down
+
+# Vi
+bindkey -M vicmd "k" history-substring-search-up
+bindkey -M vicmd "j" history-substring-search-down
+
+# Emacs and Vi
+for keymap in 'emacs' 'viins'; do
+  bindkey -M "$keymap" "$key_info[Up]" history-substring-search-up
+  bindkey -M "$keymap" "$key_info[Down]" history-substring-search-down
+done
+

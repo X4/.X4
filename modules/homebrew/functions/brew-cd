@@ -1,0 +1,63 @@
+#
+# brew-cd
+#
+# `cd` into the main Homebrew Formula directory
+#
+
+if ! ( which brew &>/dev/null ); then
+  echo "Homebrew not installed." >&2
+  return 1
+fi
+
+# If no arguments, cd to the Homebrew base directory.
+if [ $# = 0 ]; then
+  cd "$(brew --prefix)"
+  return
+fi
+
+# If the first arg was "formula", cd to the main formula directory
+if [ "$1" = "formula" ]; then
+  cd "$(brew --prefix)/Library/Formula"
+  return
+fi
+
+# Look for any binary names that match the beginning...
+if ( brew --prefix "$1" &>/dev/null ) ; then
+  # The requested name matched the package name, so cd to it...
+  echo "Found package: $1" >&2
+  cd "$(brew --prefix "$1" 2>/dev/null)"
+  return
+fi
+
+# Get the package associated with that binary name
+declare pkg_name exe
+exe="$(whence -p $1 2>/dev/null)" || echo "Error: Binary not found." >&2
+if [ "${exe}" ]; then
+  pkg_name=$(cd $(dirname ${exe}) && print ${${${(%):-$1:A}##$(brew --cellar)/}%%/*})
+  if ( brew --prefix "${pkg_name}" &>/dev/null ); then
+    echo "$1 is part of $pkg_name" >&2
+    cd $(brew --prefix "${pkg_name}")
+    return
+  fi
+fi
+
+# Get a list that begin with the provided name
+declare -a pkg_list
+pkg_list=( $(find $(setopt nullglob; print $(brew --prefix)/{bin,sbin,libexec}(/) ) -maxdepth 1 -iname "${1}*" -print) )
+for exe in ${pkg_list[@]}; do
+  # If there's a package that is an exact match, use it.
+  if [ $(basename "${exe}") = "${1}" ]; then
+    cd "$(cd "$(dirname $exe)" && cd "$(dirname $(readlink "${1}"))" && pwd -P)"
+    echo "New directory: $(pwd -P)" >&2
+    return
+  fi
+done
+
+if [ ${#pkg_list[@]} -gt 0 ]; then
+  echo "Ambiguous name. Perhaps you want one of these?" >&2
+  basename "${pkg_list[@]}" | xargs -n1 printf '  %s\n' >&2
+  return 3
+else
+  echo "No match found." >&2
+  return 1
+fi

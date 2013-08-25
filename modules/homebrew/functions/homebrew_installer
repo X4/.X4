@@ -1,0 +1,22 @@
+#
+# Function: homebrew_installer
+# 
+# Installs Homebrew
+#
+
+# Usage: homebrew_installer "</where/to/install>"
+homebrew_installer() {
+  local install_dest="$1"
+  
+  if [ ! -d "${install_dest}" ]; then
+    echo "Installing Homebrew... "
+    mkdir -p "${install_dest}" || { echo "Could not create: ${install_dest}"; return ;}
+    local homebrew_tarball_url='https://github.com/mxcl/homebrew/tarball/master'
+    curl -L "${homebrew_tarball_url}" | tar xz --strip 1 -C "${install_dest}"
+  else
+    # A directory already exists at the specified location.
+    # Hombrew is probably already installed, so bail.
+    return 4
+  fi
+  
+}

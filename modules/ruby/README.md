@@ -69,7 +69,7 @@ To display the name of the current Ruby version in a prompt, define the
 following style in the `prompt_name_setup` function.
 
     # %v - ruby version.
-    zstyle ':prezto:module:ruby:info:version' format 'version:%v'
+    zstyle ':zcontrol:module:ruby:info:version' format 'version:%v'
 
 Then add `$ruby_info[version]` to `$PROMPT` or `$RPROMPT` and call
 `ruby-info` in the `prompt_name_preexec` hook function.
@@ -80,6 +80,7 @@ Authors
 *The authors of this module should be contacted via the [issue tracker][5].*
 
   - [Sorin Ionescu](https://github.com/sorin-ionescu)
+  - [J. Brandt Buckley](https://github.com/brandt)
 
 [1]: http://www.ruby-lang.org
 [2]: https://rvm.io

@@ -1,25 +1,37 @@
 #
-# Defines Homebrew aliases.
+# Module for Homebrew - The Mac Package Manager
 #
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
+
+# Note: This module should be included early in case other modules rely on the programs it installs.
 
 # Return if requirements are not found.
 if [[ "$OSTYPE" != darwin* ]]; then
   return 1
 fi
 
-#
-# Aliases
-#
+# The path at which homebrew is installed: (~/.local/homebrew)
+BREW_PREFIX="${XDG_LOCAL_DIR}/homebrew"
 
-alias brewc='brew cleanup'
-alias brewC='brew cleanup --force'
-alias brewi='brew install'
-alias brewl='brew list'
-alias brews='brew search'
-alias brewu='brew upgrade'
-alias brewU='brew update && brew upgrade'
-alias brewx='brew remove'
+# Add Homebrew executables to $PATH
+path=(
+  ${BREW_PREFIX}/bin
+  ${BREW_PREFIX}/sbin
+  ${BREW_PREFIX}/share/npm/bin
+  ${BREW_PREFIX}/share/python
+  $path
+)
 
+# Add Homebrew completions to ZSH's $fpath
+fpath=(
+  ${BREW_PREFIX}/share/zsh-completions
+  $fpath
+)
+
+manpath=(
+  ${BREW_PREFIX}/share/man
+  $manpath
+)
+
+# Install Homebrew if it is not yet installed...
+homebrew_installer "${BREW_PREFIX}"
+rehash

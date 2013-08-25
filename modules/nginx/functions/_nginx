@@ -1,0 +1,36 @@
+#compdef nginx
+#
+# Authors:
+#  J. Brandt Buckley <brandt@runlevel1.com>
+
+local state context line curcontext="$curcontext"
+typeset -A opt_args
+
+_signals () {
+  _values 'Signals' \
+    'stop[Shut down quickly (SIGTERM)]' \
+    'quit[Shut down gracefully (SIGQUIT)]' \
+    'reopen[Reopen log files (SIGUSR1)]' \
+    'reload[Reload config, start new worker, gracefully shut down old workers (SIGHUP)]'
+}
+
+if (( ! $+_nginx_args )); then
+  local help="$(_call_program options $words[1] -h < /dev/null 2>&1)"
+  local -A optionmap
+  optionmap=(
+    '*-h*'            '-h[show this help]'
+    '*-v*'            '-v[show version and exit]'
+    '*-V*'            '-V[show version and configuration options then exit]'
+    '*-t*'            '-t[test configuration and exit]'
+    '*-q*'            '-q[suppress non-error messages during configuration testing]'
+    '*-s signal*'     '-s+[send a signal to the master process]:signal:_signals'
+    '*-p prefix*'     '-p+[set prefix path]:path:_directories'
+    '*-c filename*'   '-c+[use an alternative configuration file]:file:_files'
+    '*-g directives*' '-g+[set global configuration directives (format: "directive1; directive2")]'
+  )
+  
+  _nginx_args=($optionmap[(K)"$help"])
+fi
+
+_arguments -C -s \
+  "$_nginx_args[@]" && return 0

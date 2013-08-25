@@ -6,11 +6,11 @@ Loads prompt [themes][1].
 Settings
 --------
 
-To select a prompt theme, add the following to *zpreztorc*, and replace **name**
+To select a prompt theme, add the following to *zcontrol*, and replace **name**
 with the name of the theme you wish to load. Setting it to **random** will load
 a random theme.
 
-    zstyle ':prezto:module:prompt' theme 'name'
+    zstyle ':zcontrol:module:prompt' theme 'name'
 
 Theming
 -------
@@ -34,7 +34,7 @@ including a function that displays help or a function used to preview it.
 
 **Do not call this function directly.**
 
-The most basic example of this function can be seen below.
+The most basic example of this function can be seen bellow.
 
     function prompt_name_setup {
       PROMPT='%m%# '

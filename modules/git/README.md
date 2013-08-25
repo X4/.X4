@@ -1,8 +1,7 @@
 Git
 ===
 
-Enhances the [Git][1] distributed version control system by providing aliases,
-functions and by exposing repository status information to prompts.
+Enhances the [Git][1] distributed version control system by providing aliases, functions and by exposing repository status information to prompts.
 
 Git **1.7.2** is the [minimum required version][7].
 
@@ -13,16 +12,16 @@ Settings
 
 The format of the [git-log][8] output is configurable via the following style,
 where context is *brief*, *oneline*, and *medium*, which will be passed to the
-`--pretty=format:` switch.
+`--prety=format:` switch.
 
-    zstyle ':prezto:module:git:log:context' format ''
+    zstyle ':zcontrol:module:git:log:context' format ''
 
 ### Status
 
 Retrieving the status of a repository with submodules can take a long time.
 Submodules may be ignored when they are *dirty*, *untracked*, *all*, or *none*.
 
-    zstyle ':prezto:module:git:status:ignore' submodules 'all'
+    zstyle ':zcontrol:module:git:status:ignore' submodules 'all'
 
 This setting affects all aliases and functions that call `git-status`.
 
@@ -39,8 +38,8 @@ Aliases
   - `gbc` creates a new branch.
   - `gbl` lists branches and their commits.
   - `gbL` lists local and remote branches and their commits.
-  - `gbs` lists branches and their commits with ancestry graphs.
-  - `gbS` lists local and remote branches and their commits with ancestry
+  - `gbs` lists branches and their commits with ancestery graphs.
+  - `gbS` lists local and remote branches and their commits with ancestery
     graphs.
   - `gbx` deletes a branch.
   - `gbX` deletes a branch irrespective of its merged status.
@@ -64,17 +63,7 @@ Aliases
      commits.
   - `gcR` removes the *HEAD* commit.
   - `gcs` displays various types of objects.
-  - `gcl` lists lost commits.
-
-### Conflict
-
-  - `gCl` lists unmerged files.
-  - `gCa` adds unmerged file contents to the index.
-  - `gCe` executes merge-tool on all unmerged file.
-  - `gCo` checks out our changes for unmerged paths.
-  - `gCO` checks out our changes for all unmerged paths.
-  - `gCt` checks out their changes for unmerged paths.
-  - `gCT` checks out their changes for all unmerged paths.
+  - `gcl` displays lost commits.
 
 ### Data
 
@@ -97,8 +86,8 @@ Aliases
 
   - `gg` displays lines matching a pattern.
   - `ggi` displays lines matching a pattern ignoring case.
-  - `ggl` lists files matching a pattern.
-  - `ggL` lists files that are not matching a pattern.
+  - `ggl` displays files matching a pattern.
+  - `ggL` displays files are not matching a pattern.
   - `ggv` displays lines not matching a pattern.
   - `ggw` displays lines matching a pattern at word boundary.
 
@@ -113,6 +102,16 @@ Aliases
   - `giR` resets the current index interactively.
   - `gix` removes files/directories from the index (recursively).
   - `giX` removes files/directories from the index (recursively and forced).
+
+### Conflict
+
+  - `gCl` lists unmerged files.
+  - `gCa` adds unmerged file contents to the index.
+  - `gCe` executes merge-tool on all unmerged file.
+  - `gCo` checks out our changes for unmerged paths.
+  - `gCO` checks out our changes for all unmerged paths.
+  - `gCt` checks out their changes for unmerged paths.
+  - `gCT` checks out their changes for all unmerged paths.
 
 ### Log
 
@@ -148,19 +147,19 @@ Aliases
 
   - `gr` forward-ports local commits to the updated upstream head.
   - `gra` aborts the rebase.
-  - `grc` continues the rebase after merge conflicts are resolved.
+  - `grcon` continues the rebase after merge conflicts are resolved.
   - `gri` makes a list of commits to be rebased and opens the editor.
   - `grs` skips the current patch.
 
 ### Remote
 
   - `gR` manages tracked repositories.
-  - `gRl` lists remote names and their URLs.
+  - `gRl` displays remote names and URLs.
   - `gRa` adds a new remote.
   - `gRx` removes a remote.
   - `gRm` renames a remote.
   - `gRu` fetches remotes updates.
-  - `gRp` prunes all stale remote tracking branches.
+  - `gRc` deletes all stale remote tracking branches.
   - `gRs` displays information about a given remote.
   - `gRb` opens a remote on [GitHub][3] in the default browser.
 
@@ -170,9 +169,10 @@ Aliases
   - `gsa` applies the changes recorded in a stash to the working directory.
   - `gsx` drops a stashed state.
   - `gsX` drops all the stashed states.
+  - `gsd` lists dropped stashed states.
   - `gsl` lists stashed states.
-  - `gsL` lists dropped stashed states.
-  - `gsd` displays changes between the stash and its original parent.
+  - `gsL` displays the changes recorded in the stash as a diff between the
+    stashed state and its original parent.
   - `gsp` removes and applies a single stashed state from the stash list.
   - `gsr` recovers a given stashed state.
   - `gss` stashes the changes of the dirty working directory, including untracked.
@@ -245,45 +245,26 @@ To display information about the current repository in a prompt, define the
 following styles in the `prompt_name_setup` function, where the syntax for
 setting a style is as follows.
 
-    zstyle ':prezto:module:git:info:context:subcontext' format 'string'
+    zstyle ':zcontrol:module:git:info:context:subcontext' format 'string'
 
 ### Main Contexts
 
 | Name      | Format Code | Description
 | --------- | :---------: | ---------------------------------------------------
 | action    |     %s      | Special action name
+| added     |     %a      | Added files count
 | ahead     |     %A      | Commits ahead of remote count
 | behind    |     %B      | Commits behind of remote count
 | branch    |     %b      | Branch name
 | commit    |     %c      | Commit hash
-| position  |     %p      | Commits from the nearest tag count
-| remote    |     %R      | Remote name
-| stashed   |     %S      | Stashed states count
-
-### Concise Contexts
-
-| Name      | Format Code | Description
-| --------- | :---------: | ---------------------------------------------------
-| clean     |     %C      | Clean state
-| dirty     |     %D      | Dirty files count
-| indexed   |     %i      | Indexed files count
-| unindexed |     %I      | Unindexed files count
-| untracked |     %u      | Untracked files count
-
-The following contexts must be enabled with the following zstyle:
-
-    zstyle ':prezto:module:git:info' verbose 'yes'
-
-### Verbose Contexts
-
-| Name      | Format Code | Description
-| --------- | :---------: | ---------------------------------------------------
-| added     |     %a      | Added files count
 | clean     |     %C      | Clean state
 | deleted   |     %d      | Deleted files count
 | dirty     |     %D      | Dirty files count
 | modified  |     %m      | Modified files count
+| position  |     %p      | Commits from the nearest tag count
+| remote    |     %R      | Remote name
 | renamed   |     %r      | Renamed files count
+| stashed   |     %S      | Stashed states count
 | unmerged  |     %U      | Unmerged files count
 | untracked |     %u      | Untracked files count
 
@@ -303,12 +284,12 @@ The following contexts must be enabled with the following zstyle:
 First, format the repository state attributes. For example, to format the branch
 and remote names, define the following styles.
 
-    zstyle ':prezto:module:git:info:branch' format 'branch:%b'
-    zstyle ':prezto:module:git:info:remote' format 'remote:%R'
+    zstyle ':zcontrol:module:git:info:branch' format 'branch:%b'
+    zstyle ':zcontrol:module:git:info:remote' format 'remote:%R'
 
 Second, format how the above attributes are displayed in prompts.
 
-    zstyle ':prezto:module:git:info:keys' format \
+    zstyle ':zcontrol:module:git:info:keys' format \
       'prompt'  ' git(%b)' \
       'rprompt' '[%R]'
 
@@ -329,7 +310,7 @@ Authors
 [3]: https://www.github.com
 [4]: http://www.manpagez.com/man/8/gpt/
 [5]: http://linux.die.net/man/1/gs
-[6]: https://github.com/sorin-ionescu/prezto/issues
-[7]: https://github.com/sorin-ionescu/prezto/issues/219
+[6]: https://github.com/sorin-ionescu/zcontrol/issues
+[7]: https://github.com/sorin-ionescu/zcontrol/issues/219
 [8]: http://www.kernel.org/pub/software/scm/git/docs/git-log.html
 

@@ -3,7 +3,8 @@
 # associative array.
 #
 # Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#  Sorin Ionescu <sorin.ionescu@gmail.com>
+#  J. Brandt Buckley <brandt@runlevel1.com>
 #
 
 local virtualenv_format
@@ -15,8 +16,7 @@ typeset -gA python_info
 
 # Format virtualenv.
 if [[ -n "$VIRTUAL_ENV" ]]; then
-  zstyle -s ':prezto:module:python:info:virtualenv' format 'virtualenv_format'
+  zstyle -s ':zcontrol:module:python:info:virtualenv' format 'virtualenv_format'
   zformat -f virtualenv_formatted "$virtualenv_format" "v:${VIRTUAL_ENV:t}"
   python_info[virtualenv]="$virtualenv_formatted"
 fi
-

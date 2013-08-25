@@ -9,19 +9,9 @@ Settings
 ### Auto-Title
 
 To auto set the terminal window and tab titles with the current command or
-directory, add the following to *zpreztorc*:
+directory, add the following to *zcontrol*:
 
-    zstyle ':prezto:module:terminal' auto-title 'yes'
-
-Functions
----------
-
-- `set-screen-window-title` sets the screen title.
-- `set-terminal-tab-title` sets the terminal tab title.
-- `set-terminal-window-title` sets the terminal window title.
-- `set-titles-with-command` sets the screen and terminal titles with
-  a given command.
-- `set-titles-with-path` sets the screen and terminal titles with a given path.
+    zstyle ':zcontrol:module:terminal' auto-title 'yes'
 
 Authors
 -------

@@ -9,11 +9,10 @@
 autoload -Uz promptinit && promptinit
 
 # Load the prompt theme.
-zstyle -a ':prezto:module:prompt' theme 'prompt_argv'
+zstyle -a ':zcontrol:module:prompt' theme 'prompt_argv'
 if (( $#prompt_argv > 0 )); then
   prompt "$prompt_argv[@]"
 else
   prompt 'off'
 fi
 unset prompt_argv
-

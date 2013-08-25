@@ -6,7 +6,7 @@
 #
 
 function make {
-  if zstyle -t ':prezto:module:utility:make' color; then
+  if zstyle -t ':zcontrol:module:utility:make' color; then
     if (( $+commands[colormake] )); then
       colormake "$@"
     else

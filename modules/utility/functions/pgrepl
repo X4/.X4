@@ -1,0 +1,11 @@
+#
+# pgrepl - a more verbose pgrep
+#
+# Description:
+#   Like `pgrep` but shows more information, including all command args.
+#
+# Authors:
+#   J. Brandt Buckley <brandt@runlevel1.com>
+#
+
+ps uwwp ${$(pgrep -d, "${(j:|:)@}"):?no process found}

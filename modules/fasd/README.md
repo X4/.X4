@@ -9,7 +9,7 @@ accessed.
 For completion to work, this module must be loaded **after** the *completion*
 module.
 
-The Prezto Fasd configuration differs from the default. The default aliases have
+The Zcontrol Fasd configuration differs from the default. The default aliases have
 been disabled.
 
 Aliases
@@ -30,6 +30,7 @@ Authors
 
   - [Wei Dai](https://github.com/clvv)
   - [Sorin Ionescu](https://github.com/sorin-ionescu)
+  - [J. Brandt Buckley](https://github.com/brandt)
 
 [1]: https://github.com/clvv/fasd
 [2]: https://github.com/joelthelion/autojump

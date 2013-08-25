@@ -1,0 +1,10 @@
+#
+# Output Checksum Using SHA-256
+#
+# Authors:
+#    J. Brandt Buckley <brandt@runlevel1.com>
+#
+
+function sha256sum() {
+  openssl sha -sha256 "$1" | awk '{ print $NF }'
+}

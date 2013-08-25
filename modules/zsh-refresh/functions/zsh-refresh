@@ -1,0 +1,15 @@
+#
+# zsh-refresh
+#
+# Description:
+#   Triggers a re-sourcing of the the ZSH init scripts
+#   and rehash whenever ZSH receives SIGUSR1
+#
+# Author:
+#   J. Brandt Buckley <brandt@runlevel.com>
+#
+#
+
+print "Re-sourcing zshrc..." >&2
+source ${XDG_CONFIG_HOME}/zsh/.zshrc
+rehash

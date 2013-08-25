@@ -5,6 +5,8 @@
 #   Robby Russell <robby@planetargon.com>
 #   Suraj N. Kurapati <sunaku@gmail.com>
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
+#   J. Brandt Buckley <brandt@runlevel.com>
+#
 #
 
 # Load dependencies.
@@ -32,6 +34,7 @@ alias mkdir='nocorrect mkdir'
 alias mv='nocorrect mv'
 alias mysql='nocorrect mysql'
 alias rm='nocorrect rm'
+alias touch='nocorrect touch'
 
 # Disable globbing.
 alias fc='noglob fc'
@@ -43,6 +46,7 @@ alias rake='noglob rake'
 alias rsync='noglob rsync'
 alias scp='noglob scp'
 alias sftp='noglob sftp'
+alias yum='noglob yum'
 
 # Define general aliases.
 alias _='sudo'
@@ -55,34 +59,26 @@ alias mv="${aliases[mv]:-mv} -i"
 alias p='${(z)PAGER}'
 alias po='popd'
 alias pu='pushd'
-alias rm="${aliases[rm]:-rm} -i"
+# alias rm="${aliases[rm]:-rm} -i"
 alias type='type -a'
+alias bd='popd'
+
+# sudo
+alias fu='sudo $( fc -ln -1)'         # Use instead of 'sudo !!'
 
 # ls
 if is-callable 'dircolors'; then
   # GNU Core Utilities
   alias ls='ls --group-directories-first'
 
-  if zstyle -t ':prezto:module:utility:ls' color; then
-    if [[ -s "$HOME/.dir_colors" ]]; then
-      eval "$(dircolors "$HOME/.dir_colors")"
-    else
-      eval "$(dircolors)"
-    fi
-
+  if zstyle -t ':zcontrol:module:utility:ls' color; then
     alias ls="$aliases[ls] --color=auto"
   else
     alias ls="$aliases[ls] -F"
   fi
 else
   # BSD Core Utilities
-  if zstyle -t ':prezto:module:utility:ls' color; then
-    # Define colors for BSD ls.
-    export LSCOLORS='exfxcxdxbxGxDxabagacad'
-
-    # Define colors for the completion system.
-    export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
-
+  if zstyle -t ':zcontrol:module:utility:ls' color; then
     alias ls='ls -G'
   else
     alias ls='ls -F'
@@ -101,57 +97,79 @@ alias lc='lt -c'         # Lists sorted by date, most recent last, shows change 
 alias lu='lt -u'         # Lists sorted by date, most recent last, shows access time.
 alias sl='ls'            # I often screw this up.
 
-# Mac OS X Everywhere
+# Homogenize Mac OS X commands across other systems
 if [[ "$OSTYPE" == darwin* ]]; then
   alias o='open'
-elif [[ "$OSTYPE" == cygwin* ]]; then
-  alias o='cygstart'
-  alias pbcopy='tee > /dev/clipboard'
-  alias pbpaste='cat /dev/clipboard'
+  alias get='curl --continue-at - --location --progress-bar --remote-name --remote-time'
+  alias pbc='pbcopy'
+  alias pbp='pbpaste'
 else
   alias o='xdg-open'
+  alias get='wget --continue --progress=bar --timestamping'
 
   if (( $+commands[xclip] )); then
     alias pbcopy='xclip -selection clipboard -in'
     alias pbpaste='xclip -selection clipboard -out'
-  elif (( $+commands[xsel] )); then
+  fi
+
+  if (( $+commands[xsel] )); then
     alias pbcopy='xsel --clipboard --input'
     alias pbpaste='xsel --clipboard --output'
   fi
 fi
 
-alias pbc='pbcopy'
-alias pbp='pbpaste'
-
-# File Download
-if (( $+commands[curl] )); then
-  alias get='curl --continue-at - --location --progress-bar --remote-name --remote-time'
-elif (( $+commands[wget] )); then
-  alias get='wget --continue --progress=bar --timestamping'
-fi
-
 # Resource Usage
+
+## List disks human readable by default
 alias df='df -kh'
 alias du='du -kh'
 
+## Prefer htop, if it's available
 if (( $+commands[htop] )); then
-  alias top=htop
+  alias top='htop'
 else
   alias topc='top -o cpu'
   alias topm='top -o vsize'
 fi
 
+## In SysV UNIX `killall` literally kills everything. This is a safety net.
+if [[ $OSTYPE =~ solaris* ]] || [[ $OSTYPE =~ aix* ]]; then
+  alias -g killall='echo "On this system killall literally kills everything. Try: pkill"'
+fi
+
+
 # Miscellaneous
 
-# Serves a directory via HTTP.
+## Serves a directory via HTTP.
 alias http-serve='python -m SimpleHTTPServer'
+
+## JSON prettifier
+alias json="python -mjson.tool"
+
+## Base64 Conversion
+alias base64decode="base64 -D"
+alias base64encode="base64"
+
+## Date - print an ISO 8901 timestamp (2012-11-01T13:54:26-0800)
+alias ts='date "+%Y-%m-%dT%H:%M:%S%z"'
+
+## VIM - start in paste mode
+alias vimp='vim -c "set paste"'
+
+## dd - send a signal to `dd` that triggers a status report
+case $OSTYPE in
+  darwin*) alias dd-status='sudo pkill -INFO "^dd$"' ;;
+   linux*) alias dd-status='sudo pkill -USR1 "^dd$"' ;;
+esac
+
+
 
 #
 # Functions
 #
 
 # Makes a directory and changes to it.
-function mkdcd {
+function mkcd {
   [[ -n "$1" ]] && mkdir -p "$1" && builtin cd "$1"
 }
 

@@ -1,0 +1,4 @@
+#
+# Adds a key-combo to insert a sortable, ISO 8901 datestamp (YYYY-MM-DD)
+#
+LBUFFER+=${(%):-'%D{%Y-%m-%d}'}

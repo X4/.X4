@@ -1,0 +1,14 @@
+#
+# Get the port name or service name association based on the /etc/services file.
+#
+# Authors:
+#   J. Brandt Buckley <brandt@runlevel1.com>
+#
+# Usage: service-lookup postgres
+#        service-lookup 5432
+
+service-lookup(){ 
+  cut -d'#' -f1 </etc/services | tr -s '\n' |  awk '{ print $2,$1 }' | { [ $# != 0 ] && grep "$@" || cat - ;} 
+}
+
+service-lookup "$@"

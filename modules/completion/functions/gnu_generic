@@ -1,0 +1,26 @@
+#
+# GNU Generic Completion
+#
+# Description:
+#   The _gnu_generic completion definition attempts to auto-generate completion
+#   for programs that accept the `--help` flag.
+#
+# Author:
+#   J. Brandt Buckley <brandt@runlevel.com>
+#
+# All completion definitions should have been defined already because:
+# 1. All module functions are sourced before they're initialized.
+# 2. The completions in this module are added to $fpath before we're executed.
+
+if (( ! $+functions[compdef] )); then
+  echo "Warning: Could not run gnu_generic.zsh because 'compdef' was not yet loaded." >&2
+  return 1
+fi
+
+local cmd ; for cmd in $@ ; do
+  # Only define completion if we have the command.
+  # Only define completion if a completion hasn't yet been defined.
+  if (( $+commands[$cmd] )) && (( ! $+functions[_$cmd] )) ; then
+    compdef _gnu_generic $cmd
+  fi
+done

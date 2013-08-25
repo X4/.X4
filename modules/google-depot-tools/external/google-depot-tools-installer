@@ -1,0 +1,28 @@
+#
+# google-depot-tools-installer
+# 
+# Installs Google Depot Tools
+#
+
+# Usage: homebrew_installer "</where/to/install>"
+google-depot-tools-installer() {
+  local install_dest="$1"
+  
+  # If no argument was supplied, revert to default settings.
+  # Typically this will be: ~/.local/google-depot-tools
+  if [ -z "${install_dest}" ]; then
+    : ${XDG_LOCAL_DIR:=${HOME}/.local}
+    : ${install_dest:=${XDG_LOCAL_DIR}/google-depot-tools}
+  fi
+  
+  # Install is allowed to continue if $install_dest doesn't exist yet.
+  if [ ! -d "${install_dest}" ]; then
+    echo "Installing Google Depot Tools... "
+    mkdir -p "$(dirname "${install_dest}")" || { echo "Could not create: ${install_dest}"; return ;}
+    git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git "${install_dest}"
+  else
+    return 4
+  fi  
+}
+
+google-depot-tools-installer "$@"

@@ -1,0 +1,15 @@
+# Notes
+
+# Figuring out which programs we can use with _gnu_generic ...
+#
+# This should list all commands that accept the '--help' argument and
+# don't already have a completion definition file.
+#
+# It doesn't guarantee that _gnu_generic will work because some are not
+# formatted in a way it knows how to handle.
+
+find ${path[@]} -type f -perm +111 -print0 2>/dev/null |
+  xargs -0 -n1 -P4 -I{} grep -l -m 1 -- "--help" "{}" 2>/dev/null | 
+  sort | uniq | 
+  while read line; do (($+functions[_$line])) || echo "${line}" ; done |
+  grep -E -v "PlistBuddy|defaults|cpio|bsdtar"

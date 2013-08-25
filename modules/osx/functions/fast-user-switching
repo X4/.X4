@@ -1,0 +1,41 @@
+#
+# Operates Mac OS X's Fast User Switching from the command-line
+#
+# Authors:
+#   J. Brandt Buckley <brandt@runlevel1.com>
+#
+fast-user-switching() {
+  local fus_bin='/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession'
+  
+  usage() {
+    printf '%s\n' \
+      "Description: Operates Mac OS X's Fast User Switching from the Command-Line" \
+      "Usage: fast-user-switching [-s|-u <username>]" 
+    printf '  -%15s  %s\n'  \
+      "s"             "Suspend session (goto Login Window)" \
+      "u <username>"  "Switch to user by username" \
+      "i <uid>"       "Switch to user by UID" \
+      "h"             "Print this usage message"
+  }
+  
+  case "$1" in
+    -s) local flag='-suspend'
+        ;;
+    -u) local flag='-switchToUserID'
+        local user=$(id -u $2)  # Convert username to UID
+        ;;
+    -i) local flag='-switchToUserID'
+        local user="$2"
+        ;;
+    -h) usage >&2 ; exit 2
+        ;;
+     *) usage >&2 ; exit 2
+        ;;
+  esac
+  if [ "$flag" = '-switchToUserID' -a -z "$user" ]; then 
+      printf '%s\n' "Error: Invalid user specification."
+      exit 1
+  fi
+  # Execute:
+ "$fus_bin" $flag $user
+}

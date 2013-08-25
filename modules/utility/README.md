@@ -8,25 +8,25 @@ Settings
 
 ### Highlighting
 
-If you have enabled color globally in *zpreztorc*, you may disable it for certain
+If you have enabled color globally in *zcontrol*, you may disable it for certain
 commands.
 
-To disable `ls` color, add the following line to *zpreztorc*; when coloring is
+To disable `ls` color, add the following line to *zcontrol*; when coloring is
 disabled, type indicators (\*, /, =>, @, =, |, %) will be appended to entries.
 
-    zstyle ':prezto:module:utility:ls' color 'no'
+    zstyle ':zcontrol:module:utility:ls' color 'no'
 
-To disable `diff` highlighting, add the following line to *zpreztorc*:
+To disable `diff` highlighting, add the following line to *zcontrol*:
 
-    zstyle ':prezto:module:utility:diff' color 'no'
+    zstyle ':zcontrol:module:utility:diff' color 'no'
 
-To disable `wdiff` highlighting, add the following line to *zpreztorc*:
+To disable `wdiff` highlighting, add the following line to *zcontrol*:
 
-    zstyle ':prezto:module:utility:wdiff' color 'no'
+    zstyle ':zcontrol:module:utility:wdiff' color 'no'
 
-To disable `make` highlighting, add the following line to *zpreztorc*:
+To disable `make` highlighting, add the following line to *zcontrol*:
 
-    zstyle ':prezto:module:utility:make' color 'no'
+    zstyle ':zcontrol:module:utility:make' color 'no'
 
 Aliases
 -------

@@ -1,0 +1,144 @@
+#
+# Help with globbing and file expansion
+#
+# Author:
+#   J. Brandt Buckley <brandt@runlevel.com>
+#
+
+cat - <<"_EOF_"
+FILENAME GENERATION (GLOB QUALIFIERS)
+See also:  man zshexpn
+           http://zshwiki.org/home/scripting/paramflags
+
+DEPTH
+ *           non-recursive
+ **/*        recursive
+ ***/*       recursive, follow-symlinks
+
+
+Qualifiers
+---------------
+The items below refine the search.
+Place them in parentheses after the path expression.
+
+
+TYPES
+ /           directories
+ .           plain files
+ @           symbolic links
+ F           non-empty directories
+ =           sockets
+ p           named pipes (FIFOs)
+ *           executable plain files (0100)
+ %           device files (character or block special)
+ %b          block special files
+ %c          character special files
+
+
+MODE
+ r            400  owner-readable
+ w            200  owner-writable
+ x            100  owner-executable
+ A            040  group-readable
+ I            020  group-writable
+ E            010  group-executable
+ R            004  world-readable
+ W            002  world-writable
+ X            001  world-executable
+ s           4000  setuid set
+ S           2000  setgid set
+ t           1000  sticky bit set
+
+
+OWNER
+ u:root:     owned by user, bob
+ u:0:        owned by UID 0 (root)
+ g:staff:    group set to adm
+ g:20:       group set to 20 (staff)
+
+
+NAME
+ i           case-insensitive
+ #a1         aproximate matching with up to 1 error
+ #a3         aproximate matchine with up to 3 errors
+ (a|b).*     match either 'a' or 'b'
+ *.c~file.c  match '*.c' except for 'file.c'
+
+
+DATE
+ m-1         modified LESS than 1 DAY ago
+ mM-2        modified LESS than 2 MONTHS ago
+ mw-3        modified LESS than 3 WEEKS ago
+ mh-12       modified LESS than 12 HOURS ago
+ mm-15       modified LESS than 15 MINUTES ago
+ ms-30       modified LESS than 30 SECONDS ago
+ m+1         modified OVER 1 DAY ago
+ mM+2        modified OVER 2 MONTHS ago
+ mw+3        modified OVER 3 WEEKS ago
+ mh+12       modified OVER 12 HOURS ago
+ mm+15       modified OVER 15 MINUTES ago
+ ms+30       modified OVER 30 SECONDS ago
+
+
+SIZE
+ Lk+128      more than 128 KB
+ Lk-128      less than 128 KB
+ Lm+10       more than 10 MB
+ Lm-10       less than 10 MB
+
+
+SORTING
+ on          name - alphabetical
+ On          name - reverse alphabetical
+ oL          size - largest to smallest
+ Ol          side - smallest to largest
+ om          modification time - newest to oldest
+ Om          modification time - oldest to newest
+ oa          access time - newest to oldest
+ Oa          access time - oldest to newest
+ od          depth - deepest first
+ Od          depth - shallowest first
+
+
+Modifiers
+---------------
+The items below alter the resultant output.
+Add a sequence of one or more modifiers, each preceded by a ':' (colon).
+
+
+MODIFIERS
+ a           make absolute path: doesn't validate subpaths or resolve symlinks
+ A           make absolute path: validates subpaths, resolves symlinks
+ c           resolve a comman name by searching $PATH
+ e           extension
+ h           dirname: strip trailing pathname component
+ r           strip extension
+ t           basename: strip all leading pathname components
+ l           convert to lowercase
+ u           convert to uppercase
+
+
+EXAMPLES
+ print *(m-1)             # Modified less than a day ago
+ print *(a1)              # Accessed a day ago
+ print *(@)               # Symlinks
+ print *(Lk+50)           # Greater than 50 KB
+ print *(Lk-50)           # Less than 50 KB
+ print **/*.c             # Ending with *.c (recursive)
+ print **/*.c~file.c      # Ending with *.c except 'file.c' (recursive)
+ print *~*.*              # All files without a dot
+ print (foo|bar).*        # Starting with 'foo' or 'bar'
+ chmod 644 *(.^x)         # Make regular, non-executable files world-readable
+ print -l *(.c|.h)        # Ending with *.c or *.h
+ print **/*(g:users:)     # Items owned by group, 'users' (recursive)
+ print /etc/*.d(:t/)      # Basename of all directories in /etc ending with *.d
+ ls -flh **/*(.OL[1,10])  # 10 largest files (recursive)
+ ls -rl **/*(D.om[1,10])  # 10 newest files (recursive)
+ ls -rtlh *(D.om[1,10])   # 10 oldest files
+ ls -d *(/)               # Directories only
+ ls -l *(*)               # Executables only
+ ls -l **/*(s,S,t)        # SETUID, SETGID, or Sticky bit set (recursive)
+ ls *(f-100)              # Files for which the owner does not have execute
+ ls *(f:gu+w,o-rx:)       # Files with gu+w AND o-rx
+ 
+_EOF_

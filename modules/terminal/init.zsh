@@ -19,42 +19,36 @@ else
 fi
 
 # Sets the GNU Screen title.
-function set-screen-window-title {
+function set-screen-title {
   if [[ "$TERM" == screen* ]]; then
     printf "\ek%s\e\\" ${(V)argv}
   fi
 }
 
 # Sets the terminal window title.
-function set-terminal-window-title {
-  if [[ "$TERM" == ((x|a|ml|dt|E)term*|(u|)rxvt*) ]]; then
+function set-window-title {
+  if [[ "$TERM" == (^(x|a|ml|dt|E)term*|(u|)rxvt*) ]]; then
     printf "\e]2;%s\a" ${(V)argv}
   fi
 }
 
 # Sets the terminal tab title.
-function set-terminal-tab-title {
-  if [[ "$TERM" == ((x|a|ml|dt|E)term*|(u|)rxvt*) ]]; then
+function set-tab-title {
+  if [[ "$TERM" == ( (x|a|ml|dt|E)term*|(u|)rxvt*) ]]; then
     printf "\e]1;%s\a" ${(V)argv}
   fi
 }
 
-# Sets the tab and window titles with a given command.
-function set-titles-with-command {
-  # Do not set the window and tab titles in Terminal.app because they are not
-  # reset upon command termination.
-  if [[ "$TERM_PROGRAM" == 'Apple_Terminal' ]]; then
-    return 1
-  fi
-
+# Sets the tab and window titles with the command name.
+function set-title-by-command {
   emulate -L zsh
-  setopt EXTENDED_GLOB
+  setopt LOCAL_OPTIONS EXTENDED_GLOB
 
   # Get the command name that is under job control.
   if [[ "${1[(w)1]}" == (fg|%*)(\;|) ]]; then
     # Get the job name, and, if missing, set it to the default %+.
     local job_name="${${1[(wr)%*(\;|)]}:-%+}"
-
+    
     # Make a local copy for use in the subshell.
     local -A jobtexts_from_parent_shell
     jobtexts_from_parent_shell=(${(kv)jobtexts})
@@ -62,43 +56,20 @@ function set-titles-with-command {
     jobs $job_name 2>/dev/null > >(
       read index discarded
       # The index is already surrounded by brackets: [1].
-      set-titles-with-command "${(e):-\$jobtexts_from_parent_shell$index}"
+      set-title-by-command "${(e):-\$jobtexts_from_parent_shell$index}"
     )
   else
     # Set the command name, or in the case of sudo or ssh, the next command.
-    local cmd=${${1[(wr)^(*=*|sudo|ssh|-*)]}:t}
-    local truncated_cmd="${cmd/(#m)?(#c15,)/${MATCH[1,12]}...}"
-    unset MATCH
+    local cmd=${1[(wr)^(*=*|sudo|ssh|-*)]}
 
-    if [[ "$TERM" == screen* ]]; then
-      set-screen-window-title "$truncated_cmd"
-    else
-      set-terminal-window-title "$cmd"
-      set-terminal-tab-title "$truncated_cmd"
+    # Right-truncate the command name to 15 characters.
+    if (( $#cmd > 15 )); then
+      cmd="${cmd[1,15]}..."
     fi
-  fi
-}
 
-# Sets the tab and window titles with a given path.
-function set-titles-with-path {
-  emulate -L zsh
-  setopt EXTENDED_GLOB
-
-  local absolute_path="${${1:a}:-$PWD}"
-
-  if [[ "$TERM_PROGRAM" == 'Apple_Terminal' ]]; then
-    printf '\e]7;%s\a' "file://$HOST${absolute_path// /%20}"
-  else
-    local abbreviated_path="${absolute_path/#$HOME/~}"
-    local truncated_path="${abbreviated_path/(#m)?(#c15,)/...${MATCH[-12,-1]}}"
-    unset MATCH
-
-    if [[ "$TERM" == screen* ]]; then
-      set-screen-window-title "$truncated_path"
-    else
-      set-terminal-window-title "$abbreviated_path"
-      set-terminal-tab-title "$truncated_path"
-    fi
+    for kind in window tab screen; do
+      set-${kind}-title "$cmd"
+    done
   fi
 }
 
@@ -106,18 +77,29 @@ function set-titles-with-path {
 autoload -Uz add-zsh-hook
 
 # Sets the tab and window titles before the prompt is displayed.
-function set-titles-precmd {
-  if zstyle -t ':prezto:module:terminal' auto-title; then
-    set-titles-with-path
+function set-title-precmd {
+  if zstyle -t ':zcontrol:module:terminal' auto-title; then
+    if [[ "$TERM_PROGRAM" == 'Apple_Terminal' && "$TERM" != screen* ]]; then
+      # Set the current working directory in Apple Terminal.
+      printf '\e]7;%s\a' "file://$HOST${PWD// /%20}"
+    else
+      set-window-title "${(%):-%~}"
+      for kind in tab screen; do
+        # Left-truncate the current working directory to 15 characters.
+        set-${kind}-title "${(%):-%15<...<%~%<<}"
+      done
+    fi
   fi
 }
-add-zsh-hook precmd set-titles-precmd
+add-zsh-hook precmd set-title-precmd
 
 # Sets the tab and window titles before command execution.
-function set-titles-preexec {
-  if zstyle -t ':prezto:module:terminal' auto-title; then
-    set-titles-with-command "$2"
+function set-title-preexec {
+  if zstyle -t ':zcontrol:module:terminal' auto-title; then
+    if [[ "$TERM_PROGRAM" != 'Apple_Terminal' || "$TERM" == screen*  ]]; then
+      set-title-by-command "$2"
+    fi
   fi
 }
-add-zsh-hook preexec set-titles-preexec
+add-zsh-hook preexec set-title-preexec
 

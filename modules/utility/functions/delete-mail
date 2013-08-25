@@ -1,0 +1,21 @@
+#
+# Mass delete mail in a user's /var/mail mailbox (by default the current user)
+#
+# Authors:
+#   J. Brandt Buckley <brandt@runlevel1.com>
+#
+# Usage: delete-mail
+#        delete-mail jsmith
+
+## - delete_mail [user]
+function delete_mail() {
+  [ $# = 0 ] && local mail_user=${USER} || local mail_user="$1"
+  local mail_path="/var/mail/${mail_user}"
+  printf '%s: %s\n' "Mailbox size:" "$(du -h ${mail_path})"
+  read -p "Would you like to delete ${mail_user}'s mailbox? (y/n)" reply
+  case $reply in
+    [Yy])  : > ${mail_path} ;;
+       *)  printf '%s\n' "Not deleting ${mail_user}'s mailbox." ;;
+  esac
+}
+delete_mail $@

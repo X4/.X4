@@ -4,7 +4,6 @@
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #   Colin Hebert <hebert.colin@gmail.com>
-#   Georges Discry <georges@discry.be>
 #
 
 # Return if requirements are not found.
@@ -16,16 +15,10 @@ fi
 # Auto Start
 #
 
-if [[ -z "$TMUX" ]] && ( \
-  ( [[ -n "$SSH_TTY" ]] && zstyle -t ':prezto:module:tmux:auto-start' remote ) ||
-  ( [[ -z "$SSH_TTY" ]] && zstyle -t ':prezto:module:tmux:auto-start' local ) \
-); then
-  tmux_session='#Prezto'
+if [[ -z "$TMUX" ]] && zstyle -t ':zcontrol:module:tmux' auto-start; then
+  tmux_session='#Zcontrol'
 
   if ! tmux has-session -t "$tmux_session" 2> /dev/null; then
-    # Ensure that tmux server is started.
-    tmux start-server
-
     # Disable the destruction of unattached sessions globally.
     tmux set-option -g destroy-unattached off &> /dev/null
 

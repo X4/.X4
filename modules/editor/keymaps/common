@@ -1,0 +1,73 @@
+#
+# Applies to emacs and vi insert-mode (viins) key bindings
+#
+  
+bindkey -M "$keymap" "$key_info[Home]"      beginning-of-line
+bindkey -M "$keymap" "$key_info[End]"       end-of-line
+
+bindkey -M "$keymap" "$key_info[PageUp]"    history-beginning-search-backward
+bindkey -M "$keymap" "$key_info[PageDown]"  history-beginning-search-forward
+
+bindkey -M "$keymap" "$key_info[Insert]"    overwrite-mode
+bindkey -M "$keymap" "$key_info[Delete]"    delete-char
+bindkey -M "$keymap" "$key_info[Backspace]" backward-delete-char
+
+bindkey -M "$keymap" "$key_info[Left]"      backward-char
+bindkey -M "$keymap" "$key_info[Right]"     forward-char
+
+
+# Expand history on space.
+bindkey -M "$keymap" ' '                    magic-space
+
+
+# Clear screen.
+bindkey -M "$keymap" "$key_info[Control]L"  clear-screen
+
+
+# Expand command name to full path.
+for key in "$key_info[Escape]"{E,e}
+  bindkey -M "$keymap" "$key"               expand-cmd-path
+
+
+# Duplicate the previous word.
+for key in "$key_info[Escape]"{M,m}
+  bindkey -M "$keymap" "$key"               copy-prev-shell-word
+
+
+# Use a more flexible push-line.
+for key in "$key_info[Control]Q" "$key_info[Escape]"{q,Q}
+  bindkey -M "$keymap" "$key"               push-line-or-edit
+
+
+# Bind Shift + Tab to go to the previous menu item.
+bindkey -M "$keymap" "$key_info[BackTab]"   reverse-menu-complete
+
+
+# Complete in the middle of word.
+bindkey -M "$keymap" "$key_info[Control]I"  expand-or-complete
+
+
+# Expand .... to ../..
+if zstyle -t ':zcontrol:module:editor' dot-expansion; then
+  bindkey -M "$keymap" "."                  expand-dot-to-parent-directory-path
+fi
+
+# Display an indicator when completing.
+bindkey -M "$keymap" "$key_info[Control]I"  expand-or-complete-with-indicator
+
+
+# Insert 'sudo ' at the beginning of the line.
+bindkey -M "$keymap" "$key_info[Control]X$key_info[Control]S" prepend-sudo
+
+  
+# Insert a timestamp on the command line (yyyy-mm-dd)
+bindkey -M "$keymap" "$key_info[Control]X$key_info[Control]D" prepend-sudo
+
+
+## Undo/Redo:
+
+# Maps Undo to Command-Z with an iTerm Esc+ map from Cmd-Z to 0x18 0x15
+bindkey -M "$keymap" "$key_info[Control]X$key_info[Control]U" undo
+  
+# Maps Redo to Command-Shift-Z with an iTerm Esc+ map from Cmd-Shft-Z to 0x18 0x12
+bindkey -M "$keymap" "$key_info[Control]X$key_info[Control]R" redo

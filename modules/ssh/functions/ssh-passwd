@@ -1,0 +1,31 @@
+#
+# ssh-passwd - change your encrypted key passphrase as easly as your password
+#
+
+# Usage: ssh-passwd [user]
+
+## Easily change your SSH Key passphrase
+function ssh-passwd() {
+  declare -a private_keys
+  emulate -L zsh  # Ensure shell option is local to the function.
+  setopt extended_glob
+  setopt sh_file_expansion
+  private_keys=( ~${1:-$USER}/(.ssh/)#(id_*~*.pub)(.N) )
+  if [ ${#private_keys[@]} = 0 ]; then
+    echo "Could not find any keys for user." >&2
+    return 1
+  elif [ ${#private_keys[@]} = 1 ]; then
+    local selected_key="${private_keys[1]}"
+  else
+    select key in ${private_keys[@]}; do
+      local selected_key="${key}"
+      break
+    done
+  fi
+  if [ ! -f "${selected_key}" ]; then
+    echo "Invalid key selection." >&2
+    return 1
+  fi
+  echo "Changing password for: ${selected_key}"
+  ssh-keygen -f ${selected_key} -p
+}

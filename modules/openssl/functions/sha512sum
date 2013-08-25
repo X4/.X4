@@ -1,0 +1,10 @@
+#
+# Output Checksum Using SHA-512
+#
+# Authors:
+#    J. Brandt Buckley <brandt@runlevel1.com>
+#
+
+function sha512sum() {
+  openssl sha -sha512 "$1" | awk '{ print $NF }'
+}

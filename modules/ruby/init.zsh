@@ -2,41 +2,41 @@
 # Configures Ruby local gem installation, loads version managers, and defines
 # aliases.
 #
-# Authors: Sorin Ionescu <sorin.ionescu@gmail.com>
+# Requires:
+#  - Packages:
+#      ruby
+#      rbenv (optional)
+#      rvm (optional)
+#      asciidoc
+#      curl
+#  - Gems:
+#      bundler (optional)
+#
+# Authors: 
+#  Sorin Ionescu <sorin.ionescu@gmail.com>
+#  J. Brandt Buckley <brandt@runlevel1.com>
 #
 
-# Load RVM into the shell session.
-if [[ -s "$HOME/.rvm/scripts/rvm" ]]; then
-  # Unset AUTO_NAME_DIRS since auto adding variable-stored paths to ~ list
-  # conflicts with RVM.
-  unsetopt AUTO_NAME_DIRS
+# Return if requirements are not found.
+if (( ! $+commands[ruby] )); then
+  return 1
+fi
 
-  # Source RVM.
-  source "$HOME/.rvm/scripts/rvm"
-
-# Load manually installed rbenv into the shell session.
+if (( $+commands[rbenv] )); then
+  eval "$(rbenv init - --no-rehash zsh)"           # Load package manager installed rbenv into shell session.
 elif [[ -s "$HOME/.rbenv/bin/rbenv" ]]; then
-  path=("$HOME/.rbenv/bin" $path)
-  eval "$(rbenv init - --no-rehash zsh)"
-
-# Load package manager installed rbenv into the shell session.
-elif (( $+commands[rbenv] )); then
-  eval "$(rbenv init - --no-rehash zsh)"
-
-# Install local gems according to operating system conventions.
+  path+=("$HOME/.rbenv/bin")
+  eval "$(rbenv init - --no-rehash zsh)"           # Load manually installed rbenv into shell session.
+elif [[ -s "$HOME/.rvm/scripts/rvm" ]]; then
+  unsetopt AUTO_NAME_DIRS                          # Auto-adding variable-stored paths to ~ list conflicts with RVM.
+  source "$HOME/.rvm/scripts/rvm"                  # Load RVM into the shell session.
 else
   if [[ "$OSTYPE" == darwin* ]]; then
-    export GEM_HOME="$HOME/Library/Ruby/Gems/1.8"
-    path=("$GEM_HOME/bin" $path)
-  else
-    path=($HOME/.gem/ruby/*/bin(N) $path)
+    export GEM_HOME="$HOME/Library/Ruby/Gems/1.8"  # Install local gems per operating system conventions.
+    path+=( "$GEM_HOME/bin" )
   fi
 fi
 
-# Return if requirements are not found.
-if (( ! $+commands[ruby] && ! ( $+commands[rvm] || $+commands[rbenv] ) )); then
-  return 1
-fi
 
 #
 # Aliases
@@ -60,3 +60,4 @@ if (( $+commands[bundle] )); then
     && print vendor/bundle >>! .gitignore \
     && print vendor/cache  >>! .gitignore'
 fi
+

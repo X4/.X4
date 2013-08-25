@@ -4,15 +4,17 @@
 # Authors:
 #   Wei Dai <x@wei23.net>
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
+#   J. Brandt Buckley <brandt@runlevel1.com>
 
-# Load dependencies.
-pmodload 'editor'
+# TODO: Add configuration for cache file location per $XDG_CACHE_DIR
 
 # Return if requirements are not found.
 if (( ! $+commands[fasd] )); then
   return 1
 fi
+
+# Load dependencies.
+pmodload 'editor'
 
 #
 # Initialization
@@ -24,7 +26,7 @@ if [[ "${commands[fasd]}" -nt "$cache_file" || ! -s "$cache_file"  ]]; then
   init_args=(zsh-hook)
 
   # Set fasd completion init arguments, if applicable.
-  if zstyle -t ':prezto:module:completion' loaded; then
+  if zstyle -t ':zcontrol:module:completion' loaded; then
     init_args+=(zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install)
   fi
 

@@ -1,0 +1,3 @@
+# Enters vi replace mode and updates editor information.
+zle .vi-replace
+zle editor-info

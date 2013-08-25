@@ -1,0 +1,4 @@
+# Moves to the first non-blank character then enters vi insert mode and updates
+# editor information.
+zle .vi-insert-bol
+zle editor-info

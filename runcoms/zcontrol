@@ -1,0 +1,169 @@
+#
+# Sets Zcontrol options.
+#
+
+#
+# Editor and Visual
+#
+
+# Set your preffered text editor for the $VISUAL and $EDITOR variables.
+# List editors from most-preferred to least.
+# The first valid editor found will be used.
+#
+# Note: $EDITOR will be set to the same value as $VISUAL because
+# there's rarely a reason for them to differ in modern terminals.
+case $OSTYPE in
+  linux*)   # Linux Specific Commands
+      zstyle ':zcontrol:module:environment:visual' editors \
+        'vim'  \
+        'vi'   \
+        'nano' \
+        'pico'
+  darwin*)   # Mac OS X Specific Commands
+      zstyle ':zcontrol:module:environment:visual' editors \
+        'mate' \
+        'subl' \
+        'mvim' \
+        'gvim' \
+        'vim'  \
+        'vi'   \
+        'nano' \
+        'pico'
+  ;;
+esac
+
+#
+# Pager
+#
+
+# Set your preffered pager for the $PAGER variable.
+# List pagers from most-preferred to least.
+# The first valid pager found will be used.
+
+zstyle ':zcontrol:module:environment:pager' pagers \
+  'most' \
+  'less' \
+  'more'
+
+
+#
+# General
+#
+
+# Set case-sensitivity for completion, history lookup, etc.
+zstyle ':zcontrol:*:*' case-sensitive 'no'
+
+# Color output (auto set to 'no' on dumb terminals).
+zstyle ':zcontrol:*:*' color 'yes'
+
+# Set the Zsh modules to load (man zshmodules).
+zstyle ':zcontrol:load' zmodule 'attr' 'stat'
+
+# Set the Zsh functions to load (man zshcontrib).
+zstyle ':zcontrol:load' zfunction 'zargs' 'zmv'
+
+# Set the Zcontrol modules to load (browse modules). Order matters!
+# TODO: Add better dependency resolution; situational awareness.
+# The 'environment' 'organizer' 'terminal' 'editor' and 'utility' modules should be loaded first.
+zstyle ':zcontrol:load' pmodule 'environment' 'organizer' 'editor' 'utility'   \
+  'history'                  \
+  'git'                      \
+  'directory'                \
+  'spectrum'                 \
+  'completion'               \
+  'archive'                  \
+  'perl'                     \
+  'python'                   \
+  'pyenv'                    \
+  'curl'                     \
+  'fasd'                     \
+  'ssh'                      \
+  'nginx'                    \
+  'zsh-help'                 \
+  'insert-last-typed-word'   \
+  'syntax-highlighting'      \
+  'history-substring-search' \
+  'prompt'
+# If enabled, the 'syntax-highlighting' 'history-substring-search' and 'prompt' modules must be loaded *last*, in that order.
+
+
+#
+# Git
+#
+
+# Ignore submodules when they are 'dirty', 'untracked', 'all', or 'none'.
+zstyle ':zcontrol:module:git:ignore' submodule 'all'
+
+
+#
+# GNU Utility
+#
+
+# Set the command prefix on non-GNU systems.
+# zstyle ':zcontrol:module:gnu-utility' prefix 'g'
+
+
+#
+# Pacman
+#
+
+# Set the Pacman frontend.
+# zstyle ':zcontrol:module:pacman' frontend 'yaourt'
+
+
+#
+# Prompt
+#
+
+# Set the prompt theme to load.
+# Setting it to 'random' loads a random theme.
+# Auto set to 'off' on dumb terminals.
+# To list avialable prompts, use:  prompt -l
+zstyle ':zcontrol:module:prompt' theme 'brandt'
+
+
+#
+# Screen
+#
+
+# Auto start a session when Zsh is launched.
+# zstyle ':zcontrol:module:screen' auto-start 'yes'
+
+
+#
+# SSH-Agent
+#
+
+# Enable ssh-agent forwarding.
+# zstyle ':zcontrol:module:ssh-agent' forwarding 'yes'
+
+# Set ssh-agent identities to load.
+# zstyle ':zcontrol:module:ssh-agent' identities 'id_rsa' 'id_rsa2' 'id_github'
+
+
+#
+# Highlighting
+#
+
+zstyle ':zcontrol:module:syntax-highlighting' highlighters  \
+  'main'     \
+  'brackets' \
+  'pattern'  \
+  'cursor'
+
+
+#
+# Terminal
+#
+
+# Auto set the tab and window titles.
+zstyle ':zcontrol:module:terminal' auto-title 'yes'
+
+
+#
+# Tmux
+#
+
+# Auto start a session when Zsh is launched.
+# zstyle ':zcontrol:module:tmux' auto-start 'yes'
+

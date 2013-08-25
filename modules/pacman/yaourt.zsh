@@ -10,7 +10,7 @@
 #
 
 # Disable color.
-if ! zstyle -t ':prezto:module:pacman:yaourt' color; then
+if ! zstyle -t ':zcontrol:module:pacman:yaourt' color; then
   alias pacman='pacman --nocolor'
 fi
 

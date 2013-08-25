@@ -1,0 +1,3 @@
+# Toggles emacs overwrite mode and updates editor information.
+zle .overwrite-mode
+zle editor-info

@@ -1,9 +1,11 @@
 #
-# Authors:
-#   Robby Russell <robby@planetargon.com>
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#   Ferhat Dogru  <worldwide@online.de>
+# Initializes Zcontrol.
+#
 
+## Note:  $ZDOTDIR needs to be set in: /etc/zshenv
+# if [ -d "$HOME/.config/zsh" -o -L "$HOME/.config/zsh" ]; then
+#  ZDOTDIR="$HOME/.config/zsh"
+# fi
 
 #
 # Version Check
@@ -12,17 +14,33 @@
 # Check for the minimum supported version.
 min_zsh_version='4.3.10'
 if ! autoload -Uz is-at-least || ! is-at-least "$min_zsh_version"; then
-  print "prezto: old z-shell version detected, minimum requirement: $min_zsh_version" >&2
+  print "zcontrol: $SHELL is too old. Requires $min_zsh_version or later." >&2
   return 1
 fi
 unset min_zsh_version
+
+
+#
+# Preflight
+#
+
+# Ensure all of the XDG directories that we'll be using exist.
+# The values for these should already have been declared in '.zshenv' or earlier.
+if [ ! -d "${XDG_CONFIG_HOME}/zsh" -o ! -d "${XDG_DATA_HOME}/zsh" -o ! -d "${XDG_CACHE_HOME}/zsh" ]; then
+  mkdir -p "${XDG_CONFIG_HOME}/zsh" "${XDG_DATA_HOME}/zsh" "${XDG_CACHE_HOME}/zsh"
+fi
+
 
 #
 # Module Loader
 #
 
-# Loads modules.
+# Profiler (use with `zprof` to see shell resource usage)
+# zmodload zsh/zprof
+
+# Loads Zcontrol modules.
 function pmodload {
+  local modules_root="${ZDOTDIR}/modules"
   local -a pmodules
   local pmodule
   local pfunction_glob='^([_.]*|prompt_*_setup|README*)(.N:t)'
@@ -31,7 +49,7 @@ function pmodload {
   pmodules=("$argv[@]")
 
   # Add functions to $fpath.
-  fpath=(${pmodules:+${ZDOTDIR:-$HOME}/.X4/modules/${^pmodules}/functions(/FN)} $fpath)
+  fpath=(${pmodules:+${modules_root}/${^pmodules}/functions(/FN)} $fpath)
 
   function {
     local pfunction
@@ -39,29 +57,30 @@ function pmodload {
     # Extended globbing is needed for listing autoloadable function directories.
     setopt LOCAL_OPTIONS EXTENDED_GLOB
 
-    # Load functions.
-    for pfunction in ${ZDOTDIR:-$HOME}/.X4/modules/${^pmodules}/functions/$~pfunction_glob; do
+    # Load Zcontrol functions.
+    for pfunction in $modules_root/${^pmodules}/functions/$~pfunction_glob; do
       autoload -Uz "$pfunction"
     done
   }
 
-  # Load modules.
+  # Load Zcontrol modules.
   for pmodule in "$pmodules[@]"; do
-    if zstyle -t ":prezto:module:$pmodule" loaded 'yes' 'no'; then
+    if zstyle -t ":zcontrol:module:$pmodule" loaded; then
       continue
-    elif [[ ! -d "${ZDOTDIR:-$HOME}/.X4/modules/$pmodule" ]]; then
+    elif [[ ! -d "$modules_root/$pmodule" ]]; then
       print "$0: no such module: $pmodule" >&2
       continue
     else
-      if [[ -s "${ZDOTDIR:-$HOME}/.X4/modules/$pmodule/init.zsh" ]]; then
-        source "${ZDOTDIR:-$HOME}/.X4/modules/$pmodule/init.zsh"
+      zstyle ":zcontrol:module:$pmodule" basepath "$modules_root/$pmodule"
+      if [[ -s "$modules_root/$pmodule/init.zsh" ]]; then
+        source "$modules_root/$pmodule/init.zsh"
       fi
 
       if (( $? == 0 )); then
-        zstyle ":prezto:module:$pmodule" loaded 'yes'
+        zstyle ":zcontrol:module:$pmodule" loaded 'yes'
       else
         # Remove the $fpath entry.
-        fpath[(r)${ZDOTDIR:-$HOME}/.X4/modules/${pmodule}/functions]=()
+        fpath[(r)$modules_root/${pmodule}/functions]=()
 
         function {
           local pfunction
@@ -70,54 +89,46 @@ function pmodload {
           # directories.
           setopt LOCAL_OPTIONS EXTENDED_GLOB
 
-          # Unload functions.
-          for pfunction in ${ZDOTDIR:-$HOME}/.X4/modules/$pmodule/functions/$~pfunction_glob; do
+          # Unload Zcontrol functions.
+          for pfunction in $modules_root/$pmodule/functions/$~pfunction_glob; do
             unfunction "$pfunction"
           done
         }
 
-        zstyle ":prezto:module:$pmodule" loaded 'no'
+        zstyle ":zcontrol:module:$pmodule" loaded 'no'
       fi
     fi
   done
 }
 
+
 #
-# Initialization
+# Zcontrol Initialization
 #
 
-# Source the configuration file.
-if [[ -s "${ZDOTDIR:-$HOME}/.zpreztorc" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zpreztorc"
+# Source the Zcontrol configuration file.
+if [ -s "${ZDOTDIR}/.zcontrol" ]; then
+  source "${ZDOTDIR}/.zcontrol"
 fi
 
 # Disable color and theme in dumb terminals.
 if [[ "$TERM" == 'dumb' ]]; then
-  zstyle ':prezto:*:*' color 'no'
-  zstyle ':prezto:module:prompt' theme 'off'
+  zstyle ':zcontrol:*:*' color 'no'
+  zstyle ':zcontrol:module:prompt' theme 'off'
 fi
 
 # Load Zsh modules.
-zstyle -a ':prezto:load' zmodule 'zmodules'
+zstyle -a ':zcontrol:load' zmodule 'zmodules'
 for zmodule ("$zmodules[@]") zmodload "zsh/${(z)zmodule}"
 unset zmodule{s,}
 
 # Autoload Zsh functions.
-zstyle -a ':prezto:load' zfunction 'zfunctions'
+zstyle -a ':zcontrol:load' zfunction 'zfunctions'
 for zfunction ("$zfunctions[@]") autoload -Uz "$zfunction"
 unset zfunction{s,}
 
-# Load modules.
-zstyle -a ':prezto:load' pmodule 'pmodules'
+# Load Zcontrol modules.
+zstyle -a ':zcontrol:load' pmodule 'pmodules'
 pmodload "$pmodules[@]"
 unset pmodules
 
-# Load aliases
-for file in ${ZDOTDIR:-$HOME}/.X4/alias.d/*.zsh; do
-  test -f && source $file
-done
-
-# Source the local configuration file.
-if [[ -s "${ZDOTDIR:-$HOME}/.zshrc.local" ]]; then
-  test -f source "${ZDOTDIR:-$HOME}/.zshrc.local"
-fi

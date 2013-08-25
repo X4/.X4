@@ -3,12 +3,13 @@
 #
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
+#   J. Brandt Buckley <brandt@runlevel1.com>
 #   Zeh Rizzatti <zehrizzatti@gmail.com>
 #
 
 # Load NVM into the shell session.
-if [[ -s "$HOME/.nvm/nvm.sh" ]]; then
-  source "$HOME/.nvm/nvm.sh"
+if [[ -s "${XDG_CONFIG_HOME}/nvm/nvm.sh" ]]; then
+  source "${XDG_CONFIG_HOME}/nvm/nvm.sh"
 fi
 
 # Return if requirements are not found.
@@ -18,7 +19,7 @@ fi
 
 # Load NPM completion.
 if (( $+commands[npm] )); then
-  cache_file="${0:h}/cache.zsh"
+  cache_file="${XDG_CACHE_HOME}/zsh/npm.zcomp.zsh"
 
   if [[ "$commands[npm]" -nt "$cache_file" || ! -s "$cache_file" ]]; then
     # npm is slow; cache its output.
@@ -26,7 +27,5 @@ if (( $+commands[npm] )); then
   fi
 
   source "$cache_file"
-
   unset cache_file
 fi
-

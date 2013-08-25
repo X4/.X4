@@ -1,0 +1,59 @@
+#!/bin/bash
+
+## dotfile
+##
+## Usage: dotfile <app_name> <config|data|cache|local> [<file|dir> target]
+##
+##
+## Example 1:
+##   BUNDLE_CONFIG="$(dotfile bundler config file bundle.conf)"
+##   ... Creates ~/.config/bundler/bundle.conf where config is a file.
+##
+## Example 2:
+##   export ACKRC="$(dotfile ack config)"              # Directory is assumed
+##   dotfile ack config file .ackrc >/dev/null         # Actual file is created; no output to STDOUT
+##
+##
+## Allows you to take advantage of programs accept an environmental variable to set an alternate dotfile path.
+## - By default, we use the XDG_CONFIG_HOME standard which is ~/.config/<app_name>/ convention.
+## - Creates all directories between your DOTFILE_ROOT (default: ~/.config ) and your optionally-specified target.
+## - Returns the resultant path on STDOUT with which you can set the variable
+
+
+dotfile() {
+  local app_name="$1"
+  local target_category="$2"
+  local target_type="$3"
+  local target="$4"
+  declare target_path
+
+  # Set a special umask if one was declared in the inherited environment.
+  [ ${dotfile_umask} ] && umask ${dotfile_umask}
+
+  case $target_category in
+     config) target_path="${XDG_CONFIG_HOME:-$HOME/.config}/${app_name}"
+             ;;
+       data) target_path="${XDG_DATA_HOME:-$HOME/.local/share}/${app_name}"
+             ;;
+      local) target_path="${XDG_LOCAL_HOME:-$HOME/.local}/${app_name}"
+             ;;
+      cache) target_path="${XDG_CACHE_HOME:-$HOME/.cache}/${app_name}"
+             ;;
+  esac
+  
+  if [ $# = 2 ]; then
+    target_type="dir"
+  elif [ $# = 4 ]; then
+    target_path="${target_path}/${target}"
+  fi
+
+  case $target_type in
+            file) [ ! -f "${target_path}" ] && ( mkdir -p "${target_path:h}" >&2 && touch "${target_path}" >&2 ) ;;
+   dir|directory) [ ! -d "${target_path}" ] && mkdir -p "${target_path}" >&2 ;;
+           print) true ;;
+               *) printf '%s\n' "dotfile: Error: Invalid argument: $@" >&2 ; return 1 ;;
+  esac
+  
+  ## Return the generated path...
+  printf '%s' "${target_path}"
+}

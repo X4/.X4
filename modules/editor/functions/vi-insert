@@ -1,0 +1,3 @@
+# Enters vi insert mode and updates editor information.
+zle .vi-insert
+zle editor-info

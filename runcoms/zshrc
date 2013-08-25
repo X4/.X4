@@ -1,0 +1,33 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# WARNING: Avoid modifying this file.
+#          Modify 'zcontrol' instead.
+#
+
+#
+# Global Variables
+#
+
+## Initialize Zcontrol.
+if [ -s "${ZDOTDIR}/init.zsh" ]; then
+  source "${ZDOTDIR}/init.zsh"
+fi
+
+## Ensure high-priority (user) paths are first
+path=(
+  $HOME/.bin
+  $HOME/.local/{bin,sbin}
+  $path
+)
+
+# Clean up duplicates
+typeset -Ugx path manpath infopath cdpath fpath mailpath
+
+## Local
+if [ -d "${ZDOTDIR}/local" ]; then
+  for rcfile in ${ZDOTDIR}/local/**/*.zsh ; do
+    . "$rcfile"
+  done
+  unset rcfile
+fi

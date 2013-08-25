@@ -1,0 +1,8 @@
+#
+# Incremental Search Key Bindings (isearch)
+#
+
+# Do not expand .... to ../.. during incremental search.
+if zstyle -t ':zcontrol:module:editor' dot-expansion; then
+  bindkey -M isearch . self-insert 2> /dev/null
+fi

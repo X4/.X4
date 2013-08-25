@@ -3,7 +3,6 @@
 #
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
-#   Georges Discry <georges@discry.be>
 #
 
 # Return if requirements are not found.
@@ -15,10 +14,7 @@ fi
 # Auto Start
 #
 
-if [[ -z "$STY" ]] && ( \
-  ( [[ -n "$SSH_TTY" ]] && zstyle -t ':prezto:module:screen:auto-start' remote ) ||
-  ( [[ -z "$SSH_TTY" ]] && zstyle -t ':prezto:module:screen:auto-start' local ) \
-); then
+if [[ -z "$STY" ]] && zstyle -t ':zcontrol:module:screen' auto-start; then
   session="$(
     screen -list 2> /dev/null \
       | sed '1d;$d' \

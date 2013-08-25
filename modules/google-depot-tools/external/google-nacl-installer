@@ -1,0 +1,34 @@
+#
+# google-nacl-installer
+# 
+# Bootstraps Google Native Client Installation (NACL)
+#
+
+# Usage: google-nacl-installer "</where/to/install>"
+google-nacl-installer() {
+  
+  if [ -z "${NACL_ROOT}" ]; then
+    echo 'Warning: Could not install Google NACL because $NACL_ROOT is not set.' >&2
+    return 1
+  fi
+
+  if ! (($+commands[gclient])); then
+    echo 'Warning: Could not install Google NACL because gclient was not found.' >&2
+    echo 'Are you sure google-depot-tools is installed?' >&2
+    return 1
+  fi    
+
+  # Installation allowed to continue if $NACL_ROOT directory doesn't yet exist.
+  if [ ! -d "$NACL_ROOT" ]; then
+    mkdir -p "$NACL_ROOT"
+    pushd "$NACL_ROOT"
+    gclient config http://src.chromium.org/native_client/trunk/src/native_client
+    gclient sync
+    popd
+  else
+    return 4
+  fi
+
+}
+
+google-nacl-installer

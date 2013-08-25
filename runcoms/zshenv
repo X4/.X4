@@ -1,0 +1,124 @@
+#
+# Defines environment variables.
+# 
+# WARNING: Avoid modifying this file.
+#          Modify 'zcontrol' instead.
+#
+
+#
+# Debugging
+#
+
+## Uncommenting these items can help with debugging.
+# setopt SOURCE_TRACE
+# setopt XTRACE
+
+
+#
+# Fallback Editor
+#
+
+## Note: Set your preferred editor in: zcontrol
+export EDITOR='vim'
+export VISUAL='vim'
+export PAGER='less'
+
+
+#
+# Fallback Language
+#
+
+## Default to 'en_US.UTF-8' if $LANG is unset.
+## It should have already been set by the terminal emulator.
+if [ -z "$LANG" ]; then
+  export LANG='de_DE.UTF-8'
+fi
+
+
+#
+# Paths
+#
+
+typeset -gx cdpath fpath mailpath path
+typeset -gx MANPATH manpath
+typeset -gx INFOPATH infopath
+typeset -gx XDG_CACHE_HOME XDG_DATA_HOME XDG_CONFIG_HOME
+
+
+# XDG Default Directory Variables
+
+## Locations defined in the XDG Base Specification
+## - We don't set $XDG_RUNTIME_DIR because the spec is too loosely defined.
+## - These are set only if they aren't already defined.
+: ${XDG_CACHE_HOME:=$HOME/.cache}
+: ${XDG_DATA_HOME:=$HOME/.local/share}
+: ${XDG_CONFIG_HOME:=$HOME/.config}
+
+
+# Bin Paths
+
+## Set the main directories that Zsh searches for programs.
+## - User paths (i.e. ~/bin) are added again in 'zshrc' to ensure they're first.
+path=(
+  $HOME/.bin
+  $HOME/.local/{bin,sbin}
+  /usr/local/{bin,sbin}
+  /usr/libexec
+  /usr/{bin,sbin}
+  /{bin,sbin}
+  $path
+)
+
+# CD Paths
+
+## Set the the list of directories that cd searches.
+cdpath=(
+  $cdpath
+)
+
+
+# Info Paths
+
+## Set the list of directories that `info` searches for manuals.
+infopath=(
+  /usr/local/share/info
+  /usr/share/info
+  $infopath
+)
+
+
+# Man Paths
+
+## Set the list of directories that `man` searches for manuals.
+manpath=(
+  /usr/local/share/man
+  /usr/share/man
+  $manpath
+)
+
+
+# Function Paths
+
+## Set additional directories for ZSH to search for functions.
+fpath=(
+  $fpath
+)
+
+
+#
+# Browser
+#
+
+if [[ "$OSTYPE" = darwin* ]]; then
+  export BROWSER='open'
+fi
+
+
+#
+# Temporary Files
+#
+
+if [ -d "$TMPDIR" ]; then
+  export TMPPREFIX="${TMPDIR%/}/zsh"
+  [ ! -d "$TMPPREFIX" ] && mkdir -p "$TMPPREFIX"
+fi

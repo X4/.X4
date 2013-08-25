@@ -1,0 +1,29 @@
+#
+# Emacs Key Bindings (emacs)
+#
+
+# Word jump.
+for key ("$key_info[Escape]"{B,b}) bindkey -M emacs "$key"    emacs-backward-word
+for key ("$key_info[Escape]"{F,f}) bindkey -M emacs "$key"    emacs-forward-word
+bindkey -M emacs "$key_info[Escape]$key_info[Left]"           emacs-backward-word
+bindkey -M emacs "$key_info[Escape]$key_info[Right]"          emacs-forward-word
+
+# Kill to the beginning of the line.
+for key in "$key_info[Control]"{U,u} bindkey -M emacs "$key"  backward-kill-line
+
+# Redo.
+bindkey -M emacs "$key_info[Escape]_"                         redo
+
+# Search previous character.
+bindkey -M emacs "$key_info[Control]X$key_info[Control]B"     vi-find-prev-char
+
+# Match bracket.
+bindkey -M emacs "$key_info[Control]X$key_info[Control]]"     vi-match-bracket
+
+# Edit command in an external editor.
+bindkey -M emacs "$key_info[Control]X$key_info[Control]E"     edit-command-line
+
+if (( $+widgets[history-incremental-pattern-search-backward] )); then
+  bindkey -M emacs "$key_info[Control]R"                      history-incremental-pattern-search-backward
+  bindkey -M emacs "$key_info[Control]S"                      history-incremental-pattern-search-forward
+fi

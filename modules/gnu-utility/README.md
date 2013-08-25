@@ -17,10 +17,10 @@ Settings
 
 ### Prefix
 
-To use a different prefix, add the following to *zpreztorc*, and replace 'g' with
+To use a different prefix, add the following to *zcontrol*, and replace 'g' with
 the desired prefix:
 
-    zstyle ':prezto:module:gnu-utility' prefix 'g'
+    zstyle ':zcontrol:module:gnu-utility' prefix 'g'
 
 Authors
 -------

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+## symalias
+##
+## Usage:   mksymlink <parent_dir>  <existing_file>  <sym_alias>
+##                     directory         file          symlink
+##
+## Creates a symlink from a source to a target within the *same directory*
+##
+## This is useful for making a visible alias of an invisible dotfile.
+##
+## Example: symalias  $ACKRC  .ackrc  ackrc
+##
+symalias() {
+  [ $# = 3 ] || return 1
+  local parent_dir="$1"
+  local existing_file="$2"
+  local sym_alias="$3"
+
+  [ -e "${parent_dir}/${existing_file}" ] || return 1  # Existing file must exist
+  [ ! -e "${parent_dir}/${sym_alias}"   ] || return    # Alias must NOT YET exist
+  
+  pushd "${parent_dir}" >/dev/null
+  ln -s "${existing_file}" "${sym_alias}"
+  popd >/dev/null
+}

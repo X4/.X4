@@ -1,0 +1,58 @@
+#
+# Individual Completion
+#
+# Description:
+#   Downloads and installs individual completion functions that are not part of a git submodule.
+#
+# Author:
+#   J. Brandt Buckley <brandt@runlevel.com>
+#
+
+# Get the path to the individual completion directory
+zstyle -a ':zcontrol:module:completion:individual' directory 'comp_dir'
+
+
+# Get the individual completers and put them into an associative array
+typeset -A completer_list
+zstyle -a ':zcontrol:module:completion:individual' sources 'completer_list'
+
+
+# Create the individual completer directory if it doesn't yet exist.
+if [ ! -d "$comp_dir" ]; then
+  mkdir -p "$comp_dir"
+fi
+
+
+# Add the individual completer directory to our function paths
+fpath=( "$comp_dir" $fpath )
+
+
+# Downloads the completer to the specified location
+# Usage:   dl_component <url> <dest>
+# Example: dl_component "http://foo.com/bar.zsh" "/path/to/_bar"
+dl_component() {
+  local url="$1"
+  local dest="$2"
+  if (( $+commands[curl] )); then
+    ( curl -s -L "$url" -o "$dest" ) &!
+  elif (( $+commands[wget] )); then
+    wget -q -b --no-check-certificate "$url" -O "$dest"
+  else
+    print "zcontrol: completion: Can't find a program to download individual completers." >&2
+    return 1
+  fi
+}
+
+# If any don't exist, download them to individual completion directory
+for completer in ${(k)completer_list[@]} ; do
+  if [ ! -f "${comp_dir}/_${completer}" ]; then
+    dl_component "${completer_list[$completer]}" "${comp_dir}/_${completer}" || {
+      print "zcontrol: completion: Failed to download completer: $completer" >&2
+      continue
+    }
+  fi
+done
+
+# Tidy up after ourselves.
+unset comp_dir completer completer_list
+unfunction dl_component
