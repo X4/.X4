@@ -89,15 +89,15 @@ fi
 # Group matches and describe.
 zstyle ':completion:*:*:*:*:*'          menu                select
 zstyle ':completion:*'                  list-colors         'reply=( "=(#b)(*$PREFIX)(?)*=00=$color[green]=$color[bg-green]" )'
-zstyle ':completion:*'                  select-prompt %SScrolling active: current selection at %P Lines: %m
+zstyle ':completion:*'                  select-prompt       %SScrolling active: current selection at %P Lines: %m
 zstyle ':completion:*'                  group-name          ''
 zstyle ':completion:*:matches'          group               'yes'
 zstyle ':completion:*:options'          description         'yes'
 zstyle ':completion:*:options'          auto-description    '%d'
-zstyle ':completion:*:corrections'      format              ' %F{green}-- %d (errors: %e) --%f'
-zstyle ':completion:*:descriptions'     format              $'%F{white}⚔ %F{yellow}completing %F{green}❯❯%F{white} %B%d%b%{%}'
-zstyle ':completion:*:messages'         format              ' %F{purple} -- %d --%f'
-zstyle ':completion:*:warnings'         format              ' %F{red}-- no matches found --%f'
+zstyle ':completion:*:corrections'      format              ' %F{green} ☛ %d (errors: %e) --%f'
+zstyle ':completion:*'                  format              $'%F{white} ☛ %F{yellow}completing %F{yellow}❬❬%F{white} %B%d%b%%F{yellow} ❭❭'                        
+zstyle ':completion:*:messages'         format              ' %F{purple} ☛ %d --%f'
+zstyle ':completion:*:warnings'         format              ' %F{red} ☛ no matches found --%f'
 zstyle ':completion:*:default'          list-prompt         '%S%M matches%s'
 zstyle -e ':completion:*:-command-:*:commands'  list-colors 'reply=( '\''=(#b)('\''$words[CURRENT]'\''|)*-- #(*)=0=38;5;45=38;5;136'\'' '\''=(#b)('\''$words[CURRENT]'\''|)*=0=38;5;45'\'' )'
 
