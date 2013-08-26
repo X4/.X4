@@ -1,6 +1,5 @@
 *.zwc
 *.zwc.old
-modules/*/cache.zsh
 .zcompcache
 .zcompdump
 .zsh_history
