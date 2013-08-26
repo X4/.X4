@@ -9,6 +9,10 @@
 # Global Variables
 #
 
+if [ -d "$HOME/.config/zsh" -o -L "$HOME/.config/zsh" ]; then
+  ZDOTDIR="$HOME/.config/zsh"
+fi
+
 ## Initialize Zcontrol.
 if [ -s "${ZDOTDIR}/init.zsh" ]; then
   source "${ZDOTDIR}/init.zsh"
