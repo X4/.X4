@@ -4,6 +4,8 @@
 .zcompdump
 .zsh_history
 local/*
+modules/*/cache.zsh
+
 
 .DS_Store
 .directory
