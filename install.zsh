@@ -11,6 +11,7 @@
 ALT_ZDOTDIR='$HOME/.config/zsh'
 
 REPO_URL='https://github.com/X4/.X4.git'
+REPO_BRANCH='edge'
 
 ZSH_BIN=$(command -v zsh)
 
@@ -128,7 +129,7 @@ fi
 
 ## Clone Zcontrol into ZDOTDIR
 notification "$notify" "Cloning Zcontrol into $ZDOTDIR"
-hash git >/dev/null && /usr/bin/env git clone --recursive "$REPO_URL" "$ZDOTDIR" || {
+hash git >/dev/null && /usr/bin/env git clone --recursive -b "$REPO_BRANCH" "$REPO_URL" "$ZDOTDIR" || {
   notification "$fatal" "Error: Git clone failed. Cannot continue."
   notification "$suggest" "This is usually because Git is not correctly installed."
   exit 1

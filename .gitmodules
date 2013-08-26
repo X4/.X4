@@ -1,15 +1,8 @@
 [submodule "modules/history-substring-search/external"]
 	path = modules/history-substring-search/external
 	url = https://github.com/zsh-users/zsh-history-substring-search.git
+
 [submodule "modules/syntax-highlighting/external"]
 	path = modules/syntax-highlighting/external
 	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
-[submodule "modules/completion/external/zsh-completions"]
-	path = modules/completion/external/zsh-completions
-	url = https://github.com/zsh-users/zsh-completions.git
-[submodule "modules/completion/external/zshpwn"]
-	path = modules/completion/external/zshpwn
-	url = https://github.com/egeektronic/zshpwn.git
-[submodule "modules/completion/external/zsh-compdef"]
-	path = modules/completion/external/zsh-compdef
-	url = https://github.com/thrig/zsh-compdef.git
+
