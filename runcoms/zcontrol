@@ -19,6 +19,7 @@ case $OSTYPE in
         'vi'   \
         'nano' \
         'pico'
+  ;;
   darwin*)   # Mac OS X Specific Commands
       zstyle ':zcontrol:module:environment:visual' editors \
         'mate' \
