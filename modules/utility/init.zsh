@@ -124,14 +124,6 @@ fi
 alias df='df -kh'
 alias du='du -kh'
 
-## Prefer htop, if it's available
-if (( $+commands[htop] )); then
-  alias top='htop'
-else
-  alias topc='top -o cpu'
-  alias topm='top -o vsize'
-fi
-
 ## In SysV UNIX `killall` literally kills everything. This is a safety net.
 if [[ $OSTYPE =~ solaris* ]] || [[ $OSTYPE =~ aix* ]]; then
   alias -g killall='echo "On this system killall literally kills everything. Try: pkill"'
