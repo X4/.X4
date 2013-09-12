@@ -1,3 +1,7 @@
+## Case insensitive search for files and directories, partial matches allowed
+## - Usage: f <name>
+function f() { find . -iname "*$1*" }
+
 # interactive mv
 imv() {
   local src dst

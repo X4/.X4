@@ -1,0 +1,1 @@
+$ZSH_PROMPT="x4"

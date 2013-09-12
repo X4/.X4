@@ -32,13 +32,6 @@
   alias 'is.os'="lsb_release -a;echo;cat /etc/*release;echo; cat /etc/issue*"
 # List all zero-length-files which are not group- or world-writable
   alias 'is.empty'="ls *(L0f.go-w.)"
-# Entropy / Portage
-  alias e.q="equo match --multimatch --multirepo --installed"
-  alias e.s="equo s "
-  alias e.i="equo i --ask"
-  alias e.rm="equo rm --ask"
-  alias e.up="equo up && equo u --ask"
-  alias e.sync="equo up ; layman -S ; eix-sync"
 # Archive comfort
   alias set.targz="tar -cxvf"
   alias set.tarbzip2="tar --bzip2 -cvf"

@@ -2,6 +2,9 @@ zmodload zsh/complist
 autoload -U compinit && compinit
 autoload -U colors ; colors
 
+compdef _git tig=git-checkout # treat `tig` like `git checkout`
+compdef hub=git               # treat `hub` like `git`
+
 # Use eight bit characters for completions
 PRINT_EIGHT_BIT=1
 

@@ -1,0 +1,2 @@
+alias "emerge"='nocorrect emerge'
+

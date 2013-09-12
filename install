@@ -58,25 +58,25 @@ function uninstall () {
     if [[ $REPLY =~ ^[yY]$ ]]; then
 
 	if [[ -L "$HOME/.zshrc" ]]; then
-	    rm -i "$HOME/.zshrc" "$HOME/.zsh_custom" "$HOME/.zsh_theme" "$HOME/.*.zwc" "$HOME/.zcompdump" "$HOME/.zdirs"
+	    rm -i "$HOME/.zshrc" "$HOME/.zprofile" "$HOME/.*.zwc" "$HOME/.zcompdump" "$HOME/.zdirs"
 	fi
 
 	if [[ -L "$HOME/.bashrc" ]]; then
-	    rm -i $HOME/.bashrc
-	fi
+            rm -i $HOME/.bashrc
+        fi
 
-	if [[ -L "$HOME.fishrc" ]]; then
-	    rm -i $HOME/.fishrc
-	fi
+        if [[ -L "$HOME.fishrc" ]]; then
+            rm -i $HOME/.config/fish/config.fish
+        fi
 
-	if [[ -L "$HOME/.bcrc" || -L "$HOME/.irbrc" || -L "$HOME/.gemrc" || -L "$HOME/.tmux.linux.conf" ]]; then
+	if [[ -L "$HOME/.bcrc" || -L "$HOME/.irbrc" || -L "$HOME/.gemrc" || -L "$HOME/.tmux.conf" ]]; then
 	    rm -i "$HOME/.bcrc"
 	    rm -i "$HOME/.cvsignore"
 	    rm -i "$HOME/.gemrc"
 	    rm -i "$HOME/.irbrc"
 	    rm -i "$HOME/.inputrc"
-	    rm -i "$HOME/.tmux.linux.conf"
-	    rm -i "$HOME/.kde4/Autostart/ssh-add.sh"
+	    rm -i "$HOME/.tmux.conf"
+	    rm -i "$HOME/.kde4/Autostart/ssh-add"
         fi
 	ret="$?"
 	error "$1\n"
@@ -97,42 +97,45 @@ setup_shell() {
 
     if [[ $REPLY =~ ^[1]$ ]]; then
 	chosen_one=$(which zsh)
-        ln -sfv $HOME/.X4/.zsh* $HOME/
+        ln -sfv $HOME/.X4/zshrc $HOME/.zshrc
+        ln -sfv $HOME/.X4/zprofile $HOME/.zprofile
     fi
 
     if [[ $REPLY =~ ^[2]$ ]]; then
 	chosen_one=$(which bash)
-        ln -sfv $HOME/.X4/.bash* $HOME/
+        ln -sfv $HOME/.X4/bashrc $HOME/.bashrc
     fi
 
     if [[ $REPLY =~ ^[3]$ ]]; then
 	chosen_one=$(which fish)
-        ln -sfv $HOME/.X4/.fish* $HOME/
+        ln -sfv $HOME/.X4/fishrc $HOME/.config/fish/config.fish
     fi
 
     if [[ ! $REPLY -eq "" ]]; then
 	# Enable custom bc functions
-        ln -sfv $HOME/.X4/.bcrc $HOME/
+        ln -sfv $HOME/.X4/local/configs/bcrc $HOME/.bcrc
 
 	# Install VCS defaults
-        ln -sfv $HOME/.X4/.cvsignore $HOME/
+        ln -sfv $HOME/.X4/local/configs/cvsignore $HOME/
 
 	# Enable custom RoR toolset defaults
-        ln -sfv $HOME/.X4/.gemrc $HOME/
-        ln -sfv $HOME/.X4/.irbrc $HOME/
+        ln -sfv $HOME/.X4/local/configs/gemrc $HOME/
+        ln -sfv $HOME/.X4/local/configs/irbrc $HOME/
 
 	# Enable custom keybindings
-        ln -sfv $HOME/.X4/.inputrc $HOME/
+        ln -sfv $HOME/.X4/local/configs/inputrc $HOME/
 
 	# Enable custom tmux defaults
-        ln -sfv $HOME/.X4/.tmux* $HOME/
-
-	# Install ksshaskpass script
-        ln -sfv $HOME/.X4/script.d/ssh-add.sh $HOME/.kde4/Autostart/
+	if [[ "$OSTYPE" == linux* ]]; then
+          ln -sfv $HOME/.X4/local/configs/tmux.linux.conf $HOME/.tmux.conf
+	fi
 
         # Install Konsole themes
 	mkdir -p `kde4-config --localprefix`/share/apps/konsole/
-	cp -fv $HOME/.X4/konsole/* `kde4-config --localprefix`/share/apps/konsole/
+	cp -fv $HOME/.X4/local/configs/konsole/* `kde4-config --localprefix`/share/apps/konsole/
+
+        # Install ksshaskpass script
+        ln -sfv $HOME/.X4/local/scripts/ssh-add $HOME/.kde4/Autostart/
     fi
     ret="$?"
     success "$1"

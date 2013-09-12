@@ -6,112 +6,118 @@ intra_line_diff='--word-diff-regex="[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+"'
 #-----------------------------------------------------------------------------
 
 # show status of working copy
-alias go='git status'
+alias g.status='git status'
 
 # show status of files in working copy
-alias gol='git status --short'
+alias g.status.short='git status --short'
 
 # diff working copy against current commit
-alias god='git diff'
+alias g.diff='git diff'
 
 # ... while showing changes within a line
-alias goD='god '$intra_line_diff
+alias g.diff.intraline='git diff '$intra_line_diff
 
 # reset working copy to current index
-alias gor='git reset --soft'
+alias g.reset='git reset --soft'
 
 # reset working copy to upstream state
-alias gorh='git reset --soft @{u}'
+alias g.reset.upstream='git reset --soft @{u}'
 
 # reset working copy to current commit
-alias goR='git reset --hard'
+alias g.reset.hard='git reset --hard'
 
 # reset working copy to upstream state
-alias goRh='git reset --hard @{u}'
+alias g.reset.hard.upstream='git reset --hard @{u}'
 
 # stage deletion and also delete from working copy
-alias gox='git rm -r --ignore-unmatch'
+alias g.rm='git rm -r --ignore-unmatch'
 
 # list unknown files in working copy
-alias gou='git status --porcelain | sed -n "s/^?? *//p"'
+alias g.unknown='git status --porcelain | sed -n "s/^?? *//p"'
 
 # list unknown files in working copy that can be deleted
-alias goc='git clean -n'
+alias g.unknown.rm='git clean -n'
 
 # delete unknown files from working copy
-alias goC='git clean -f'
+alias g.clean='git clean -f'
+
+# Undo your last commit, but don't throw away your changes
+alias g.undo="git reset --soft HEAD^ "
+
+# Undo your last commit, but don't throw away your changes
+alias g.redo="git reset --soft HEAD "
 
 #-----------------------------------------------------------------------------
 # i = index / stage
 #-----------------------------------------------------------------------------
 
 # stage changes interactively (like Darcs!)
-alias gi='git add -p'
+alias g.add.interactive='git add -p'
 
 # stage all changes in target
-alias gia='git add'
+alias g.add='git add'
 
 # stage all changes in working copy
-alias giu='git add -u'
+alias g.stage='git add -u'
 
 # diff index against current commit
-alias gid='git diff --cached'
+alias g.diff.index='git diff --cached'
 
 # ... while showing changes within a line
-alias giD='gid '$intra_line_diff
+alias g.diff.index.intraline='git diff --cached '$intra_line_diff
 
 # unstage changes from index but keep them in working copy
-alias gir='git reset'
+alias g.reset.index='git reset'
 
 # unstage changes from both index and working copy
-alias giR='git reset --mixed'
+alias g.reset.mixed='git reset --mixed'
 
 # stage deletion without changing working copy
-alias gix='git rm -r --cached --ignore-unmatch'
+alias g.rm.keep='git rm -r --cached --ignore-unmatch'
 
 #-----------------------------------------------------------------------------
 # t = stash
 #-----------------------------------------------------------------------------
 
 # stash current state and reset working copy to current commit
-alias gt='git stash save'
+alias g.stash.reset='git stash save'
 
 # stash current state but keep working copy as-is
-alias gT='git stash save && git stash apply'
+alias g.stash.apply='git stash save && git stash apply'
 
 # list all stashes
-alias gtl='git stash list'
+alias g.list.stashes='git stash list'
 
 # list all stashes with diffs
-alias gtL='git stash list --patch-with-stat'
+alias g.list.stashes.diff='git stash list --patch-with-stat'
 
 # create new branch from stash
-alias gtb='git stash branch'
+alias g.branch.stash='git stash branch'
 
 # unstash to working copy but keep stash
-alias gto='git stash apply'
+alias g.unstash.keep='git stash apply'
 
 # unstash to working copy and delete stash
-alias gtO='git stash pop'
+alias g.unstash.rm='git stash pop'
 
 # delete stash
-alias gtx='git stash drop'
+alias g.stash.drop='git stash drop'
 
 # delete all stashes
-alias gtX='git stash clear'
+alias g.stash.clear='git stash clear'
 
 #-----------------------------------------------------------------------------
 # c = commit
 #-----------------------------------------------------------------------------
 
 # commit staged changes
-alias gc='git commit'
+alias g.c='git commit'
 
 # commit staged changes with the given message
-alias gcm='git commit -m'
+alias g.cm='git commit -m'
 
 # commit staged changes as if on the given date
-alias gcd='git commit --date'
+alias g.cd='git commit --date'
 
 # commit staged changes as if on the modification date of the given file
 function gcdf() {
@@ -127,59 +133,62 @@ function gcV() {
 }
 
 # commit staged changes to a temporary "squash" commit, to be rebased later
-alias gcq='git commit -m "SQUASH $(date)"'
+alias g.cq='git commit -m "SQUASH $(date)"'
 
 # amend current commit and edit its message
-alias gca='git commit --amend'
+alias g.ca='git commit --amend'
 
 # amend current commit but reuse its message
-alias gcA='git commit --amend --reuse-message=HEAD'
+alias g.cA='git commit --amend --reuse-message=HEAD'
 
 # commit an inverse commit to revert changes from the given commit
-alias gcr='git revert'
+alias g.revert='git revert'
 
 # delete current commit but keep its changes in working copy
-alias gcR='git reset "HEAD^"'
+alias g.reset.keep='git reset "HEAD^"'
 
 # check out changes from current commit
-alias gco='git checkout'
+alias g.checkout='git checkout'
 
 # update working copy to current commit
-alias gcO='git checkout HEAD --'
+alias g.checkout.head='git checkout HEAD --'
 
 # cherry pick the given commit into current branch
-alias gcp='git cherry-pick'
-alias gcpc='git cherry-pick --continue'
-alias gcpa='git cherry-pick --abort'
-alias gcps='git cherry-pick --skip'
+alias g.cherrypick='git cherry-pick'
+alias g.cherryick.continue='git cherry-pick --continue'
+alias g.cherrypick.abort='git cherry-pick --abort'
+alias g.cherrypick.skip='git cherry-pick --skip'
 
 # show current commit in detail
-alias gc1='git show'
+alias g.show='git show'
 
 #-----------------------------------------------------------------------------
 # b = branch
 #-----------------------------------------------------------------------------
 
 # create branch with given name
-alias gb='git checkout -b'
+alias g.branch='git checkout -b'
 
 # list all branches
-alias gbl='git branch -av'
+alias g.list.branches='git branch -av'
 
 # list all branches with commit details
-alias gbL='git branch -v'
+alias g.list.branches.detailed='git branch -v'
 
 # delete merged branch
-alias gbx='git branch -d'
+alias g.branch.rm='git branch -d'
 
 # delete branch forcefully
-alias gbX='git branch -D'
+alias g.branch.rm.force='git branch -D'
 
 # rename current branch to given namee
-alias gbm='git branch -m'
+alias g.branch.rename='git branch -m'
 
 # rename current branch to given name forcefully
-alias gbM='git branch -M'
+alias g.branch.rename.force='git branch -M'
+
+# show only the current branch
+alias g.whereami="git rev-parse --abbrev-ref HEAD "
 
 # show current branch name
 # http://stackoverflow.com/a/9753364
@@ -206,113 +215,128 @@ gbH() {
 #-----------------------------------------------------------------------------
 
 # merge commits
-alias gm='git merge --no-ff'
+alias g.merge='git merge --no-ff'
 
 # merge commits but don't record a special merge commit
-alias gmf='git merge --ff'
+alias g.merge.ff='git merge --ff'
 
 #-----------------------------------------------------------------------------
 # r = rebase
 #-----------------------------------------------------------------------------
 
-alias gr='git rebase'
-alias gri='git rebase --interactive'
-alias grc='git rebase --continue'
-alias gra='git rebase --abort'
-alias grs='git rebase --skip'
-alias grh='gr @{u}' # against upstream branch
+alias g.rebase='git rebase'
+alias g.rebase.interactive='git rebase --interactive'
+alias g.rebase.continue='git rebase --continue'
+alias g.rebase.abort='git rebase --abort'
+alias g.rebase.skip='git rebase --skip'
+alias g.rebase.upstream='git rebase @{u}' # against upstream branch
 
 #-----------------------------------------------------------------------------
 # k = conflict
 #-----------------------------------------------------------------------------
 
 # list all conflicted files
-alias gkl='git ls-files --unmerged | cut -f2 | uniq'
+alias g.conflicts='git ls-files --unmerged | cut -f2 | uniq'
 
 # add changes from all conflicted files
-alias gka='git add $(gkl)'
+alias g.conflict.add='git add $(gkl)'
 
 # edit conflicted files
-alias gke='edit-merge-conflict $(gkl)'
+alias g.conflict.edit='edit-merge-conflict $(gkl)'
 
 # use local version of the given files
-alias gko='git checkout --theirs --'
+alias g.conflict.local='git checkout --theirs --'
 
 # use local version of all conflicted files
-alias gkO='gko $(gkl)'
+alias g.conflict.local.all='gko $(gkl)'
 
 # use upstream version of the given files
-alias gkt='git checkout --ours --'
+alias g.conflict.upstream='git checkout --ours --'
 
 # use upstream version of all conflicted files
-alias gkT='gkt $(gkl)'
+alias g.conflict.upstream.all='gkt $(gkl)'
 
 #-----------------------------------------------------------------------------
 # f = files
 #-----------------------------------------------------------------------------
 
 # list all known files
-alias gfl='git ls-files'
+alias g.ls='git ls-files'
 
 # list ignored files
-alias gfo='git status --porcelain --short --ignored | sed -n "s/^!! //p"'
+alias g.list.ignored='git status --porcelain --short --ignored | sed -n "s/^!! //p"'
+
+# create .keep files in empty directories
+alias g.add.emptydirs="find . -type d -empty -exec touch {}/.keep \; "
 
 # list staged files
-alias gfi='git ls-files --cached'
+alias g.list.staged='git ls-files --cached'
 
 # list modified files
-alias gfm='git ls-files --modified'
+alias g.list.modified='git ls-files --modified'
 
 # list unknown files
-alias gfu='git ls-files --others'
+alias g.list.unknown='git ls-files --others'
 
 # list deleted files
-alias gfx='git ls-files --killed'
+alias g.list.deleted='git ls-files --killed'
 
 #-----------------------------------------------------------------------------
 # l = log
 #-----------------------------------------------------------------------------
 
 # show commit log
-alias gl='git log --decorate --graph'
+alias g.log='git log --decorate --graph'
+
+# show pretty commit log
+alias g.logy="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 
 # show most recent log entry
-alias gl1='glf -1'
+alias g.log.recent='git log --decorate --graph --name-status -1'
 
 # show log with affected files
-alias glf='gl --name-status'
+alias g.log.affected='git log --decorate --graph --name-status'
 
 # show log like `ls -l`
-alias gll='gl --oneline'
+alias g.log.detail='git log --decorate --graph --oneline'
 
 # show log with diffs
-alias gld='gl --patch-with-stat'
+alias g.log.diff='git log --decorate --graph --patch-with-stat'
 
 # ... while showing changes within a line
-alias glD='gld '$intra_line_diff
+alias g.log.diff.intraline='git log --decorate --graph --patch-with-stat '$intra_line_diff
 
 # pretty git changelog
 glp() {
   git log --pretty='  * %s. %b'$'\n' "$@"
 }
 
+# create ChangeLog file out of git history
+alias g.changelog="git --no-pager log --format=\"%ai %aN %n%n%x09* %s%d%n\" | sed \"s/\*\ \*/*/g\" > ChangeLog"
+
+# show gitolite logs
+alias g.gitolite="cat /home/git/.gitolite/logs/gitolite-`date +%Y-%m -d -30days`.log | cut -f2 | sort | uniq -c | sort -n -r "
+
+# add .keep files into empty directories
+alias g.ignore="find . -type d -empty -exec touch {}/.keep \; "
+
 #-----------------------------------------------------------------------------
 # L = reflog
 #-----------------------------------------------------------------------------
 
 # show reference log
-alias gL='git reflog --decorate'
+alias g.reflog='git reflog --decorate'
 
-alias gLL='gll `gL --pretty=%h`'
+alias g.reflog.intraline='git log --decorate --graph --oneline `git reflog --decorate --pretty=%h`'
 
 # search reflog for all commits related to the given files
 gLf() {
-  gl $(git rev-list --all "$@")
+  git log --decorate --graph $(git rev-list --all "$@")
 }
 
 # search reflog for all commits related to the given files, show with diffs
 gLfd() {
-  gld $(git rev-list --all "$@")
+  git log --decorate --graph --patch-with-stat $(git rev-list --all "$@")
 }
 
 #-----------------------------------------------------------------------------
@@ -320,69 +344,78 @@ gLfd() {
 #-----------------------------------------------------------------------------
 
 # list all remotes
-alias ghl='git remote -v'
+alias g.list.remotes='git remote -v'
 
 # add remote
-alias gha='git remote add'
+alias g.add.remote='git remote add'
 
 # delete remote
-alias ghx='git remote rm'
+alias g.rm.remote='git remote rm'
 
 # show current remote name
 # http://stackoverflow.com/a/7251377
-alias gh1='git config branch.$(gb1).remote'
+alias g.show.remote='git config branch.$(gb1).remote'
 
 # show current remote URL
 # http://stackoverflow.com/a/7251377
-alias gh2='git config remote.$(gh1).url'
+alias g.show.remote.url='git config remote.$(git config branch.$(gb1).remote).url'
 
 # diff remote tracking branch
-alias ghd='git diff @{u}'
+alias g.diff.remote='git diff @{u}'
 
 # ... while showing changes within a line
-alias ghD='ghd '$intra_line_diff
+alias g.diff.remote.intraline='git diff @{u} '$intra_line_diff
+
+# Creates master.tar out of remote repo (ssh:// only)
+alias g.export="git archive --format=tar --remote=$1 master | tar -xf - "
+
 
 #-----------------------------------------------------------------------------
 # p = push
 #-----------------------------------------------------------------------------
 
 # push commits
-alias gp='git push'
+alias g.push='git push'
 
 # push commits forcefully
-alias gP='git push --force'
+alias g.push.force='git push --force'
 
 # push tags
-alias gpt='git push --tags'
+alias g.push.tags='git push --tags'
 
 # push tags forcefully
-alias gPt='git push --tags --force'
+alias g.push.tags.force='git push --tags --force'
 
 #-----------------------------------------------------------------------------
 # g = fetch
 #-----------------------------------------------------------------------------
 
 # fetch commits
-alias gg='git fetch'
+alias g.fetch='git fetch'
 
 # fetch and merge commits
-alias ggm='git pull'
+alias g.pull='git pull'
 
 # fetch and rebase commits
-alias ggr='git pull --rebase'
+alias g.pull.rebase='git pull --rebase'
+
+# fetch commits from all repos in current dir
+alias g.pullall="find . -type d -name .git -exec sh -c \"cd \"{}\"/../ && pwd && git pull && git submodule init && git submodule update\" \; "    # find all .git directories and exec "git pull" on the parent.
 
 #-----------------------------------------------------------------------------
 # u = submodule
 #-----------------------------------------------------------------------------
 
 # list all submodules
-alias gul='git submodule'
+alias g.list.submodules='git submodule'
 
 # add submodule
-alias gua='git submodule add'
+alias g.add.submodule='git submodule add'
 
 # reset submodules to known state
-alias guR='git submodule update'
+alias g.submodule.update='git submodule update'
 
 # register new URLs for submodules
-alias gug='git submodule sync'
+alias g.submodule.sync='git submodule sync'
+
+alias g.submodule.init="git submodule init && git submodule update" #update all git submodules

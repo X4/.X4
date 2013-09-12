@@ -13,22 +13,23 @@ compinit
 # stuff from default oh-my-zsh configuration
 setopt alwaystoend
 setopt auto_cd			# Perform the cd command to that directory if it can't be accessed otherwise
-setopt autopushd		# make cd push the old directory onto the directory stack.
-setopt cdablevars
+setopt autopushd		# Let cd push the old directory onto the directory stack.
+setopt cdablevars               # Autoexpand variables for cd
 setopt completeinword		# not just at the end
 setopt correctall
-setopt extended_glob		# in order to use #, ~ and ^ for filename generation grep word  *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files  don't forget to quote '^', '~' and '#'!
+setopt extended_glob		# In order to use #, ~ and ^ for filename generation grep word  *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files  don't forget to quote '^', '~' and '#'!
 setopt noflowcontrol
 setopt interactive
-setopt kshglob
-setopt longlistjobs		# display PID when suspending processes as well
+setopt kshglob                  # KSH like globbing
+setopt longlistjobs		# Display PID when suspending processes as well
 setopt monitor
 setopt promptsubst		# Parameter Expansion for the prompt
-setopt pushdignoredups
+setopt pushdignoredups          # Ignore duplicate items in history
+setopt nocompletealiases        # Don't expand aliases upon completion
 setopt noshwordsplit		# Use zsh style word splitting
 setopt nobeep			# Avoid "beep"ing
-setopt noglobdots		# * shouldn't match dotfiles. ever.
-setopt hash_list_all		# whenever a command completion is attempted, make sure the entire command path is hashed first.
+setopt noglobdots		# Wildcard * shouldn't match dotfiles. ever.
+setopt hash_list_all		# Whenever a command completion is attempted, make sure the entire command path is hashed first.
 
 # remove HEAD^ escaping madness
 unsetopt nomatch

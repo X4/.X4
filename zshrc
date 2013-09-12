@@ -1,22 +1,24 @@
 #########################################
-# Delegate Global Configuration
+# Initiate ZSH configuration
 #########################################
+for file in $HOME/.X4/global/zsh/**/*.zsh; do
+  source $file
+done
 
-for file in $HOME/.X4/config/**/*.zsh; do
+for file in $HOME/.X4/local/zsh/**/*.zsh; do
   source $file
 done
 
 #########################################
 # Set Shell Theme
 #########################################
-if [[ -e $HOME/.zsh_theme ]]; then
-  source $HOME/.zsh_theme
+if [[ -e $HOME/.X4/global/themes ]]; then
+  source $HOME/.X4/global/themes/$ZSH_PROMPT.zsh
 fi
 
 #########################################
-# Load Plugin Bundles
+# Load external ZSH Bundles
 #########################################
-
 for bundle in $HOME/.X4/bundle/*; do
   test -d $bundle && bundle=$bundle/${bundle##*/}.zsh
   test -f $bundle && source $bundle
@@ -25,22 +27,30 @@ done
 #########################################
 # Define Shell Functions
 #########################################
-for file in $HOME/.X4/func.d/*.zsh; do
+for file in $HOME/.X4/global/functions/*.zsh; do
+  source $file
+done
+
+for file in $HOME/.X4/local/functions/*.zsh; do
   source $file
 done
 
 #########################################
 # Set Shell Aliases
 #########################################
-for file in $HOME/.X4/alias.d/*.zsh; do
+for file in $HOME/.X4/global/aliases/*.zsh; do
+  source $file
+done
+
+for file in $HOME/.X4/local/aliases/*.zsh; do
   source $file
 done
 
 #########################################
 # Custom ZSH Settings
 #########################################
-if [[ -e $HOME/.zsh_custom ]]; then
-  source $HOME/.zsh_custom
+if [[ -e $HOME/.zprofile ]]; then
+  source $HOME/.zprofile
 fi
 
 
