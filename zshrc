@@ -1,12 +1,12 @@
 #########################################
 # Initiate ZSH configuration
 #########################################
-for file in $HOME/.X4/global/zsh/**/*.zsh; do
+for file in $HOME/.X4/global/zsh/*.zsh; do
   source $file
 done
 
-for file in $HOME/.X4/local/zsh/**/*.zsh; do
-  source $file
+for file in $HOME/.X4/local/zsh/*.zsh; do
+  test -e $file && source $file
 done
 
 #########################################
@@ -32,7 +32,7 @@ for file in $HOME/.X4/global/functions/*.zsh; do
 done
 
 for file in $HOME/.X4/local/functions/*.zsh; do
-  source $file
+  test -e $file && source $file
 done
 
 #########################################
@@ -43,7 +43,7 @@ for file in $HOME/.X4/global/aliases/*.zsh; do
 done
 
 for file in $HOME/.X4/local/aliases/*.zsh; do
-  source $file
+  test -e $file && source $file
 done
 
 #########################################
@@ -52,5 +52,3 @@ done
 if [[ -e $HOME/.zprofile ]]; then
   source $HOME/.zprofile
 fi
-
-

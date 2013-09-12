@@ -1,1 +1,1 @@
-$ZSH_PROMPT="x4"
+ZSH_PROMPT="x4"
