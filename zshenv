@@ -1,3 +1,6 @@
+#########################################
+# Define safer wrapper functions
+#########################################
 # Check if we can read given files and source those we can.
 function xsource() {
     if (( ${#argv} < 1 )) ; then

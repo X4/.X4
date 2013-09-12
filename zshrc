@@ -6,7 +6,7 @@ for file in $HOME/.X4/global/zsh/*.zsh; do
 done
 
 for file in $HOME/.X4/local/zsh/*.zsh; do
-  test -e $file && source $file
+  xsource $file
 done
 
 #########################################
@@ -32,7 +32,7 @@ for file in $HOME/.X4/global/functions/*.zsh; do
 done
 
 for file in $HOME/.X4/local/functions/*.zsh; do
-  test -e $file && source $file
+  xsource $file
 done
 
 #########################################
@@ -43,7 +43,7 @@ for file in $HOME/.X4/global/aliases/*.zsh; do
 done
 
 for file in $HOME/.X4/local/aliases/*.zsh; do
-  test -e $file && source $file
+  xsource $file
 done
 
 #########################################

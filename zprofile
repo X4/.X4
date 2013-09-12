@@ -13,7 +13,7 @@ export LESS_TERMCAP_us=$'\E[01;32m'
 
 # locale setup
 xsource "/etc/default/locale"
-if [[ LC_ALL -eq '' ]]; then
+if [[ -z "$LC_ALL" ]]; then
     export LC_ALL="$LANG"
 fi
 
