@@ -58,7 +58,7 @@ function uninstall () {
     if [[ $REPLY =~ ^[yY]$ ]]; then
 
 	if [[ -L "$HOME/.zshrc" ]]; then
-	    rm -i "$HOME/.zshrc" "$HOME/.zshenv" "$HOME/.zprofile" "$HOME/.*.zwc" "$HOME/.zcompdump" "$HOME/.zdirs"
+	    rm -i "$HOME/.zshrc" "$HOME/.zshenv" "$HOME/.zprofile" "$HOME/.*.zwc" "$HOME/.zcompdump" "$HOME/.zdirs" "$HOME/.zlogin" "$HOME/.zlogout"
 	fi
 
 	if [[ -L "$HOME/.bashrc" ]]; then
@@ -100,6 +100,8 @@ setup_shell() {
         ln -sfv "$HOME/.X4/zshrc" 			"$HOME/.zshrc"
         ln -sfv "$HOME/.X4/zshenv" 			"$HOME/.zshenv"
         ln -sfv "$HOME/.X4/zprofile" 			"$HOME/.zprofile"
+        ln -sfv "$HOME/.X4/zlogin" 			"$HOME/.zlogin"
+        ln -sfv "$HOME/.X4/zlogout" 			"$HOME/.zlogout"
     fi
 
     if [[ $REPLY =~ ^[2]$ ]]; then

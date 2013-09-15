@@ -1,3 +1,7 @@
+#
+# Executes commands at login, pre-zshrc.
+#
+
 # support colors in ls
 [ -f /etc/DIR_COLORS ] && eval $(dircolors -b /etc/DIR_COLORS)
 export ZLSCOLORS="${LS_COLORS}"
@@ -22,3 +26,9 @@ TZ=$(xcat /etc/timezone)
 
 # set default shell to zsh
 export SHELL='/bin/zsh'
+
+# Browser
+if [[ "$OSTYPE" = darwin* ]]; then
+	export BROWSER='open'
+fi
+

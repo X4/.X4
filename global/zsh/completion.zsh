@@ -183,9 +183,6 @@ zstyle ':completion:*:corrections' 	format "- %d - (errors %e)"
 # Adjust hosts style (background = red, foreground = black)
 zstyle ':completion:*:*:*:*:hosts'	list-colors '=*=30;41'
 
-# Adjust usernames style (background = white, foreground = blue)
-zstyle ':completion:*:*:*:*:users'	list-colors '=*=34;47'
-
 # Adjust description styles
 zstyle ':completion:*:descriptions'	format $'%{\033[1m⚔\e[0;33m%} completing ☛\e[0m %B%d%b%{\e[0m%}'
 
