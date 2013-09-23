@@ -1,13 +1,12 @@
-#
+#########################################
 # Executes commands at login post-zshrc.
-#
-
+#########################################
 # Execute code that does not affect the current session in the background.
 {
   # Compile the completion dump to increase startup speed.
   zcompdump="$HOME/.zcompdump"
   if [[ -s "$zcompdump" && (! -s "${zcompdump}.zwc" || "$zcompdump" -nt "${zcompdump}.zwc") ]]; then
-zcompile "$zcompdump"
+    zcompile "$zcompdump"
   fi
 
   # Set environment variables for launchd processes. (Mac OS X)
@@ -30,9 +29,9 @@ zcompile "$zcompdump"
   # context as the GUI user. Simply using 'sudo' or 'su' just won't do it.
   #
   if [[ "$OSTYPE" == darwin* ]]; then
-for env_var in PATH MANPATH; do
-launchctl setenv "$env_var" "${(P)env_var}"
-    done
-fi
+    for env_var in PATH MANPATH; do
+      launchctl setenv "$env_var" "${(P)env_var}"
+        done
+  fi
 
 } &!

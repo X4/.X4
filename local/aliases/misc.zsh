@@ -8,7 +8,7 @@
   alias favs="history | awk '{print $2}' | sort | uniq -c | sort -rn | head"
   alias stay="tail -f"
 # Reload config and reset terminal
-  alias cls=". ~/.config/fish/config.fish && reset"
+  alias cls=" clear;exec $SHELL"
 # Kill Shell History
   alias empty="clear && history --clear"
 # Show directory sizes, depends on helper
@@ -34,10 +34,10 @@
   alias 'is.empty'="ls *(L0f.go-w.)"
 # Archive comfort
   alias set.targz="tar -cxvf"
-  alias set.tarbzip2="tar --bzip2 -cvf"
+  alias set.tarbz2="tar --bzip2 -cvf"
   alias get.rfkills="rfkill list all"
   alias get.targz="tar -zxvf"
-  alias get.tarbzip2="tar --bzip2 -xvf"
+  alias get.tarbz2="tar --bzip2 -xvf"
 # Uncompress tar.bz2
   alias get.tarbz2="bzip2 -dc ${1} | tar -xf - "
 # Show Userlist
@@ -51,11 +51,11 @@
   alias run.update-system-fonts="set -x PERSONAL_FONTS=$HOME/.fonts && echo \"Scanning $PERSONAL_FONTS\"; sudo fc-cache -f -r -v $PERSONAL_FONTS; sudo texhash; sudo mktexlsr; sudo updmap-sys --force"
   alias run.mysqldump="mysqldump --all-databases -p | bzip2 -c > $(date --rfc-3339=date)all-databases.sql.bz2"
 # Proxy: Start to unblock stuff through your proxy
-  alias 'on.proxy'="PORT=$[${RANDOM}%2012+4012]; echo -n 'Enter Hostname: '; read HOSTNAME; ssh -C2 -c blowfish -D $PORT $HOSTNAME sleep 5; echo 'Your proxy runs on: localhost:${PORT} forwarded through ${HOSTNAME}'"
+  alias 'proxy.on'="PORT=$[${RANDOM}%2012+4012]; echo -n 'Enter Hostname: '; read HOSTNAME; ssh -C2 -c blowfish -D $PORT $HOSTNAME sleep 5; echo 'Your proxy runs on: localhost:${PORT} forwarded through ${HOSTNAME}'"
 # Proxy: kills all users using ssh with given username to end proxy session
-  alias 'off.proxy'="read USER; kill $(ps ax o 'pid euser egroup command' | grep "sshd: $USER" | awk '{ print $1 }' | sed ':a;N;$!ba;s/\n/ /g') > /dev/null"
+  alias 'proxy.off'="read USER; kill $(ps ax o 'pid euser egroup command' | grep "sshd: $USER" | awk '{ print $1 }' | sed ':a;N;$!ba;s/\n/ /g') > /dev/null"
 # WiFi
-  alias w.scan="iwlist wlan0 scan >/dev/null "
-  alias w.up="ifconfig wlan0 up"
-  alias w.down="ifconfig wlan0 down"
-  alias w.reload="rmmod iwldvm && rmmod iwlwifi && sleep 1;modprobe iwlwifi auto_agg=0 wd_disable=1 bt_coex_active=0 && sleep 1 modprobe iwldvm"
+  alias wifi.scan="iwlist wlan0 scan >/dev/null "
+  alias wifi.up="ifconfig wlan0 up"
+  alias wifi.down="ifconfig wlan0 down"
+  alias wifi.reload="rmmod iwldvm && rmmod iwlwifi && sleep 1;modprobe iwlwifi auto_agg=0 wd_disable=1 bt_coex_active=0 && sleep 1 modprobe iwldvm"

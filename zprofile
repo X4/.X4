@@ -1,7 +1,6 @@
-#
+#########################################
 # Executes commands at login, pre-zshrc.
-#
-
+#########################################
 # support colors in ls
 [ -f /etc/DIR_COLORS ] && eval $(dircolors -b /etc/DIR_COLORS)
 export ZLSCOLORS="${LS_COLORS}"
@@ -29,6 +28,13 @@ export SHELL='/bin/zsh'
 
 # Browser
 if [[ "$OSTYPE" = darwin* ]]; then
-	export BROWSER='open'
+    export BROWSER='open'
 fi
 
+# Python
+export PYTHONUSERBASE="$HOME/.local"
+
+# PyEnv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"

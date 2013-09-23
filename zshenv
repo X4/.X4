@@ -1,9 +1,9 @@
-#
+#########################################
 # Defines environment variables and global helpers.
 #
 # WARNING: Avoid modifying this file.
 # Modify 'zshrc.local, zlogin, zlogout or zprofile' instead.
-#
+#########################################
 
 #########################################
 # Debugging helpers
