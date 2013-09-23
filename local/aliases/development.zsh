@@ -7,7 +7,7 @@
 # Clean tmp files, compile and execute the ./current_directoryname. Works always thanks to a Generic Makefile
   alias run.mm="cp -u ~/.X4/.Makefile ./Makefile; make distclean > /dev/null && make; ./${PWD##*/}"
 # Update all (system) gems
-  alias set.gemup="gem update --system && gem update"
+  alias run.gemup="gem update --system && gem update"
 # Show Ruby on Rails toolset versions
   alias get.ror-versions="which ruby;which rails;which bundle;ruby -v;rails -v; bundle -v" #show ror version numbers
 # Runs mongodb on /tmp
