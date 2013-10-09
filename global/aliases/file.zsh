@@ -6,6 +6,7 @@ alias lt='ls -ltr'
 alias mv='mv -i'
 alias rm='rm -i'
 alias RM='rm -vrf'
+alias toArray="xxd -i"
 
 duh() { # disk usage for humans
   test $# -eq 0 && set -- *

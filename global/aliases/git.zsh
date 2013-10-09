@@ -4,9 +4,13 @@ intra_line_diff='--word-diff-regex="[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+"'
 #-----------------------------------------------------------------------------
 # o = working copy
 #-----------------------------------------------------------------------------
-
+# clone remote repository
+alias g.clone="git clone"
+alias g.c="git clone"
+ 
 # show status of working copy
 alias g.status='git status'
+alias g.s='git status'
 
 # show status of files in working copy
 alias g.status.short='git status --short'
@@ -33,10 +37,10 @@ alias g.reset.hard.upstream='git reset --hard @{u}'
 alias g.rm='git rm -r --ignore-unmatch'
 
 # list unknown files in working copy
-alias g.unknown='git status --porcelain | sed -n "s/^?? *//p"'
+alias g.list.unknown.status='git status --porcelain | sed -n "s/^?? *//p"'
 
 # list unknown files in working copy that can be deleted
-alias g.unknown.rm='git clean -n'
+alias g.list.cleanable='git clean -n'
 
 # delete unknown files from working copy
 alias g.clean='git clean -f'
@@ -107,39 +111,39 @@ alias g.stash.drop='git stash drop'
 alias g.stash.clear='git stash clear'
 
 #-----------------------------------------------------------------------------
-# c = commit
+# m = commit message
 #-----------------------------------------------------------------------------
 
 # commit staged changes
-alias g.c='git commit'
+alias g.m='git commit'
 
 # commit staged changes with the given message
-alias g.cm='git commit -m'
+alias g.mm='git commit -m'
 
 # commit staged changes as if on the given date
-alias g.cd='git commit --date'
+alias g.md='git commit --date'
 
 # commit staged changes as if on the modification date of the given file
-function gcdf() {
+function g.mdf() {
   git commit --date="$(date -r "$1")"
 }
 
 # commit staged changes with the given version string as the message
-function gcv() {
+function g.mv() {
   git commit -m "Version $1" && git tag "v$1"
 }
-function gcV() {
+function g.mV() {
   git tag -f "v$1"
 }
 
 # commit staged changes to a temporary "squash" commit, to be rebased later
-alias g.cq='git commit -m "SQUASH $(date)"'
+alias g.mq='git commit -m "SQUASH $(date)"'
 
 # amend current commit and edit its message
-alias g.ca='git commit --amend'
+alias g.ma='git commit --amend'
 
 # amend current commit but reuse its message
-alias g.cA='git commit --amend --reuse-message=HEAD'
+alias g.mA='git commit --amend --reuse-message=HEAD'
 
 # commit an inverse commit to revert changes from the given commit
 alias g.revert='git revert'
@@ -229,14 +233,15 @@ alias g.rebase.interactive='git rebase --interactive'
 alias g.rebase.continue='git rebase --continue'
 alias g.rebase.abort='git rebase --abort'
 alias g.rebase.skip='git rebase --skip'
-alias g.rebase.upstream='git rebase @{u}' # against upstream branch
+# rebase against upstream branch
+alias g.rebase.upstream='git rebase @{u}'
 
 #-----------------------------------------------------------------------------
 # k = conflict
 #-----------------------------------------------------------------------------
 
 # list all conflicted files
-alias g.conflicts='git ls-files --unmerged | cut -f2 | uniq'
+alias g.list.conflicts='git ls-files --unmerged | cut -f2 | uniq'
 
 # add changes from all conflicted files
 alias g.conflict.add='git add $(gkl)'
@@ -267,7 +272,7 @@ alias g.ls='git ls-files'
 alias g.list.ignored='git status --porcelain --short --ignored | sed -n "s/^!! //p"'
 
 # create .keep files in empty directories
-alias g.add.emptydirs="find . -type d -empty -exec touch {}/.keep \; "
+alias g.add.emptydirs="find . -type d -empty -exec touch {}/.keep \; git add ."
 
 # list staged files
 alias g.list.staged='git ls-files --cached'
@@ -393,13 +398,16 @@ alias g.push.tags.force='git push --tags --force'
 # fetch commits
 alias g.fetch='git fetch'
 
-# fetch and merge commits
+# fetch commits from all repos in current dir
+alias g.fetchall="find . -type d -name .git -exec sh -c \"cd \"{}\"/../ && pwd && git fetch && git submodule init && git submodule update\" \; "
+
+# pull and merge commits
 alias g.pull='git pull'
 
-# fetch and rebase commits
+# pull and rebase commits
 alias g.pull.rebase='git pull --rebase'
 
-# fetch commits from all repos in current dir
+# pull commits from all repos in current dir
 alias g.pullall="find . -type d -name .git -exec sh -c \"cd \"{}\"/../ && pwd && git pull && git submodule init && git submodule update\" \; "    # find all .git directories and exec "git pull" on the parent.
 
 #-----------------------------------------------------------------------------

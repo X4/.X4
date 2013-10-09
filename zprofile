@@ -33,8 +33,9 @@ fi
 
 # Python
 export PYTHONUSERBASE="$HOME/.local"
+export PYTHONPATH="$HOME/.local/lib64/python2.7/site-packages:${PYTHONPATH}"
 
 # PyEnv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+#export PYENV_ROOT="$HOME/.pyenv"
+#export PATH="$PYENV_ROOT/bin:$PATH"
+#eval "$(pyenv init -)"
