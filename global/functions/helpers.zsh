@@ -68,45 +68,6 @@ chkservice(){
 	sudo $HOME/.X4/functions/chkservice
 }
 
-#update G-WAN
-update-gwan(){
-    if [[ ! -f $HOME/.gwan/gwan_linux.tar.bz2 ]]; then
-            wget -NP "$HOME/.gwan" "94.230.210.136/archives/gwan_linux.tar.bz2" 2> /dev/null
-        git init && git add . && git commit -am "initial commit of gwan_linux.tar.bz2"
-    else
-            newfilesum=$(wget -NP "$HOME/.gwan" "94.230.210.136/archives/gwan_linux.tar.bz2" 2> /dev/null | sha256sum "$HOME/.gwan/gwan_linux.tar.bz2" 2> /dev/null)
-            oldfilesum=$(sha256sum "$HOME/.gwan/gwan_linux.tar.bz2" 2> /dev/null)
-            if [[ $newfilesum != $oldfilesum ]]; then
-            echo -e "Updating ...\n"
-
-            # Create backup directory
-                    mkdir -p "$HOME/.gwan/backups/"
-
-                    # Backup local G-WAN installation
-                    tar cfj "$HOME/.gwan/backups/gwan.$(date --iso).tar.bz2" "/usr/local/gwan"
-
-                    # Decompress new G-WAN archive
-                    tar xjf "$HOME/.gwan/gwan_linux.tar.bz2"
-
-                    # Update local G-WAN installation with new files using rsync
-                    sudo rsync -avP "$HOME/.gwan/gwan/" "/usr/local/gwan"
-
-                    # Take ownership of all gwan files, so that we can edit without beeing root
-                    sudo chown $(whoami):root -R "/usr/local/gwan" 2> /dev/null
-
-                    # Remove temporary directory
-                    rm -R "$HOME/.gwan/gwan"
-
-                    # Create a symbolic link so that we can run ie. gwan -v anywhere
-                    sudo ln -s "/usr/local/gwan/gwan" "/usr/local/bin/gwan"
-            git add . && git commit -am "Updated G-WAN on $(date --iso)."
-            else
-            echo -e "No updates available ...\n"
-        fi
-    fi
-    /usr/local/gwan/gwan -v | tr '\n' ' ' | echo -n "You're running "
-}
-
 #ask wikipedia
 wiki(){
     C=`tput cols`;dig +short txt ${1}.wp.dg.cx|sed -e 's/" "//g' -e 's/^"//g' -e 's/"$//g' -e 's/ http:/\n\nhttp:/'|fmt -w $C

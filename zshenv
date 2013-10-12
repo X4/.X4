@@ -71,7 +71,7 @@ fpath=(
 )
 
 #########################################
-# Safer sourcing and cat used in in zshrc
+# Safer commands that check for x-istence
 #########################################
 # Check if we can read given files and source those we can.
 function xsource() {
@@ -97,4 +97,65 @@ function xcat() {
 
     [[ -r $1 ]] && cat $1
     return 0
+}
+
+# Checks if a command exists and returns either true or false.
+# Usage: xcmnd [-c|-g] word
+#   -c  only checks for external commands
+#   -g  does the usual tests and also checks for global aliases
+function xcmd() {
+    emulate -L zsh
+    local -i command deep
+
+    if [[ $1 == '-c' ]] ; then
+        (( command = 1 ))
+        shift
+    elif [[ $1 == '-g' ]] ; then
+        (( deep = 1 ))
+    else
+        (( command = 0 ))
+        (( deep = 0 ))
+    fi
+
+    if (( ${#argv} != 1 )) ; then
+        printf 'usage: xcmnd [-c] <command>\n' >&2
+        return 1
+    fi
+
+    if (( command > 0 )) ; then
+        [[ -n ${commands[$1]}  ]] && return 0
+        return 1
+    fi
+
+    if   [[ -n ${commands[$1]}    ]] \
+      || [[ -n ${functions[$1]}   ]] \
+      || [[ -n ${aliases[$1]}     ]] \
+      || [[ -n ${reswords[(r)$1]} ]] ; then
+
+        return 0
+    fi
+
+    if (( gatoo > 0 )) && [[ -n ${galiases[$1]} ]] ; then
+        return 0
+    fi
+
+    return 1
+}
+
+# Check if the underlying OS is a Darwin
+function xdarwin(){
+    [[ $OSTYPE == darwin* ]] && return 0
+    return 1
+}
+
+# Check if the underlying OS is a Unix
+function xfreebsd(){
+    [[ $OSTYPE == freebsd* ]] && return 0
+    return 1
+}
+
+# Check if the underlying OS is a Linux
+function xlinux(){
+    [[ $OSTYPE == linux* ]] && return 0
+    return 1
 }

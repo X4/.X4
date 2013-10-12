@@ -13,8 +13,6 @@
   alias empty="clear && history --clear"
 # Show directory sizes, depends on helper
   #alias dirsize="du -sk ./* | sort -n | AWKSIZE"
-# More informative ls
-  alias ll="ls -Alih --color"
 # Show empty dirs
   alias l.emptydirs="ls -ld *(/^F)"
 # Show symbolic links
@@ -22,20 +20,20 @@
 # Show last modified
   alias l.modified="ls -t $* 2> /dev/null | head -n 1"
 # System
-  alias dl="curl -O " #download
-  alias psa="ps -eo pid,user,group,args,etime,lstart "
-  alias psl="watch -n 1 ps -eo %cpu,pid,egid,user,group,args,etime,lstart,comm --sort=-%cpu,uid,-ppid,+pid "
+  alias dl="curl -O "
+  alias p.all="ps -eo pid,user,group,args,etime,lstart "
+  alias p.list="watch -n 1 ps -eo %cpu,pid,egid,user,group,args,etime,lstart,comm --sort=-%cpu,uid,-ppid,+pid "
   alias duff="du -hd 1 | sort -h"
   alias cmx="chmod +x "
-  alias lsock="lsof -Pnl +M -i4"
+  alias run.rfkill.list="rfkill list all"
+  alias is.socket="lsof -Pnl +M -i4"
 # Show OS info
   alias 'is.os'="lsb_release -a;echo;cat /etc/*release;echo; cat /etc/issue*"
 # List all zero-length-files which are not group- or world-writable
   alias 'is.empty'="ls *(L0f.go-w.)"
 # Archive comfort
-  alias set.targz="tar -cxvf"
-  alias set.tarbz2="tar --bzip2 -cvf"
-  alias get.rfkills="rfkill list all"
+  alias to.targz="tar -cxvf"
+  alias to.tarbz2="tar --bzip2 -cvf"
   alias get.targz="tar -zxvf"
   alias get.tarbz2="tar --bzip2 -xvf"
 # Uncompress tar.bz2

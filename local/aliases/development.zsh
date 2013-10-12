@@ -5,11 +5,11 @@
 # Lazy Ass C
   alias run.c="gcc -Wall -ansi -pedantic -g -o "
 # Clean tmp files, compile and execute the ./current_directoryname. Works always thanks to a Generic Makefile
-  alias run.mm="cp -u ~/.X4/.Makefile ./Makefile; make distclean > /dev/null && make; ./${PWD##*/}"
+  alias run.make="cp -u ~/.X4/.Makefile ./Makefile; make distclean > /dev/null && make; ./${PWD##*/}"
 # Update all (system) gems
   alias run.gemup="gem update --system && gem update"
 # Show Ruby on Rails toolset versions
-  alias get.ror-versions="which ruby;which rails;which bundle;ruby -v;rails -v; bundle -v" #show ror version numbers
+  alias run.ror-versions="which ruby;which rails;which bundle;ruby -v;rails -v; bundle -v" #show ror version numbers
 # Runs mongodb on /tmp
   alias run.mongodb="mkdir /tmp/mongo -p && mongod --dbpath /tmp/mongo --rest > /dev/null &" #start mongodb
 # Converts erb files to haml

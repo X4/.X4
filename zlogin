@@ -28,7 +28,7 @@
   # 2) The shell session must have been opened within the same Mach bootstrap
   # context as the GUI user. Simply using 'sudo' or 'su' just won't do it.
   #
-  if [[ "$OSTYPE" == darwin* ]]; then
+  if ((xdarwin)); then
     for env_var in PATH MANPATH; do
       launchctl setenv "$env_var" "${(P)env_var}"
         done

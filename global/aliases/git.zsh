@@ -4,6 +4,8 @@ intra_line_diff='--word-diff-regex="[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+"'
 #-----------------------------------------------------------------------------
 # o = working copy
 #-----------------------------------------------------------------------------
+alias g.cal="$HOME/.X4/global/scripts/git-cal"
+
 # clone remote repository
 alias g.clone="git clone"
 alias g.c="git clone"

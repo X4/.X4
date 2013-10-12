@@ -27,13 +27,13 @@ TZ=$(xcat /etc/timezone)
 export SHELL='/bin/zsh'
 
 # Browser
-if [[ "$OSTYPE" = darwin* ]]; then
+if ((xdarwin)); then
     export BROWSER='open'
 fi
 
 # Python
-export PYTHONUSERBASE="$HOME/.local"
-export PYTHONPATH="$HOME/.local/lib64/python2.7/site-packages:${PYTHONPATH}"
+#export PYTHONUSERBASE="$HOME/.local"
+#export PYTHONPATH="$HOME/.local/lib64/python2.7/site-packages:${PYTHONPATH}"
 
 # PyEnv
 #export PYENV_ROOT="$HOME/.pyenv"
