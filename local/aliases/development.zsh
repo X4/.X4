@@ -18,3 +18,5 @@
   alias CO="./configure"
 # Execute \kbd{./configure --help}
   alias CH="./configure --help"
+# Start kate always silent
+  alias kate='kate >/dev/null 2>&1'
