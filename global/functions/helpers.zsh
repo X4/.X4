@@ -51,7 +51,7 @@ done
 
 # show weather
 function show_weather() {
-   curl --silent "http://xml.weather.yahoo.com/forecastrss?p=GMXX0260&u=c" | grep -E '(Current Conditions:| C<BR)' | sed -e 's/Current Conditions://' -e 's/<br \/>//' -e 's/<b>//' -e 's/<\/b>//' -e 's/<BR \/>//g' -e 's/<description>//' -e 's/<\/description>//' -e 's/Drifting Snow/Schneeverwehungen/g' -e 's/Fair/Heiter/g' -e 's/Haze/Nebel/g' -e 's/Partly/Zum Teil/g' -e 's/Sunny/Sonnig/g' -e 's/Mostly/Meist/g' -e 's/Heavy/Starker/g' -e 's/Light/Leichter/g' -e 's/Rain Shower/Regenschauer/g' -e 's/Rain/Regen/g' -e 's/Showers/Schauer/g' -e 's/T-showers/Gewitter/g' -e 's/Thundershower/Gewitterschauer/g' -e 's/Mostly/Meist/g' -e 's/Scattered/Vereinzelt/g' -e 's/Showers Late/Abends Schauer/g' -e 's/Shower/Schauer/g' -e 's/Showers in the Vicinity/Schauer in der Umgebung/g' -e 's/AM/vormittags/g' -e 's/PM/nachmittags/g' -e 's/Clear/Klar/g' -e 's/Cloudy/bewÃ¶lkt/g' -e 's/Windy/windig/g' -e 's/Few/Wenige/g' -e 's/Thunderstorm/Gewittersturm/g' -e 's/Thunder/Gewitter/g' -e 's/Snow/Schnee/g' -e 's/Fog/Nebel/g' -e 's/Early/Morgens/g' -e 's/Late/Abends/g' -e 's/Drizzle/Nieselregen/g' -e 's/Isolated/Vereinzelt/g' -e 's/Mix/Wechselhaft/g' -e 's/Wintry/Winterlich/g' -e 's/to/oder/g' -e 's/in the Vicinity/in der Umgebung/g' -e 's/Mist/Leichter Nebel/g' -e 's/\ C$/\Â°C/' -e 's/,/ bei/g' -e 's/with/mit/g' | tail -1
+   curl --silent "http://xml.weather.yahoo.com/forecastrss?p=$WEATHER_CODE&u=c" | grep -E '(Current Conditions:| C<BR)' | sed -e 's/Current Conditions://' -e 's/<br \/>//' -e 's/<b>//' -e 's/<\/b>//' -e 's/<BR \/>//g' -e 's/<description>//' -e 's/<\/description>//' -e 's/Drifting Snow/Schneeverwehungen/g' -e 's/Fair/Heiter/g' -e 's/Haze/Nebel/g' -e 's/Partly/Zum Teil/g' -e 's/Sunny/Sonnig/g' -e 's/Mostly/Meist/g' -e 's/Heavy/Starker/g' -e 's/Light/Leichter/g' -e 's/Rain Shower/Regenschauer/g' -e 's/Rain/Regen/g' -e 's/Showers/Schauer/g' -e 's/T-showers/Gewitter/g' -e 's/Thundershower/Gewitterschauer/g' -e 's/Mostly/Meist/g' -e 's/Scattered/Vereinzelt/g' -e 's/Showers Late/Abends Schauer/g' -e 's/Shower/Schauer/g' -e 's/Showers in the Vicinity/Schauer in der Umgebung/g' -e 's/AM/vormittags/g' -e 's/PM/nachmittags/g' -e 's/Clear/Klar/g' -e 's/Cloudy/bewÃ¶lkt/g' -e 's/Windy/windig/g' -e 's/Few/Wenige/g' -e 's/Thunderstorm/Gewittersturm/g' -e 's/Thunder/Gewitter/g' -e 's/Snow/Schnee/g' -e 's/Fog/Nebel/g' -e 's/Early/Morgens/g' -e 's/Late/Abends/g' -e 's/Drizzle/Nieselregen/g' -e 's/Isolated/Vereinzelt/g' -e 's/Mix/Wechselhaft/g' -e 's/Wintry/Winterlich/g' -e 's/to/oder/g' -e 's/in the Vicinity/in der Umgebung/g' -e 's/Mist/Leichter Nebel/g' -e 's/\ C$/\Â°C/' -e 's/,/ bei/g' -e 's/with/mit/g' | tail -1
 }
 
 #reconnect vpns
@@ -71,24 +71,6 @@ chkservice(){
 #ask wikipedia
 wiki(){
     C=`tput cols`;dig +short txt ${1}.wp.dg.cx|sed -e 's/" "//g' -e 's/^"//g' -e 's/"$//g' -e 's/ http:/\n\nhttp:/'|fmt -w $C
-}
-
-#translate EN<->DE
-dict(){
-    NAME="dict.cc"; VERSION="1.0"; USERAGENT="${NAME}/${VERSION} (cli)";
-
-    if [[ "x${1}" = "x" ]]; then
-      echo "missing word."
-      echo "USAGE:" $(basename $0) "WORD"
-      return 1
-    fi
-
-    echo "" > /tmp/dict
-    SITE="$(wget --user-agent="${USERAGENT}" -q -O - "http://www.dict.cc/?s=${1}")"
-    echo "ENGLISH"
-    echo "${SITE}" | grep "var c1Arr = new Array" | cut -d '(' -f2 | cut -d ')' -f1 | sed "s/,/\n/g" | sed "s/\"//g" | grep -v "^$" | uniq | sed "s/^/\t/"| column | fold -s --width=120
-    echo "DEUTSCH"
-    echo "${SITE}" | grep "var c2Arr = new Array" | cut -d '(' -f2 | cut -d ')' -f1 | sed "s/,/\n/g" | sed "s/\"//g" | grep -v "^$" | uniq | sed "s/^/\t/"| column | fold -s --width=120
 }
 
 #easier archive extraction

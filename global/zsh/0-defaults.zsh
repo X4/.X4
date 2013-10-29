@@ -18,6 +18,7 @@ setopt cdablevars               # Autoexpand variables for cd
 setopt completeinword		# not just at the end
 setopt correctall
 setopt extended_glob		# In order to use #, ~ and ^ for filename generation grep word  *~(*.gz|*.bz|*.bz2|*.zip|*.Z) -> searches for word not in compressed files  don't forget to quote '^', '~' and '#'!
+setopt bareglobqual
 setopt noflowcontrol
 setopt interactive
 setopt kshglob                  # KSH like globbing

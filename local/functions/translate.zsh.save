@@ -1,0 +1,115 @@
+##########################
+#   LIST OF LANGUAGES    #
+##########################
+# af    (Afrikaans)      #
+# sq    (Albanian)       #
+# ar    (Arabic)         #
+# hy    (Armenian)       #
+# az    (Azerbaijani)    #
+# eu    (Basque)         #
+# be    (Belarusian)     #
+# bn    (Bengali)        #
+# bg    (Bulgarian)      #
+# ca    (Catalan)        #
+# zh-CN (Chinese)        #
+# hr    (Croatian)       #
+# cs    (Czech)          #
+# da    (Danish)         #
+# nl    (Dutch)          #
+# en    (English)        #
+# eo    (Esperanto)      #
+# et    (Estonian)       #
+# tl    (Filipino)       #
+# fi    (Finnish)        #
+# fr    (French)         #
+# gl    (Galician)       #
+# ka    (Georgian)       #
+# de    (German)         #
+# el    (Greek)          #
+# gu    (Gujarati)       #
+# ht    (Haitian-Creole) #
+# iw    (Hebrew)         #
+# hi    (Hindi)          #
+# hu    (Hungarian)      #
+# is    (Icelandic)      #
+# id    (Indonesian)     #
+# ga    (Irish)          #
+# it    (Italian)        #
+# ja    (Japanese)       #
+# kn    (Kannada)        #
+# ko    (Korean)         #
+# la    (Latin)          #
+# lv    (Latvian)        #
+# lt    (Lithuanian)     #
+# mk    (Macedonian)     #
+# ms    (Malay)          #
+# mt    (Maltese)        #
+# no    (Norwegian)      #
+# fa    (Persian)        #
+# pl    (Polish)         #
+# pt    (Portuguese)     #
+# ro    (Romanian)       #
+# ru    (Russian)        #
+# sr    (Serbian)        #
+# sk    (Slovak)         #
+# sl    (Slovenian)      #
+# es    (Spanish)        #
+# sw    (Swahili)        #
+# sv    (Swedish)        #
+# ta    (Tamil)          #
+# te    (Telugu)         #
+# th    (Thai)           #
+# tr    (Turkish)        #
+# uk    (Ukrainian)      #
+# ur    (Urdu)           #
+# vi    (Vietnamese)     #
+# cy    (Welsh)          #
+# yi    (Yiddish)        #
+##########################
+
+UA="Mozilla/5.0"
+#UA='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.66 Safari/537.36'
+
+# strip ansi and urlencode input string
+function sanitize() {
+    echo "$1" \
+    | perl -ple "s/\033\[(?:\d*(?:;\d+)*)*m//g;" \
+    | perl -MURI::Escape -ne "\$/=\"\"; print uri_escape \$_"
+}
+
+
+function dicsay() {
+    mplayer -user-agent Mozilla \
+    "http://translate.google.com/translate_tts?tl=${2:-en}&q=$(sanitize ${1} | sed 's#\ #\+#g')" >|/dev/null 2>&1
+}
+
+
+function dic(){
+    if [[ -z "$1" ]]; then
+	echo "Usage: $0 source-language target-language"
+    else
+        wget -U $UA -qO - \
+        "http://translate.google.com/translate_a/t?client=t&text=$(sanitize ${1})&sl=${3:-auto}&tl=${2:-en}" \
+        | sed 's/\[\[\[\"//' \
+        | cut -d \" -f 1
+    fi
+}
+
+
+function dicc() {
+    if [[ -z "$1" ]]; then
+	print "Usage: $0 source-language target-language"
+    else
+        dic $1 $3 $2
+        dicsay $(dic $1 $3 $2) $3
+    fi
+}
+
+# Search words that begin with
+function words() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: $0 your-word"
+    else
+        grep "$@" /usr/share/dict/words
+    fi
+}

@@ -10,8 +10,6 @@ bundles=(
     "--squash https://github.com/zsh-users/zsh-syntax-highlighting.git master"
     "bundle/zsh-auto-fu"
     "--squash https://github.com/hchbaw/auto-fu.zsh.git master"
-    "bundle/zsh-base16"
-    "--squash git@github.com:X4/zsh-base16.git master"
 );
 
 

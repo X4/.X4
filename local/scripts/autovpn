@@ -1,4 +1,8 @@
 #!/usr/bin/python
+# Simple VPN Watcher
+# it kills "transmission-gtk" (or your tool),
+# whenever the VPN connection drops
+# Usage: Copy your VPN UUID's and program's name into this script
 
 import sys
 import os
@@ -15,14 +19,14 @@ VPN_CONNECTION_UUID = "0dec678a-4b7c-49ee-90f8-974a9639e622"
 ACTIVE_CONNECTION_UUID = "92d369bc-8fae-4a42-9b93-fe8ef6495889"
 
 # some service, path and interface constants
-NM_DBUS_SERVICE									 = "org.freedesktop.NetworkManager"
-NM_DBUS_PATH											= "/org/freedesktop/NetworkManager"
-NM_DBUS_INTERFACE								 = "org.freedesktop.NetworkManager"
-NM_DBUS_IFACE_CONNECTION_ACTIVE	 = "org.freedesktop.NetworkManager.Connection.Active"
-NM_DBUS_SERVICE_SYSTEM_SETTINGS	 = "org.freedesktop.NetworkManagerSystemSettings"
-NM_DBUS_SERVICE_USER_SETTINGS		 = "org.freedesktop.NetworkManagerUserSettings"
-NM_DBUS_IFACE_SETTINGS						= "org.freedesktop.NetworkManagerSettings"
-NM_DBUS_PATH_SETTINGS						 = "/org/freedesktop/NetworkManagerSettings"
+NM_DBUS_SERVICE			  = "org.freedesktop.NetworkManager"
+NM_DBUS_PATH			  = "/org/freedesktop/NetworkManager"
+NM_DBUS_INTERFACE		  = "org.freedesktop.NetworkManager"
+NM_DBUS_IFACE_CONNECTION_ACTIVE	  = "org.freedesktop.NetworkManager.Connection.Active"
+NM_DBUS_SERVICE_SYSTEM_SETTINGS	  = "org.freedesktop.NetworkManagerSystemSettings"
+NM_DBUS_SERVICE_USER_SETTINGS	  = "org.freedesktop.NetworkManagerUserSettings"
+NM_DBUS_IFACE_SETTINGS		  = "org.freedesktop.NetworkManagerSettings"
+NM_DBUS_PATH_SETTINGS		  = "/org/freedesktop/NetworkManagerSettings"
 NM_DBUS_IFACE_SETTINGS_CONNECTION = "org.freedesktop.NetworkManagerSettings.Connection"
 
 DBusGMainLoop(set_as_default=True)

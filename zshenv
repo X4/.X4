@@ -159,3 +159,9 @@ function xlinux(){
     [[ $OSTYPE == linux* ]] && return 0
     return 1
 }
+
+# Check if the underlying OS is a Cygwin Environment
+function xlinux(){
+    [[ $OSTYPE == cygwin* ]] && return 0
+    return 1
+}

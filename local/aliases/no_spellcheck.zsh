@@ -1,7 +1,6 @@
 if [[ "$DISABLE_CORRECTION" == "true" ]]; then
   return
 else
-  setopt correct_all
   alias man='nocorrect man'
   alias mv='nocorrect mv'
   alias mysql='nocorrect mysql'
@@ -16,4 +15,3 @@ else
   alias "_"='nocorrect sudo'
   alias pip="nocorrect pip"
 fi
-

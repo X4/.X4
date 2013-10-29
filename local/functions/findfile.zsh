@@ -29,6 +29,3 @@ findfile() {
   printf '%s\n' "find . ${fargs[@]} -print" >&2
   noglob find . ${fargs[@]} -print
 }
-
-
-
