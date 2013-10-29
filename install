@@ -111,6 +111,11 @@ setup_shell() {
 	chosen_one=$(which fish)
         ln -sfv "$HOME/.X4/fishrc" 			"$HOME/.config/fish/config.fish"
     fi
+    ret="$?"
+    success "$1"
+
+    msg "\n\e[36mAdd extra configs to your $chosen_one shell now?\033[0m\n[\e[31my\033[0m] yes\t\t[\e[31mn\033[0m] no\t[\e[31mENTER\033[0m] skip \nChoose: "
+    read; echo ""
 
     if [[ ! $REPLY -eq "" ]]; then
 	# Enable custom bc functions

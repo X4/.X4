@@ -107,7 +107,7 @@ def main_entry():
         print "Missing keywords"
         sys.exit(255)
     get("+".join(
-        escape(x).encode('ascii', 'xmlcharrefreplace') for x in sys.argv[1:]))
+        escape(x).encode('unicode_escape', 'xmlcharrefreplace') for x in sys.argv[1:]))
 
 ################################################################################
 
