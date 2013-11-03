@@ -9,6 +9,7 @@ alias g.cal="$HOME/.X4/global/scripts/git-cal"
 # clone remote repository
 alias g.clone="git clone"
 alias g.c="git clone"
+alias g.cr="git clone --resursive"
  
 # show status of working copy
 alias g.status='git status'
