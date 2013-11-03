@@ -2,6 +2,7 @@
 .*.s[a-w][a-z]
 ..*.kate-swp
 *.un~
+*.save
 Session.vim
 .netrwhist
 *.directory

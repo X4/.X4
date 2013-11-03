@@ -98,8 +98,8 @@ function precmd() {
 	white_user="%F{white}❯%f"
 	red_user="%F{red}❯%f"
 
-	white_root="%F{white}#%f"
-	red_root="%F{red}#%f"
+	white_root="%F{white}#%f "
+	red_root="%F{red}#%f "
 
 	psvar[1]=$(cmd_exec_time)
         ret1="[%B%F{red}exit $?%f%b]"

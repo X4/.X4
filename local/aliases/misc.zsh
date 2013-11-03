@@ -17,8 +17,8 @@
   alias l.modified="ls -t $* 2> /dev/null | head -n 1"
 # System
   alias dl="curl -O "
-  alias p.all="ps -eo pid,user,group,args,etime,lstart "
-  alias p.list="watch -n 1 ps -eo %cpu,pid,egid,user,group,args,etime,lstart,comm --sort=-%cpu,uid,-ppid,+pid "
+  alias ps.all="ps -eo pid,user,group,args,etime,lstart "
+  alias ps.list="watch -n 1 ps -eo %cpu,pid,egid,user,group,args,etime,lstart,comm --sort=-%cpu,uid,-ppid,+pid "
   alias duff="du -hd 1 | sort -h"
   alias cmx="chmod +x "
   alias get.rfkills="rfkill list all"
