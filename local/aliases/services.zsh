@@ -11,7 +11,7 @@ alias s.disable"systemctl disable"
 alias s.services="systemctl list-units -t service"
 alias s.dependencies="systemctl list-dependencies"
 alias s.reload="systemctl daemon-reload"
-alias s.reset="systemctl reset-failed
+alias s.reset="systemctl reset-failed"
 
 # control pc status using systemd
 alias pc.poweroff="systemctl poweroff"
