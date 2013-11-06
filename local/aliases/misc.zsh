@@ -3,10 +3,7 @@
   alias bc="bc -q -l ~/.bcrc"
   alias cal="cal -m -3"
 # Prettify mount output
-  alias mount="mount | column -t"
-# Show favorite commands
-  alias favs="history | awk '{print $2}' | sort | uniq -c | sort -rn | head"
-  alias stay="tail -f"
+  alias mounts="mount | column -t"
 # Reload config and reset terminal
   alias cls=" clear;exec $SHELL"
 # Kill Shell History
