@@ -1,5 +1,6 @@
 # Prompt for ZSH using vcs_info stdlib
 # Ripped from: http://snk.tuxfamily.org/log/sunaku-zsh-prompt.png
+# It's minimal: http://i.imgur.com/N0xCgc7.png
 
 # Threshold (sec) for showing cmd exec time
 CMD_MAX_EXEC_TIME=5
@@ -107,7 +108,6 @@ function precmd() {
 	flag=1
 }
 
-
 # Left Prompt
 PROMPT='$(vcs_info && echo $vcs_info_msg_0_)'\
 '%(!.%F{red}.%F{green})%34<…<%~ %f'\
@@ -117,5 +117,5 @@ PROMPT='$(vcs_info && echo $vcs_info_msg_0_)'\
 RPROMPT='%(?.%F{yellow}%1v.$ret1) %F{cyan}%T%f'
 
 # Redraw Prompt every second
-prompt_and_resched() { sched +60 _prompt_and_resched; zle && zle reset-prompt }
-prompt_and_resched
+_prompt_and_resched() { sched +60 _prompt_and_resched; zle && zle reset-prompt }
+_prompt_and_resched

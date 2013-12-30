@@ -50,4 +50,4 @@ alias get.fonts='fc-list :outline -f "%{family}\n"'
   alias wifi.scan="iwlist wlan0 scan >/dev/null "
   alias wifi.up="ifconfig wlan0 up"
   alias wifi.down="ifconfig wlan0 down"
-  alias wifi.reload="rmmod iwldvm && rmmod iwlwifi && sleep 1;modprobe iwlwifi auto_agg=0 wd_disable=1 bt_coex_active=0 && sleep 1 modprobe iwldvm"
+  alias wifi.reload="rmmod iwldvm ; rmmod iwlwifi ; sleep 1;modprobe iwlwifi auto_agg=0 wd_disable=1 bt_coex_active=0 ; sleep 1; modprobe iwldvm"

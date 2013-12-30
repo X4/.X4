@@ -10,3 +10,8 @@ function expand-url() {
 dig.all() {
     dig +nocmd $1 any +multiline +noall +answer
 }
+
+# Retrieve BibTeX associated with DOI codes
+function doi.bib(){
+    echo $(curl -sLH "Accept: text/bibliography; style=bibtex" http://dx.doi.org/${1};) | sed -e 's/,/,\n/g' -e '0,/{/{s/{/ {\n/}' -e 's/\(.*\)}/\1\n}/'
+}

@@ -1,3 +1,19 @@
+# Get repository infos over the Github API
+function g.remote.info(){
+    REPO_URL="$(echo ${1}\
+    |sed -n 's/\/\/github/\/\/api\.github/g'\
+    | sed -n 's/github.com/github.com\/repos/g'\
+    | sed -n 's/\.git$/\/git\//g')"
+
+    echo $REPO_URL
+
+#    REPO_SHA="$2"
+#    if [[ REPO_SHA = "" ]]; then
+#        REPO_SHA="refs/heads/master"
+#    fi
+#    curl "$REPO_URL$REPO_SHA"
+}
+
 # get the name of the branch we are on
 function git_prompt_info() {
   ref=$(command git symbolic-ref HEAD 2> /dev/null) || \

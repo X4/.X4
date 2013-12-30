@@ -1,11 +1,10 @@
 HISTFILE=$HOME/.zsh_history
-HISTSIZE=5000
+HISTSIZE=10000
 SAVEHIST=10000
 # append history list to the history file (required for share_history.)
 setopt appendhistory
 # save each command's beginning timestamp and the duration to the history file
 setopt extendedhistory
-setopt histexpiredupsfirst
 # If a new command line being added to the history list duplicates an older one, the older command is removed from the list
 setopt histignorealldups
 setopt histignoredups

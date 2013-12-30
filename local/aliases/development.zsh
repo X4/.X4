@@ -1,3 +1,7 @@
+# Run simple HTTP Server in current directory
+alias go.py="python -m SimpleHTTPServer"
+alias go.php="php -S 127.0.0.1:8080"
+
 # Fix Autotools Annoyance
   alias run.autotools="aclocal && autoheader && libtoolize --copy --automake && automake --copy --add-missing  && autoconf"
 # Finish CB Homework

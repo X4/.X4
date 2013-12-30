@@ -27,7 +27,6 @@ typeset -gx XDG_CACHE_HOME XDG_DATA_HOME XDG_CONFIG_HOME
 path=(
   $HOME/.bin
   $HOME/.local/{bin,sbin}
-  $HOME/.gem/ruby/2.0.0/bin
   /usr/local/{bin,sbin}
   /usr/libexec
   /usr/{bin,sbin}
