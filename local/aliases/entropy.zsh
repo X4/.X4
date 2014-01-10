@@ -8,4 +8,5 @@
   alias e.up="equo up && eix-sync"
   alias e.status="while true ; do clear ; qlop -c ; sleep 2 ; done"
   alias e.log="tail -f /var/tmp/portage/*/${PKG}*/temp/build.log"
-  alias e.world="equo repo mirrorsort sabayon-weekly && equo update && equo install entropy rigo equo --relaxed && equo conf update && equo upgrade -a && equo deptest && equo conf update && equo libtest"
+  alias e.world="equo repo mirrorsort sabayon-weekly && equo update && equo install entropy rigo equo --relaxed && equo conf update && equo upgrade -a && equo conf update"
+  alias e.sanitize="equo deptest && revdep-rebuild && prelink -amR && equo libtest && equo cleanup && equo cache clean"

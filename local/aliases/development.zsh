@@ -24,3 +24,5 @@ alias go.php="php -S 127.0.0.1:8080"
   alias CH="./configure --help"
 # Start kate always silent
   alias kate='kate >/dev/null 2>&1'
+# No more nano
+  alias n='nano'
