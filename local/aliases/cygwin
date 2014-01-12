@@ -1,4 +1,0 @@
-# If using Cygwin on Windows, alias open for cygstart
-if (( iscygwin )); then
-  alias open="cygstart"
-fi
