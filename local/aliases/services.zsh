@@ -7,7 +7,7 @@
 # Control systemd unit files
   alias srv.available='systemctl list-unit-files'
   alias srv.enable='systemctl enable'
-  alias srv.disable'systemctl disable'
+  alias srv.disable='systemctl disable'
   alias srv.services='systemctl list-units -t service'
   alias srv.dependencies='systemctl list-dependencies'
   alias srv.reload='systemctl daemon-reload'

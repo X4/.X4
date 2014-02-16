@@ -6,7 +6,7 @@ function f() {
 
 
 # interactive mv
-mv.i() {
+function mv.i() {
   local src dst
   for src; do
     [[ -e $src ]] || { print -u2 "$src does not exist"; continue }
@@ -63,4 +63,10 @@ function proj() {
   if [ $(ls -1 | wc -l) != 0 ]; then
     CLICOLOR_FORCE=1 ls -dtrnl *(/om[1,10])
   fi
+}
+
+function timewarp() {
+  for i in $1; do
+    touch -m -d "$(stat -c %y "$i") $2" "$i"
+  done
 }

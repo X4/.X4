@@ -9,7 +9,7 @@ alias g.cal="$HOME/.X4/global/scripts/git-cal"
 # clone remote repository
 alias g.clone="git clone"
 alias g.c="git clone"
-alias g.cr="git clone --resursive"
+alias g.cr="git clone --recursive"
  
 # show status of working copy
 alias g.status='git status'
@@ -156,6 +156,7 @@ alias g.reset.keep='git reset "HEAD^"'
 
 # check out changes from current commit
 alias g.checkout='git checkout'
+alias g.co='git checkout'
 
 # update working copy to current commit
 alias g.checkout.head='git checkout HEAD --'
