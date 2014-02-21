@@ -1,8 +1,7 @@
 HISTFILE=$HOME/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
-HIST_STAMPS = "yyyy-mm-dd"
-
+HIST_STAMPS="yyyy-mm-dd"
 # append history list to the history file (required for share_history.)
 setopt appendhistory
 # save each command's beginning timestamp and the duration to the history file
