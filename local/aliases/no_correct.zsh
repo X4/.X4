@@ -1,7 +1,7 @@
 if [[ "$DISABLE_CORRECTION" == "true" ]]; then
   return
 else
-  alias "_"='nocorrect sudo'
+  alias "_"='nocorrect sudo '
   alias man='nocorrect man'
   alias mv='nocorrect mv'
   alias mysql='nocorrect mysql'
@@ -12,7 +12,7 @@ else
   alias hpodder='nocorrect hpodder'
   alias ebuild='nocorrect ebuild'
   alias emerge='nocorrect emerge'
-  alias sudo='nocorrect sudo'
+  alias sudo='nocorrect sudo '
   alias pip='nocorrect pip'
   alias rock='nocorrect rock'
 fi

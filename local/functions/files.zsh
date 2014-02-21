@@ -1,3 +1,8 @@
+function cdd() {
+  mkdir -p $1
+  cd $1
+}
+
 ## Case insensitive search for files and directories, partial matches allowed
 ## - Usage: f <name>
 function f() {
