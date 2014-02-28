@@ -79,9 +79,6 @@ alias g.reset.index='git reset'
 # unstage changes from both index and working copy
 alias g.reset.mixed='git reset --mixed'
 
-# stage deletion without changing working copy
-alias g.rm.keep='git rm -r --cached --ignore-unmatch'
-
 #-----------------------------------------------------------------------------
 # t = stash
 #-----------------------------------------------------------------------------
@@ -327,7 +324,10 @@ alias g.changelog="git --no-pager log --format=\"%ai %aN %n%n%x09* %s%d%n\" | se
 alias g.gitolite="cat /home/git/.gitolite/logs/gitolite-`date +%Y-%m -d -30days`.log | cut -f2 | sort | uniq -c | sort -n -r "
 
 # add .keep files into empty directories
-alias g.ignore="find . -type d -empty -exec touch {}/.keep \; "
+alias g.ignore.empty="find . -type d -empty -exec touch {}/.keep \; "
+
+# stage deletion without changing working copy
+alias g.ignore.sync='git rm -r --cached --ignore-unmatch'
 
 #-----------------------------------------------------------------------------
 # L = reflog
