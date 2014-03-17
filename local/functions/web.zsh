@@ -17,11 +17,15 @@ function doi.bib() {
 }
 
 # Proxy: Start to unblock stuff through your proxy
-function proxy.on {
+function proxy.on() {
     "PORT=$[${RANDOM}%2012+4012]; echo -n 'Enter Hostname: '; read HOSTNAME; ssh -C2 -c blowfish -D $PORT $HOSTNAME sleep 5; echo 'Your proxy runs on: localhost:${PORT} forwarded through ${HOSTNAME}'"
 }
 
 # Proxy: kills all users using ssh with given username to end proxy session
-function proxy.off {
+function proxy.off() {
     "read USER; kill $(ps ax o 'pid euser egroup command' | grep "sshd: $USER" | awk '{ print $1 }' | sed ':a;N;$!ba;s/\n/ /g') > /dev/null"
+}
+
+function myip () {
+    curl http://ipecho.net/plain; echo;
 }
