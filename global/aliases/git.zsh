@@ -140,10 +140,13 @@ function g.mV() {
 alias g.mq='git commit -m "SQUASH $(date)"'
 
 # amend current commit and edit its message
+alias g.mma='git commit -am'
+
+# amend current commit and edit its message
 alias g.ma='git commit --amend'
 
 # amend current commit but reuse its message
-alias g.mA='git commit --amend --reuse-message=HEAD'
+alias g.mar='git commit --amend --reuse-message=HEAD'
 
 # commit an inverse commit to revert changes from the given commit
 alias g.revert='git revert'
