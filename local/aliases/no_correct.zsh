@@ -12,7 +12,6 @@ else
   alias hpodder='nocorrect hpodder'
   alias ebuild='nocorrect ebuild'
   alias emerge='nocorrect emerge'
-  alias sudo='nocorrect sudo '
   alias pip='nocorrect pip'
   alias rock='nocorrect rock'
 fi
