@@ -208,7 +208,7 @@ function dict() {
 }
 
 # Translate EN<->DE using dict.cc
-function dictt() {
+function diccc() {
     NAME="dict.cc"; VERSION="1.0"; UA="${NAME}/${VERSION} (cli)";
 
     if [[ "x${1}" = "x" ]]; then
