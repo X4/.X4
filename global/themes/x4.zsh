@@ -109,12 +109,12 @@ function precmd() {
 }
 
 # Left Prompt
-PROMPT='$(vcs_info && echo $vcs_info_msg_0_)'\
+PROMPT='%F{cyan}%D{%a,}%F{yellow}%D{%d.%m} %F{white}%T%f $(vcs_info && echo $vcs_info_msg_0_)'\
 '%(!.%F{red}.%F{green})%34<…<%~ %f'\
 '%(!.%(?.$white_root.$red_root).%(?.$white_user.$red_user) )'
 
 # Right Prompt
-RPROMPT='%(?.%F{yellow}%1v.$ret1) %F{cyan}%T%f'
+RPROMPT='%(?.%F{yellow}%1v.$ret1)%f'
 
 # Redraw Prompt every second
 _prompt_and_resched() { sched +60 _prompt_and_resched; zle && zle reset-prompt }
