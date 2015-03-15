@@ -5,7 +5,7 @@
 #ZSH_PROMPT="skaro"       
 #ZSH_PROMPT="ys"
 #ZSH_PROMPT="bira"
-##ZSH_PROMPT="jonathan"
+#ZSH_PROMPT="jonathan"
 #ZSH_PROMPT="miloshadzic"
 #ZSH_PROMPT="norm"
 #ZSH_PROMPT="vibrantink"

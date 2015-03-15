@@ -4,6 +4,7 @@ export EDITOR='vim'
 export VISUAL=$EDITOR
 export BROWSER='w3m -v'
 
+alias -g sudo="sudo "
 alias e=$EDITOR
 alias v=$PAGER
 alias b=$BROWSER

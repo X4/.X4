@@ -54,6 +54,21 @@ alias g.undo="git reset --soft HEAD^ "
 # Undo your last commit, but don't throw away your changes
 alias g.redo="git reset --soft HEAD "
 
+# List available gitignore templates
+function g.ignore.list() {
+    curl -L -s https://www.gitignore.io/api/list ;
+}
+
+# Show gitignore rules for chosen template
+function g.ignore() {
+    curl -L -s https://www.gitignore.io/api/\$@;
+}
+
+# Append gitignore by chosen template
+function g.ignore.append() {
+    curl -L -s https://www.gitignore.io/api/\$@ >> .gitignore;
+}
+
 #-----------------------------------------------------------------------------
 # i = index / stage
 #-----------------------------------------------------------------------------
